@@ -1,0 +1,51 @@
+#pragma once
+
+
+#include <algorithm>
+#include <array>
+#include <cassert>
+#include <cctype>
+#include <charconv>
+#include <concepts>
+#include <csignal>
+#include <cstddef>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include <exception>
+#include <expected>
+#include <filesystem>
+#include <format>
+#include <functional>
+#include <iomanip>
+#include <iostream>
+#include <istream>
+#include <iterator>
+#include <limits>
+#include <memory>
+#include <optional>
+#include <ostream>
+#include <ranges>
+#include <span>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <string_view>
+#include <sys/ioctl.h>
+#include <system_error>
+#include <termios.h>
+#include <tuple>
+#include <type_traits>
+#include <unistd.h>
+#include <utility>
+#include <variant>
+#include <vector>
+
+#include <catch2/catch_test_macros.hpp>
+#include <catch2/generators/catch_generators_all.hpp>
+
+#include <fmt/base.h>
+#include <fmt/compile.h>
+#include <fmt/core.h>
+#include <fmt/format.h>
+#include <fmt/ostream.h>

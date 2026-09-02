@@ -1,0 +1,48 @@
+---
+Checks: '*,
+        -abseil-*,
+        -altera-*,
+        -android-*,
+        -fuchsia-*,
+        -google-*,
+        -llvm*,
+        -modernize-use-trailing-return-type,
+        -modernize-use-nodiscard,
+        -zircon-*,
+        -readability-else-after-return,
+        -readability-redundant-member-init,
+        -readability-static-accessed-through-instance,
+        -readability-avoid-const-params-in-decls,
+        -readability-function-cognitive-complexity,
+        -cppcoreguidelines-non-private-member-variables-in-classes,
+        -cppcoreguidelines-pro-type-reinterpret-cast,
+        -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+        -cppcoreguidelines-no-malloc,
+        -cppcoreguidelines-owning-memory,
+        -misc-include-cleaner,
+        -cppcoreguidelines-pro-type-vararg,
+        -hicpp-vararg,
+        -hicpp-no-malloc,
+        -concurrency-mt-unsafe,
+        -misc-non-private-member-variables-in-classes,'
+WarningsAsErrors: ''
+HeaderFileExtensions:
+  - ''
+  - h
+  - hh
+  - hpp
+  - hxx
+ImplementationFileExtensions:
+  - c
+  - cc
+  - cpp
+  - cxx
+HeaderFilterRegex:  '.*\.h$'
+ExcludeHeaderFilterRegex: '.*\.h$'
+FormatStyle: 'file'
+UseColor: 'true'
+CheckOptions:
+  - key: readability-identifier-length.IgnoredVariableNames
+    value: 'x|y|z'
+  - key: readability-identifier-length.IgnoredParameterNames
+    value: 'x|y|z'
