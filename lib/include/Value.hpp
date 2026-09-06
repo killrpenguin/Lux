@@ -22,18 +22,34 @@
 #include "Object.hpp"
 
 #include <optional>
+#include <string_view>
 #include <type_traits>
+#include <unordered_map>
 #include <utility>
 #include <variant>
+#include <vector>
+
+#include <fmt/format.h>
+#include <fmt/ranges.h> // Required if your recursive variant contains vectors/containers
+#include <fmt/std.h>    // Required for std::variant support
 
 namespace LuxLibrary {
     namespace detail {
 
+        struct Node;
+
         using Nil       = std::monostate;
         using character = char32_t;
         using integer   = std::int64_t;
+        using LuxArray  = std::vector< Node >;
+        using LuxMap    = std::unordered_map< std::string, Node >;
 
-        using Tag = std::variant< Nil, bool, character, double, integer, std::string, Object >;
+        using Tag = std::variant<
+            Nil, bool, character, double, integer, std::string, Object, LuxMap, LuxArray >;
+
+        struct Node : Tag {
+            using Tag::variant;
+        };
 
     } // namespace detail
 
@@ -122,6 +138,22 @@ namespace LuxLibrary {
 
 } // namespace LuxLibrary
 
+template <>
+struct fmt::formatter< LuxLibrary::detail::LuxArray > : fmt::formatter< std::string_view > {
+    template < typename FormatContext >
+    constexpr auto format( LuxLibrary::detail::LuxArray& /*inner*/, FormatContext& ctx ) const {
+        return fmt::format_to( ctx.out(), "LuxArray" );
+    }
+};
+
+template <>
+struct fmt::formatter< LuxLibrary::detail::LuxMap > : fmt::formatter< std::string_view > {
+    template < typename FormatContext >
+    constexpr auto format( LuxLibrary::detail::LuxMap& /*inner*/, FormatContext& ctx ) const {
+        return fmt::format_to( ctx.out(), "LuxMap" );
+    }
+};
+
 template <> struct fmt::formatter< LuxLibrary::detail::Nil > : fmt::formatter< std::string_view > {
     template < typename FormatContext >
     constexpr auto format( LuxLibrary::detail::Nil /*inner*/, FormatContext& ctx ) const {
@@ -144,3 +176,42 @@ template <> struct fmt::formatter< LuxLibrary::Value > : fmt::formatter< std::st
             value.tag );
     }
 };
+
+template <>
+struct fmt::formatter< LuxLibrary::detail::Node > : fmt::formatter< std::string_view > {
+    template < typename FormatContext >
+    auto format( const LuxLibrary::detail::Node& node, FormatContext& ctx ) const
+        -> decltype( ctx.out() ) {
+        return std::visit(
+            [&ctx]( const auto& val ) {
+                using T = std::decay_t< decltype( val ) >;
+                if constexpr ( std::is_same_v< T, LuxLibrary::detail::LuxArray > ) {
+                    fmt::format_to( ctx.out(), "[" );
+                    bool first = true;
+                    for ( const auto& item : val ) {
+                        if ( !first ) { fmt::format_to( ctx.out(), ", " ); }
+                        fmt::format_to( ctx.out(), "{}", item ); // Recursive call
+                        first = false;
+                    }
+                    return fmt::format_to( ctx.out(), "]" );
+                } else if constexpr ( std::is_same_v< T, LuxLibrary::detail::LuxMap > ) {
+                    fmt::format_to( ctx.out(), "[" );
+                    bool first = true;
+                    for ( const auto& [key, value] : val ) {
+                        if ( !first ) { fmt::format_to( ctx.out(), ", " ); }
+                        fmt::format_to( ctx.out(), "{}, {}", key, value ); // Recursive call
+                        first = false;
+                    }
+                    return fmt::format_to( ctx.out(), "]" );
+                } else {
+                    // Delegate to standard/existing formatter for primitives/strings
+                    return fmt::format_to( ctx.out(), "{}", val );
+                }
+            },
+            node );
+    }
+};
+static_assert( fmt::formattable< LuxLibrary::Value >, "ValueNode is not formattable." );
+static_assert( fmt::formattable< LuxLibrary::detail::Node >, "ValueNode is not formattable." );
+static_assert( fmt::formattable< LuxLibrary::detail::LuxArray >, "LuxArray is not formattable." );
+static_assert( fmt::formattable< LuxLibrary::detail::LuxMap >, "LuxMap is not formattable." );

@@ -89,11 +89,6 @@ namespace LuxLibrary {
     }
 
     auto VirtualMachine::AdvanceInstructionPtr() noexcept -> void {
-        /*
-         * std::ranges::advance calls the hidden friend plf::advance() function.
-         * Rather then using advance() here we'll use ranges incase
-         * I switch back to a standard library container.
-         */
         ranges::advance( ip, 1 );
     }
 

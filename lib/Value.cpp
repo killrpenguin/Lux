@@ -139,6 +139,12 @@ namespace LuxLibrary {
                         return lhs.AsString() == rhs.AsString();
                     } else if constexpr ( std::is_same_v< T, Object > ) {
                         return lhs.AsObject() == rhs.AsObject();
+                    } else if constexpr ( std::is_same_v< T, LuxArray > ) {
+                        assert( false && "LuxArray is Unimplemented." );
+                        return false;
+                    } else if constexpr ( std::is_same_v< T, LuxMap > ) {
+                        assert( false && "LuxMap is Unimplemented." );
+                        return true;
                     } else {
                         return ResultError( "Invalid expression." );
                     }

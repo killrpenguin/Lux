@@ -23,7 +23,6 @@
 #include <concepts>
 #include <cstdint>
 #include <expected>
-#include <numeric>
 #include <optional>
 #include <string>
 #include <type_traits>
@@ -66,6 +65,7 @@ namespace LuxLibrary {
             std::is_floating_point_v< FloatingPointValue > && requires( FloatingPointValue val ) {
                 { std::isnan( val ) } -> std::same_as< bool >;
             };
+
         constexpr double REL_Tol{ 1e-9 };
         constexpr double ABS_Tol{ 1e-9 };
 
@@ -82,6 +82,7 @@ namespace LuxLibrary {
             return diff <= abs_tol or
                    diff <= ( rel_tol * std::ranges::max( std::abs( lhs ), std::abs( rhs ) ) );
         }
+
     }; // namespace detail
 
 #if defined( __clang__ ) && __has_cpp_attribute( clang::lifetimebound )
