@@ -111,12 +111,12 @@ namespace LuxLibrary {
     }
 
     auto Value::ValuesEqual(
-        const std::optional< Value >& l_val, const std::optional< Value >& r_val ) noexcept
+        const std::optional< Value >& lval, const std::optional< Value >& rval ) noexcept
         -> Result< bool > {
-        if ( !l_val.has_value() or !r_val.has_value() ) {
+        if ( !lval.has_value() or !rval.has_value() ) {
             return ResultError( "Invalid expression." );
         }
-        const auto [lhs, rhs] = [&l_val, &r_val] { return std::tuple{ *l_val, *r_val }; }();
+        const auto [lhs, rhs] = [&lval, &rval] { return std::tuple{ *lval, *rval }; }();
 
         if ( lhs.tag.index() != rhs.tag.index() ) { return false; }
         try {
@@ -154,38 +154,6 @@ namespace LuxLibrary {
         } catch ( const std::bad_variant_access& /*ex*/ ) {
             assert( false && "Bad variant error thrown in ValuesEqual function." );
         }
-    }
-
-    auto Value::AsUTFChar( const character utf8_char ) noexcept -> std::string {
-        std::array< char, 4 > buffer{};
-        std::size_t code_point_cnt{ 0 };
-
-        // NOLINTBEGIN
-        if ( utf8_char <= 0x7F ) {
-            buffer[0]      = static_cast< char >( utf8_char );
-            code_point_cnt = 1;
-        } else if ( utf8_char <= 0x7FF ) {
-            buffer[0]      = static_cast< char >( 0xC0 | ( ( utf8_char >> 6 ) & 0x1F ) );
-            buffer[1]      = static_cast< char >( 0x80 | ( utf8_char & 0x3F ) );
-            code_point_cnt = 2;
-        } else if ( utf8_char <= 0xFFFF ) {
-            buffer[0]      = static_cast< char >( 0xE0 | ( ( utf8_char >> 12 ) & 0x0F ) );
-            buffer[1]      = static_cast< char >( 0x80 | ( ( utf8_char >> 6 ) & 0x3F ) );
-            buffer[2]      = static_cast< char >( 0x80 | ( utf8_char & 0x3F ) );
-            code_point_cnt = 3;
-        } else if ( utf8_char <= 0x10FFFF ) {
-            buffer[0]      = static_cast< char >( 0xF0 | ( ( utf8_char >> 18 ) & 0x07 ) );
-            buffer[1]      = static_cast< char >( 0x80 | ( ( utf8_char >> 12 ) & 0x3F ) );
-            buffer[2]      = static_cast< char >( 0x80 | ( ( utf8_char >> 6 ) & 0x3F ) );
-            buffer[3]      = static_cast< char >( 0x80 | ( utf8_char & 0x3F ) );
-            code_point_cnt = 4;
-        } else {
-            // Substitution character for invalid code points
-            buffer[0]      = '?';
-            code_point_cnt = 1;
-        }
-        // NOLINTEND
-        return { buffer.data(), code_point_cnt };
     }
 
 }; // namespace LuxLibrary

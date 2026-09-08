@@ -21,6 +21,7 @@
 #include "Common.hpp"
 #include "Object.hpp"
 
+#include <fmt/base.h>
 #include <optional>
 #include <string_view>
 #include <type_traits>
@@ -39,13 +40,14 @@ namespace LuxLibrary {
         struct Node;
 
         using Nil       = std::monostate;
-        using character = char32_t;
+        using character = char;
         using integer   = std::int64_t;
         using LuxArray  = std::vector< Node >;
         using LuxMap    = std::unordered_map< std::string, Node >;
+        using LuxString = std::string;
 
         using Tag = std::variant<
-            Nil, bool, character, double, integer, std::string, Object, LuxMap, LuxArray >;
+            Nil, bool, character, double, integer, LuxString, Object, LuxMap, LuxArray >;
 
         struct Node : Tag {
             using Tag::variant;
@@ -83,7 +85,7 @@ namespace LuxLibrary {
             : tag{ std::move( val ) } {};
 
         explicit Value( const std::string_view text )
-            : tag{ std::string( text ) } {};
+            : tag{ LuxString( text ) } {};
 
         template < typename LuxTypes >
             requires IsValueVariant< LuxTypes, Tag >
@@ -115,7 +117,7 @@ namespace LuxLibrary {
 
         auto AsObject() const noexcept -> Object;
 
-        auto AsString() const noexcept -> std::string;
+        auto AsString() const noexcept -> LuxString;
 
         auto AsStringView() const noexcept -> std::string_view;
 
@@ -128,31 +130,11 @@ namespace LuxLibrary {
         auto AsBool() const noexcept -> bool;
 
         auto static ValuesEqual(
-            const std::optional< Value >& l_val, const std::optional< Value >& r_val ) noexcept
+            const std::optional< Value >& lval, const std::optional< Value >& rval ) noexcept
             -> Result< bool >;
-
-        auto static AsUTFChar( const character utf8_char ) noexcept -> std::string;
     };
 
-    constexpr std::size_t ExpectedByteSize{ 16 };
-
 } // namespace LuxLibrary
-
-template <>
-struct fmt::formatter< LuxLibrary::detail::LuxArray > : fmt::formatter< std::string_view > {
-    template < typename FormatContext >
-    constexpr auto format( LuxLibrary::detail::LuxArray& /*inner*/, FormatContext& ctx ) const {
-        return fmt::format_to( ctx.out(), "LuxArray" );
-    }
-};
-
-template <>
-struct fmt::formatter< LuxLibrary::detail::LuxMap > : fmt::formatter< std::string_view > {
-    template < typename FormatContext >
-    constexpr auto format( LuxLibrary::detail::LuxMap& /*inner*/, FormatContext& ctx ) const {
-        return fmt::format_to( ctx.out(), "LuxMap" );
-    }
-};
 
 template <> struct fmt::formatter< LuxLibrary::detail::Nil > : fmt::formatter< std::string_view > {
     template < typename FormatContext >
@@ -163,55 +145,64 @@ template <> struct fmt::formatter< LuxLibrary::detail::Nil > : fmt::formatter< s
 
 template <> struct fmt::formatter< LuxLibrary::Value > : fmt::formatter< std::string_view > {
     template < typename FormatContext >
-    auto format( const LuxLibrary::Value& value, FormatContext& ctx ) const {
+    constexpr auto format( const LuxLibrary::Value& inner, FormatContext& ctx ) const {
+        return std::visit(
+            LuxLibrary::overloaded{
+                [&]( auto val ) { return fmt::format_to( ctx.out(), "{}", val ); },
+            },
+            static_cast< const LuxLibrary::Node::variant& >( inner.tag ) );
+    }
+};
+
+// I don't think it's possible to get RVO to work from std::visit().
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnrvo"
+template <> struct fmt::formatter< LuxLibrary::detail::Node > : fmt::formatter< std::string_view > {
+    template < typename FormatContext >
+    auto format( const LuxLibrary::detail::Node& node_val, FormatContext& ctx ) const
+        -> decltype( ctx.out() ) {
         return std::visit(
             [&ctx]( const auto& arg ) {
                 using T = std::decay_t< decltype( arg ) >;
-                if constexpr ( std::is_same_v< T, LuxLibrary::detail::character > ) {
-                    return fmt::format_to( ctx.out(), "{}", LuxLibrary::Value::AsUTFChar( arg ) );
+                if constexpr ( std::is_same_v< T, LuxLibrary::detail::LuxArray > ) {
+                    auto out   = ctx.out();
+                    *out++     = '[';
+                    bool first = true;
+                    for ( const auto& item : arg ) {
+                        if ( !first ) {
+                            *out++ = ',';
+                            *out++ = ' ';
+                        }
+                        first = false;
+                        ctx.advance_to( fmt::format_to( ctx.out(), "{}", item ) );
+                    }
+                    *out++ = ']';
+                    return out;
+                } else if constexpr ( std::is_same_v< T, LuxLibrary::detail::LuxMap > ) {
+                    auto out = ctx.out();
+                    *out++   = '{';
+                    bool first{ true };
+                    for ( const auto& [key, val] : arg ) {
+                        if ( !first ) {
+                            *out++ = ':';
+                            *out++ = ' ';
+                        }
+                        first = false;
+                        ctx.advance_to( fmt::format_to( ctx.out(), "{}: {}", key, val ) );
+                    }
+                    *out++ = '}';
+                    return out;
                 } else {
                     return fmt::format_to( ctx.out(), "{}", arg );
                 }
             },
-            value.tag );
+            static_cast< const LuxLibrary::detail::Tag& >(
+                node_val ) ); // Cast to base variant for std::visit
     }
 };
+#pragma clang diagnostic pop
 
-template <>
-struct fmt::formatter< LuxLibrary::detail::Node > : fmt::formatter< std::string_view > {
-    template < typename FormatContext >
-    auto format( const LuxLibrary::detail::Node& node, FormatContext& ctx ) const
-        -> decltype( ctx.out() ) {
-        return std::visit(
-            [&ctx]( const auto& val ) {
-                using T = std::decay_t< decltype( val ) >;
-                if constexpr ( std::is_same_v< T, LuxLibrary::detail::LuxArray > ) {
-                    fmt::format_to( ctx.out(), "[" );
-                    bool first = true;
-                    for ( const auto& item : val ) {
-                        if ( !first ) { fmt::format_to( ctx.out(), ", " ); }
-                        fmt::format_to( ctx.out(), "{}", item ); // Recursive call
-                        first = false;
-                    }
-                    return fmt::format_to( ctx.out(), "]" );
-                } else if constexpr ( std::is_same_v< T, LuxLibrary::detail::LuxMap > ) {
-                    fmt::format_to( ctx.out(), "[" );
-                    bool first = true;
-                    for ( const auto& [key, value] : val ) {
-                        if ( !first ) { fmt::format_to( ctx.out(), ", " ); }
-                        fmt::format_to( ctx.out(), "{}, {}", key, value ); // Recursive call
-                        first = false;
-                    }
-                    return fmt::format_to( ctx.out(), "]" );
-                } else {
-                    // Delegate to standard/existing formatter for primitives/strings
-                    return fmt::format_to( ctx.out(), "{}", val );
-                }
-            },
-            node );
-    }
-};
-static_assert( fmt::formattable< LuxLibrary::Value >, "ValueNode is not formattable." );
+static_assert( fmt::formattable< LuxLibrary::Value >, "Value is not formattable." );
 static_assert( fmt::formattable< LuxLibrary::detail::Node >, "ValueNode is not formattable." );
 static_assert( fmt::formattable< LuxLibrary::detail::LuxArray >, "LuxArray is not formattable." );
 static_assert( fmt::formattable< LuxLibrary::detail::LuxMap >, "LuxMap is not formattable." );

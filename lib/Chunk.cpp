@@ -22,8 +22,9 @@
 namespace LuxLibrary {
 
     template <>
-    // NOLINTNEXTLINE
+
     auto Chunk::WriteChunk< Chunk::value_type >(
+        // NOLINTNEXTLINE
         const value_type byte, const unsigned int line ) noexcept -> void {
         code.emplace_back( byte );
 

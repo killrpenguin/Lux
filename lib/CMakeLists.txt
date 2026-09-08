@@ -48,7 +48,7 @@ add_library(LL ${SRC_LIST} ${HEADER_LIST})
 
 target_precompile_headers(LL PUBLIC "${INCLUDE_PATH}/pch.hpp")
 
-# set_target_properties(LL PROPERTIES UNITY_BUILD ON)
+set_target_properties(LL PROPERTIES UNITY_BUILD ON)
 
 target_compile_options(LL PUBLIC
     $<$<CONFIG:Debug>:-g -O3>
