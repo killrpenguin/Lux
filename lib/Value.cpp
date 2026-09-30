@@ -40,17 +40,36 @@ namespace LuxLibrary {
     auto Value::IsChar() const noexcept -> bool {
         return Is< character >();
     }
+    auto Value::IsLuxArray() const noexcept -> bool {
+        return Is< LuxArray >();
+    }
+
+    auto Value::IsLuxMap() const noexcept -> bool {
+        return Is< LuxMap >();
+    }
 
     auto Value::IsString() const noexcept -> bool {
         return Is< std::string >();
     }
 
     auto Value::IsObject() const noexcept -> bool {
-        return Is< Object >();
+        return Is< LuxArray >() or Is< LuxString >() or Is< LuxMap >();
     }
 
     auto Value::IsFalsey() const noexcept -> bool {
         return IsNil() or ( IsBool() and !AsBool() );
+    }
+
+    auto Value::AsLuxArray() const noexcept -> LuxArray {
+        if ( const std::optional< LuxArray > val = As< LuxArray >(); val.has_value() ) {
+            return *val;
+        }
+        assert( false && "Value was not a LuxArray." );
+    }
+
+    auto Value::AsLuxMap() const noexcept -> LuxMap {
+        if ( const std::optional< LuxMap > val = As< LuxMap >(); val.has_value() ) { return *val; }
+        assert( false && "Value was not a LuxMap." );
     }
 
     auto Value::AsString() const noexcept -> std::string {

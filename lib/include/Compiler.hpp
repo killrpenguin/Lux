@@ -58,7 +58,7 @@ namespace LuxLibrary {
 
       public:
         Compiler() = default;
-        Compiler( Scanner scanner, Parser parser ) noexcept;
+        Compiler( Scanner scnr, Parser prsr ) noexcept;
         ~Compiler() noexcept = default;
 
         Compiler( const Compiler& other )                = default;
@@ -80,7 +80,9 @@ namespace LuxLibrary {
         auto String() noexcept -> void;
         auto Char() noexcept -> void;
         auto Unary() noexcept -> void;
-
+        auto LuxVector() noexcept -> void;
+        auto LuxMap() noexcept -> void;
+        
         auto ErrorAt( const Token& token, const std::string_view message ) noexcept -> void;
 
         template < detail::IsEnumType... Args > auto EmitBytes( Args&&... args ) noexcept -> void {

@@ -37,8 +37,8 @@
 
 namespace LuxLibrary {
 
-    Compiler::Compiler( Scanner scanner, Parser parser ) noexcept
-        : parser{ parser }, scanner{ scanner } {
+    Compiler::Compiler( Scanner scnr, Parser prsr ) noexcept
+        : parser{ prsr }, scanner{ scnr } {
     }
 
     auto Compiler::Advance() noexcept -> void {
@@ -216,6 +216,27 @@ namespace LuxLibrary {
         const std::string_view text{ &*text_start, token.length - 2 };
 
         EmitConstant( Value( text ) );
+    }
+
+    auto Compiler::LuxVector() noexcept -> void {
+        Advance();
+
+        [[maybe_unused]] const Token& prefix_token{ parser.Previous() };
+
+        const Token& current_token{ parser.Current() };
+
+        LuxArray val{};
+
+        while ( current_token.type != TokenType::LUX_VECTOR_CLOSE ) {
+            Advance();
+            // val.emplace_back(val);
+            // const Token& infix_token{ parser.Previous() };
+        }
+
+        EmitConstant( Value( val ) );
+    }
+
+    auto Compiler::LuxMap() noexcept -> void {
     }
 
     auto Compiler::MakeConstant( const Value& val ) noexcept -> std::uint8_t {

@@ -33,6 +33,8 @@ namespace LuxLibrary {
         using line_type = std::uint32_t;
 
       private:
+	  
+
         std::string::const_iterator start{};
         std::string::const_iterator current{};
         std::string::const_iterator end{};
@@ -175,6 +177,18 @@ namespace LuxLibrary {
          * @return A string token.
          */
         auto StringToken() noexcept -> Token;
+
+        /*
+         * @brief Generate a Lux Vector with the values between two square brackets.
+         * @return A LuxVector token.
+         */
+        auto LuxVectorToken() noexcept -> Token;
+
+        /*
+         * @brief Generate a Lux Map with the key and value pairs between two curly brackets.
+         * @return A LuxMap token.
+         */
+        auto LuxMapToken() noexcept -> Token;
 
         /*
          * @brief Generate a char token with a value between two single quotes.

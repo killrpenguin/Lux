@@ -21,8 +21,9 @@
 #include "Common.hpp"
 #include "Object.hpp"
 
-#include <fmt/base.h>
+// #include <concepts>
 #include <optional>
+// #include <ranges>
 #include <string_view>
 #include <type_traits>
 #include <unordered_map>
@@ -30,9 +31,10 @@
 #include <variant>
 #include <vector>
 
+#include <fmt/base.h>
 #include <fmt/format.h>
-#include <fmt/ranges.h> // Required if your recursive variant contains vectors/containers
-#include <fmt/std.h>    // Required for std::variant support
+#include <fmt/ranges.h> // Required if your recursive variant contains vectors/containers.
+#include <fmt/std.h>    // Required for std::variant support.
 
 namespace LuxLibrary {
     namespace detail {
@@ -113,11 +115,19 @@ namespace LuxLibrary {
 
         auto IsChar() const noexcept -> bool;
 
+        auto IsLuxArray() const noexcept -> bool;
+
+        auto IsLuxMap() const noexcept -> bool;
+
         auto IsFalsey() const noexcept -> bool;
 
         auto AsObject() const noexcept -> Object;
 
         auto AsString() const noexcept -> LuxString;
+
+        auto AsLuxArray() const noexcept -> LuxArray;
+
+        auto AsLuxMap() const noexcept -> LuxMap;
 
         auto AsStringView() const noexcept -> std::string_view;
 
@@ -154,7 +164,7 @@ template <> struct fmt::formatter< LuxLibrary::Value > : fmt::formatter< std::st
     }
 };
 
-// I don't think it's possible to get RVO to work from std::visit().
+// I don't think it's possible to get RVO to work from std::visit() in this case.
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnrvo"
 template <> struct fmt::formatter< LuxLibrary::detail::Node > : fmt::formatter< std::string_view > {

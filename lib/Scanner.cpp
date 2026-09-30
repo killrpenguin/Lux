@@ -167,14 +167,12 @@ namespace LuxLibrary {
     }
 
     auto Scanner::ErrorToken( const std::string& messsage ) const noexcept -> Token {
-        // clang-format off
         return Token{
-		  .type = TokenType::ERROR,
-		  .start = start,
-		  .length = messsage.size(),
-		  .line = line,
-		};
-        // clang-format on
+            .type   = TokenType::ERROR,
+            .start  = start,
+            .length = messsage.size(),
+            .line   = line,
+        };
     }
 
     auto Scanner::Line() const noexcept -> line_type {
@@ -204,8 +202,6 @@ namespace LuxLibrary {
         switch ( current_char ) {
             case '(': return NewToken( TokenType::LEFT_PAREN );
             case ')': return NewToken( TokenType::RIGHT_PAREN );
-            case '{': return NewToken( TokenType::LEFT_BRACE );
-            case '}': return NewToken( TokenType::RIGHT_BRACE );
             case ';': return NewToken( TokenType::SEMICOLON );
             case ',': return NewToken( TokenType::COMMA );
             case '.': return NewToken( TokenType::DOT );
@@ -230,6 +226,13 @@ namespace LuxLibrary {
                 return NewToken( TokenType::GREATER );
             }
             case '"' : return StringToken();
+
+            case ']' : return NewToken( TokenType::LUX_VECTOR_CLOSE );
+            case '[' : return LuxVectorToken();
+
+            case '}' : return NewToken( TokenType::LUX_MAP_CLOSE );
+            case '{' : return LuxMapToken();
+
             case '\'': return CharToken();
             default  : return ErrorToken( "Invalid token." );
         }
@@ -237,14 +240,12 @@ namespace LuxLibrary {
     }
 
     auto Scanner::NewToken( const TokenType& variant ) const noexcept -> Token {
-        // clang-format off
-          return Token {
-              .type = variant,
-			  .start = start,
-			  .length = static_cast< std::size_t >( current - start ),
-			  .line = line,
-          };
-          // clang-format on		  
+        return Token{
+            .type   = variant,
+            .start  = start,
+            .length = static_cast< std::size_t >( current - start ),
+            .line   = line,
+        };
     }
 
     auto Scanner::NumberToken() noexcept -> Token {
@@ -252,7 +253,7 @@ namespace LuxLibrary {
             Next();
         }
 
-		const bool is_double{Peek() == '.'};
+        const bool is_double{ Peek() == '.' };
 
         if ( is_double and IsDigit( PeekNext() ) ) {
             Next();
@@ -261,27 +262,49 @@ namespace LuxLibrary {
                 Next();
             }
         }
-		if(is_double) {
-          return NewToken( TokenType::DOUBLE );
-		}
+        if ( is_double ) { return NewToken( TokenType::DOUBLE ); }
 
         return NewToken( TokenType::INTEGER );
     }
 
     auto Scanner::StringToken() noexcept -> Token {
         while ( Peek() != '"' and !IsAtEnd() ) {
-            if ( Peek() == '\n' ) {
-                line++;
-            }
+            if ( Peek() == '\n' ) { line++; }
             Next();
         }
 
-        if ( IsAtEnd() ) {
-            return ErrorToken( "Unterminated string." );
-        }
+        if ( IsAtEnd() ) { return ErrorToken( "Unterminated string." ); }
 
         Next();
         return NewToken( TokenType::STRING );
+    }
+
+    auto Scanner::LuxVectorToken() noexcept -> Token {
+        if ( *start == '[' ) { return NewToken( TokenType::LUX_VECTOR_OPEN ); }
+
+        while ( Peek() != ']' and !IsAtEnd() ) {
+            if ( Peek() == '\n' ) { line++; }
+
+            if ( !IsAtEnd() ) { return NextToken(); }
+            Next();
+        }
+
+        if ( IsAtEnd() ) { return ErrorToken( "Unterminated Vector." ); }
+
+        return NewToken( TokenType::LUX_VECTOR_CLOSE );
+    }
+
+    auto Scanner::LuxMapToken() noexcept -> Token {
+        if ( *start == '{' ) { return NewToken( TokenType::LUX_MAP_OPEN ); }
+
+        while ( Peek() != '}' and !IsAtEnd() ) {
+            if ( Peek() == '\n' ) { line++; }
+            Next();
+        }
+
+        if ( IsAtEnd() ) { return ErrorToken( "Unterminated Map." ); }
+
+        return NewToken( TokenType::LUX_MAP_CLOSE );
     }
 
     auto Scanner::CharToken() noexcept -> Token {
@@ -289,13 +312,11 @@ namespace LuxLibrary {
             Next();
         }
 
-        if ( IsAtEnd() ) {
-            return ErrorToken( "Unterminated char." );
-        }
+        if ( IsAtEnd() ) { return ErrorToken( "Unterminated char." ); }
 
         Next();
         return NewToken( TokenType::CHAR );
-	}
+    }
 
     auto Scanner::IdentifierToken() noexcept -> Token {
         while ( IsAlpha( Peek() ) or IsDigit( Peek() ) ) {

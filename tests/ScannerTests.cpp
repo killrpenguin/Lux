@@ -12,7 +12,7 @@ using namespace LuxLibrary::detail;
 // NOLINTBEGIN
 TEST_CASE( "Scanner Testing", "[main]" ) {
     SECTION( "Scanner Class Tokens" ) {
-        const std::string source{ "(){};,.-+/*=!<>!= //comment\n==\t<=\r>=\"string\"5.9" };
+        const std::string source{ "();,.-+/*=!<>!= //comment\n==\t<=\r>=\"string\"5.9" };
 
         Scanner scanner{ source };
 
@@ -34,12 +34,6 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
 
         const Token right_paren{ scanner.NextToken() };
         CHECK( right_paren == scanner.NewToken( TokenType::RIGHT_PAREN ) );
-
-        const Token left_brace{ scanner.NextToken() };
-        CHECK( left_brace == scanner.NewToken( TokenType::LEFT_BRACE ) );
-
-        const Token right_brace{ scanner.NextToken() };
-        CHECK( right_brace == scanner.NewToken( TokenType::RIGHT_BRACE ) );
 
         const Token semicolon{ scanner.NextToken() };
         CHECK( semicolon == scanner.NewToken( TokenType::SEMICOLON ) );
@@ -181,6 +175,57 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
 
         const Token char_token{ scanner.NextToken() };
         CHECK( char_token == scanner.NewToken( TokenType::CHAR ) );
+    }
+
+    SECTION( "Test Vector Value scanning." ) {
+        // Inconsistent spacing in vec_source is deliberate. It shouldn't matter.
+        const std::string vec_source{ "[1, 'A', \"Apple\",[],1.0]" };
+        Scanner scanner{ vec_source };
+
+        const Token array_token{ scanner.NextToken() };
+        CHECK( array_token == scanner.NewToken( TokenType::LUX_VECTOR_OPEN ) );
+
+        const Token number_token{ scanner.NextToken() };
+        CHECK( number_token == scanner.NewToken( TokenType::INTEGER ) );
+
+        const Token first_comma{ scanner.NextToken() };
+        CHECK( first_comma == scanner.NewToken( TokenType::COMMA ) );
+
+        const Token char_token{ scanner.NextToken() };
+        CHECK( char_token == scanner.NewToken( TokenType::CHAR ) );
+
+        const Token second_comma{ scanner.NextToken() };
+        CHECK( second_comma == scanner.NewToken( TokenType::COMMA ) );
+
+        const Token string_token{ scanner.NextToken() };
+        CHECK( string_token == scanner.NewToken( TokenType::STRING ) );
+
+        const Token third_comma{ scanner.NextToken() };
+        CHECK( third_comma == scanner.NewToken( TokenType::COMMA ) );
+
+        const Token nested_vec_start{ scanner.NextToken() };
+        CHECK( nested_vec_start == scanner.NewToken( TokenType::LUX_VECTOR_OPEN ) );
+
+        const Token nested_vec_end{ scanner.NextToken() };
+        CHECK( nested_vec_end == scanner.NewToken( TokenType::LUX_VECTOR_CLOSE ) );
+
+        const Token fourth_comma{ scanner.NextToken() };
+        CHECK( fourth_comma == scanner.NewToken( TokenType::COMMA ) );
+
+        const Token double_token{ scanner.NextToken() };
+        CHECK( double_token == scanner.NewToken( TokenType::DOUBLE ) );
+    }
+
+    SECTION( "Test Map value scanning." ) {
+        const std::string map_source{ "{}" };
+
+        Scanner scanner{ map_source };
+
+        const Token map_open{ scanner.NextToken() };
+        CHECK( map_open == scanner.NewToken( TokenType::LUX_MAP_OPEN ) );
+
+        const Token map_close{ scanner.NextToken() };
+        CHECK( map_close == scanner.NewToken( TokenType::LUX_MAP_CLOSE ) );
     }
 }
 // NOLINTEND

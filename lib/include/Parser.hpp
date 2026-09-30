@@ -37,7 +37,7 @@ namespace LuxLibrary {
         FACTOR,     // * /
         UNARY,      // ! -
         CALL,       // . ()
-        PRIMARY
+        PRIMARY,
     };
 
     // 1. Pre-increment (++Precedence)

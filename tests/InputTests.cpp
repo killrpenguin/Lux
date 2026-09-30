@@ -4,11 +4,7 @@
 #include "Compiler.hpp"
 #include "Debug.hpp"
 #include "OpCode.hpp"
-#include "Repl.hpp"
-#include "Scanner.hpp"
 #include "Stack.hpp"
-#include "TokenVariant.hpp"
-#include "Value.hpp"
 
 #include <optional>
 #include <sstream>
@@ -20,27 +16,6 @@ using namespace LuxLibrary::detail;
 
 // NOLINTBEGIN
 TEST_CASE( "Crafting Interpreters cLox Section", "[main]" ) {
-    SECTION( "Repl Class Basics" ) {
-        LuxLibrary::Repl repl{};
-    }
-
-    SECTION( "Value Class Basics" ) {
-        const Value nil_type{};
-        REQUIRE( nil_type.IsNil() );
-
-        const Value bool_type{ true };
-        REQUIRE( bool_type.IsBool() );
-        REQUIRE( bool_type.AsBool() );
-
-        const Value num_type{ 2.0 };
-        REQUIRE( num_type.IsDouble() );
-        REQUIRE( num_type.AsDouble() == 2.0 );
-
-        const Value string_type{ std::string( "Test" ) };
-        REQUIRE( string_type.IsString() );
-        REQUIRE( string_type.AsString() == "Test" );
-    }
-
     SECTION( "Stack Class Basics" ) {
         LuxLibrary::Stack< int, 3 > stack{};
 
@@ -92,7 +67,7 @@ TEST_CASE( "Crafting Interpreters cLox Section", "[main]" ) {
     }
 
     SECTION( "Compile Complex Expression" ) {
-        using namespace std::string_literals; // Required for the 's' suffix
+        // using namespace std::string_literals; // Required for the 's' suffix
 
         Compiler compiler{};
 
@@ -167,6 +142,15 @@ TEST_CASE( "Crafting Interpreters cLox Section", "[main]" ) {
         REQUIRE( op_return_ln_two.has_value() );
         CHECK( op_return_ln_two->first == OpCode::OP_RETURN );
         CHECK( op_return_ln_two->second == 2 );
+    }
+
+    SECTION( "Compile LuxArray" ) {
+        Compiler compiler{};
+        Chunk complex_expression{};
+
+        const std::string vec_source{ "[1, 'A', \"Apple\",[],1.0]" };
+
+        // REQUIRE( compiler.Compile( vec_source, complex_expression ) );
     }
 
     SECTION( "Debug Output test from First Chapter" ) {

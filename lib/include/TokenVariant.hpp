@@ -62,6 +62,10 @@ namespace LuxLibrary {
         INTEGER,
         DOUBLE,
         CHAR,
+        LUX_VECTOR_OPEN,
+        LUX_VECTOR_CLOSE,
+        LUX_MAP_OPEN,
+        LUX_MAP_CLOSE,
 
         // Keywords.
         AND,
@@ -83,7 +87,7 @@ namespace LuxLibrary {
 
         ERROR,
         END_OF_FILE,
-        COUNT
+        COUNT,
     };
 
 }; // namespace LuxLibrary

@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (c) 2026 David McFarland
  *
  * SPDX-License-Identifier: Apache-2.0
