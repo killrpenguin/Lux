@@ -1,6 +1,7 @@
 find_package(Catch2 3 REQUIRED)
 
 add_executable(UnitTests TestsMain.cpp
+	"ReplTests.cpp"
 	"InputTests.cpp"
 	"ValueTests.cpp"
 	"ScannerTests.cpp"
