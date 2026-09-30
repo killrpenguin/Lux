@@ -153,6 +153,15 @@ TEST_CASE( "Crafting Interpreters cLox Section", "[main]" ) {
         // REQUIRE( compiler.Compile( vec_source, complex_expression ) );
     }
 
+    SECTION( "Compile String Expression" ) {
+        Compiler compiler{};
+        Chunk complex_expression{};
+
+        const std::string vec_source{ "I expect 6 to equal ${3+3}" };
+
+        // REQUIRE( compiler.Compile( vec_source, complex_expression ) );
+    }
+
     SECTION( "Debug Output test from First Chapter" ) {
         Chunk chunk{};
 

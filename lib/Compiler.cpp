@@ -219,21 +219,8 @@ namespace LuxLibrary {
     }
 
     auto Compiler::LuxVector() noexcept -> void {
-        Advance();
-
-        [[maybe_unused]] const Token& prefix_token{ parser.Previous() };
-
-        const Token& current_token{ parser.Current() };
-
-        LuxArray val{};
-
-        while ( current_token.type != TokenType::LUX_VECTOR_CLOSE ) {
-            Advance();
-            // val.emplace_back(val);
-            // const Token& infix_token{ parser.Previous() };
-        }
-
-        EmitConstant( Value( val ) );
+        Expression();
+        Consume( TokenType::LUX_VECTOR, "Expected ] at end of array expression." );
     }
 
     auto Compiler::LuxMap() noexcept -> void {

@@ -227,7 +227,7 @@ namespace LuxLibrary {
             }
             case '"' : return StringToken();
 
-            case ']' : return NewToken( TokenType::LUX_VECTOR_CLOSE );
+            case ']' : return NewToken( TokenType::RIGHT_BRACKET );
             case '[' : return LuxVectorToken();
 
             case '}' : return NewToken( TokenType::LUX_MAP_CLOSE );
@@ -280,18 +280,15 @@ namespace LuxLibrary {
     }
 
     auto Scanner::LuxVectorToken() noexcept -> Token {
-        if ( *start == '[' ) { return NewToken( TokenType::LUX_VECTOR_OPEN ); }
-
         while ( Peek() != ']' and !IsAtEnd() ) {
             if ( Peek() == '\n' ) { line++; }
-
-            if ( !IsAtEnd() ) { return NextToken(); }
             Next();
         }
 
         if ( IsAtEnd() ) { return ErrorToken( "Unterminated Vector." ); }
 
-        return NewToken( TokenType::LUX_VECTOR_CLOSE );
+        Next();
+        return NewToken( TokenType::LUX_VECTOR );
     }
 
     auto Scanner::LuxMapToken() noexcept -> Token {

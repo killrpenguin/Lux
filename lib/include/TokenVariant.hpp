@@ -38,6 +38,8 @@ namespace LuxLibrary {
         RIGHT_PAREN,
         LEFT_BRACE,
         RIGHT_BRACE,
+        LEFT_BRACKET,
+        RIGHT_BRACKET,
         COMMA,
         DOT,
         MINUS,
@@ -56,14 +58,18 @@ namespace LuxLibrary {
         LESS,
         LESS_EQUAL,
 
+        TOKEN_INTERPOLATION_START,  // The "Hello ${ part
+        TOKEN_INTERPOLATION_MIDDLE, // The } middle text ${ part
+
         // Literals.
         IDENTIFIER,
         STRING,
         INTEGER,
         DOUBLE,
         CHAR,
-        LUX_VECTOR_OPEN,
-        LUX_VECTOR_CLOSE,
+
+        // Objects.
+        LUX_VECTOR,
         LUX_MAP_OPEN,
         LUX_MAP_CLOSE,
 
