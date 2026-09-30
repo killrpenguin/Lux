@@ -1,4 +1,4 @@
- /*
+/*
  * Copyright (c) 2026 David McFarland
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -120,8 +120,9 @@ namespace LuxLibrary {
 
         assert( ip_distance != 0 && "instruction ptr distance was 0." );
 
-        const std::size_t line{ current_chunk->GetLine(
-            static_cast< std::size_t >( ip_distance - 1 ) ) };
+        const std::size_t line{
+            current_chunk->GetLine( static_cast< std::size_t >( ip_distance - 1 ) ),
+        };
 
         stack.Reset();
 

@@ -18,7 +18,6 @@
 
 #pragma once
 
-// #include "Common.hpp"
 #include "Value.hpp"
 
 #include <cstddef>
@@ -60,7 +59,7 @@ namespace LuxLibrary {
         Repl& operator=( const Repl& other )     = delete;
         Repl& operator=( Repl&& other ) noexcept = delete;
 
-        static Repl* InstancePtr;
+        static Repl* InstancePtr; // required for interacting with the C sigaction api.
 
         auto Initialize( std::istream& input ) noexcept -> void;
         auto Running() const noexcept -> bool;
