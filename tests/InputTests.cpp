@@ -187,18 +187,17 @@ TEST_CASE( "Crafting Interpreters cLox Section", "[main]" ) {
         CHECK( op_return->second == 1 );
     }
 
-    SECTION( "Compile Interpolated string." ) {
+    SECTION( "Compile Simple Interpolated String." ) {
         Compiler compiler{};
         Chunk expression{};
 
-        // const std::string source{ "\"Test ${\"compiler\"} string.\"" };
-        const std::string source{ "\"Test ${\"compiler\"} string.\"" };
+        const std::string source{ "\"Compile ${\"test\"} string.\"" };
 
         const bool compiled_successfully{ compiler.Compile( source, expression ) };
 
         REQUIRE( compiled_successfully );
 
-        Debug::DisassembleChunk( expression, "Interpolation String" );
+        // Debug::DisassembleChunk( expression, "Interpolation String" );
 
         Debug::OpCodeAndLine start_of_str{ Debug::GetOpcode( expression, 0 ) };
         REQUIRE( start_of_str.has_value() );
@@ -226,6 +225,69 @@ TEST_CASE( "Crafting Interpreters cLox Section", "[main]" ) {
         CHECK( post_add_interpolated_expr->second == 1 );
 
         Debug::OpCodeAndLine op_return{ Debug::GetOpcode( expression, 8 ) };
+        REQUIRE( op_return.has_value() );
+        CHECK( op_return->first == OpCode::OP_RETURN );
+        CHECK( op_return->second == 1 );
+    }
+
+    SECTION( "Compile Complex Interpolated string." ) {
+        Compiler compiler{};
+        Chunk expression{};
+
+        const std::string source{ "\"Comp ${\"cplx\"} tst ${\"str\" }.\"" };
+
+        const bool compiled_successfully{ compiler.Compile( source, expression ) };
+
+        Debug::DisassembleChunk( expression, "Complex Interpolation String" );
+
+        REQUIRE( compiled_successfully );
+
+        Debug::OpCodeAndLine first_str{ Debug::GetOpcode( expression, 0 ) };
+        REQUIRE( first_str.has_value() );
+        CHECK( first_str->first == OpCode::OP_CONSTANT );
+        CHECK( first_str->second == 1 );
+
+        Debug::OpCodeAndLine first_interpolated_str{ Debug::GetOpcode( expression, 2 ) };
+        REQUIRE( first_interpolated_str.has_value() );
+        CHECK( first_interpolated_str->first == OpCode::OP_CONSTANT );
+        CHECK( first_interpolated_str->second == 1 );
+
+        Debug::OpCodeAndLine first_add{ Debug::GetOpcode( expression, 4 ) };
+        REQUIRE( first_add.has_value() );
+        CHECK( first_add->first == OpCode::OP_ADD );
+        CHECK( first_add->second == 1 );
+
+        Debug::OpCodeAndLine third_str{ Debug::GetOpcode( expression, 5 ) };
+        REQUIRE( third_str.has_value() );
+        CHECK( third_str->first == OpCode::OP_CONSTANT );
+        CHECK( third_str->second == 1 );
+
+        Debug::OpCodeAndLine third_interpolated_str{ Debug::GetOpcode( expression, 7 ) };
+        REQUIRE( third_interpolated_str.has_value() );
+        CHECK( third_interpolated_str->first == OpCode::OP_CONSTANT );
+        CHECK( third_interpolated_str->second == 1 );
+
+        Debug::OpCodeAndLine post_add_interpolated_expr{ Debug::GetOpcode( expression, 9 ) };
+        REQUIRE( post_add_interpolated_expr.has_value() );
+        CHECK( post_add_interpolated_expr->first == OpCode::OP_ADD );
+        CHECK( post_add_interpolated_expr->second == 1 );
+
+        Debug::OpCodeAndLine end_of_str{ Debug::GetOpcode( expression, 10 ) };
+        REQUIRE( end_of_str.has_value() );
+        CHECK( end_of_str->first == OpCode::OP_CONSTANT );
+        CHECK( end_of_str->second == 1 );
+
+        Debug::OpCodeAndLine third_add_interpolated_expr{ Debug::GetOpcode( expression, 12 ) };
+        REQUIRE( third_add_interpolated_expr.has_value() );
+        CHECK( third_add_interpolated_expr->first == OpCode::OP_ADD );
+        CHECK( third_add_interpolated_expr->second == 1 );
+
+        Debug::OpCodeAndLine last_add{ Debug::GetOpcode( expression, 13 ) };
+        REQUIRE( last_add.has_value() );
+        CHECK( last_add->first == OpCode::OP_ADD );
+        CHECK( last_add->second == 1 );
+
+        Debug::OpCodeAndLine op_return{ Debug::GetOpcode( expression, 14 ) };
         REQUIRE( op_return.has_value() );
         CHECK( op_return->first == OpCode::OP_RETURN );
         CHECK( op_return->second == 1 );

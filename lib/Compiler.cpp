@@ -224,8 +224,6 @@ namespace LuxLibrary {
         while ( parser.Previous().type != TokenType::INTERPOLATION_END ) {
             Expression();
 
-            // Consume( TokenType::INTERPOLATION_END, "Expect '}' after interpolation expression." );
-
             EmitByte( OpCode::OP_ADD );
         }
     }

@@ -287,7 +287,6 @@ namespace LuxLibrary {
 
             if ( Peek() == '$' and PeekNext() == '{' ) {
                 Next();
-                InString();
                 const Token token{ NewToken( TokenType::INTERPOLATION_START ) };
                 Next();
                 return token;
@@ -298,6 +297,7 @@ namespace LuxLibrary {
         if ( IsAtEnd() ) { return ErrorToken( "Unterminated string." ); }
 
         Next();
+        InString();
         return NewToken( TokenType::INTERPOLATION_END );
     }
 
