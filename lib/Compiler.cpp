@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2026 David McFarland
  *
@@ -216,6 +217,17 @@ namespace LuxLibrary {
         const std::string_view text{ &*text_start, token.length - 2 };
 
         EmitConstant( Value( text ) );
+    }
+
+    auto Compiler::Interpolation() noexcept -> void {
+        String();
+        while ( parser.Previous().type != TokenType::INTERPOLATION_END ) {
+            Expression();
+
+            // Consume( TokenType::INTERPOLATION_END, "Expect '}' after interpolation expression." );
+
+            EmitByte( OpCode::OP_ADD );
+        }
     }
 
     auto Compiler::LuxVector() noexcept -> void {

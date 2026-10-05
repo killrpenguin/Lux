@@ -43,37 +43,41 @@ namespace LuxLibrary {
 
         static constexpr std::array< Rule, RulesMax > rules{
             // clang-format off
+
             Rule{ .prefix = &Compiler::Grouping, .infix = nullptr, .precedence = Precedence::NONE },     // LEFT_PAREN
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // RIGHT_PAREN
-                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // LEFT_BRACE
-                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // RIGHT_BRACE
-                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // LEFT_BRACKET
-                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // RIGHT_BRACKET
-                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // COMMA
+                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // LEFT_BRACE {
+                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // RIGHT_BRACE }
+                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // LEFT_BRACKET [
+                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // RIGHT_BRACKET ]
+
+				Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // COMMA
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // DOT
                 Rule{ .prefix = &Compiler::Unary, .infix = &Compiler::Binary, .precedence = Precedence::TERM },   // MINUS
                 Rule{ .prefix = nullptr, .infix = &Compiler::Binary, .precedence = Precedence::TERM },   // PLUS
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE },   // SEMICOLON
                 Rule{ .prefix = nullptr, .infix = &Compiler::Binary, .precedence = Precedence::FACTOR }, // SLASH
                 Rule{ .prefix = nullptr, .infix = &Compiler::Binary, .precedence = Precedence::FACTOR }, // STAR
+
+				// One or two character tokens.
                 Rule{ .prefix = &Compiler::Unary, .infix = nullptr, .precedence = Precedence::NONE }, // BANG
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // BANG_EQUAL
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // EQUAL
-
                 Rule{ .prefix = nullptr, .infix = &Compiler::Binary, .precedence = Precedence::EQUALITY }, // EQUAL_EQUAL
                 Rule{ .prefix = nullptr, .infix = &Compiler::Binary, .precedence = Precedence::COMPARISON }, // GREATER
                 Rule{ .prefix = nullptr, .infix = &Compiler::Binary, .precedence = Precedence::COMPARISON }, // GREATER_EQUAL
                 Rule{ .prefix = nullptr, .infix = &Compiler::Binary, .precedence = Precedence::COMPARISON }, // LESS
                 Rule{ .prefix = nullptr, .infix = &Compiler::Binary, .precedence = Precedence::COMPARISON }, // LESS_EQUAL
-                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // IDENTIFIER
 
-                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // TOKEN_INTERPOLATION_START
-                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // TOKEN_INTERPOLATION_MIDDLE
-                                                                                             // 
+                  Rule{ .prefix = &Compiler::Interpolation, .infix = nullptr, .precedence = Precedence::NONE }, // INTERPOLATION_START
+                  Rule{ .prefix = &Compiler::String, .infix = nullptr, .precedence = Precedence::NONE }, // INTERPOLATION_END
+                                                                                                              // 
+                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // IDENTIFIER
                 Rule{ .prefix = &Compiler::String, .infix = nullptr, .precedence = Precedence::NONE }, // STRING
                 Rule{ .prefix = &Compiler::Number, .infix = nullptr, .precedence = Precedence::NONE }, // INTEGER
                 Rule{ .prefix = &Compiler::Number, .infix = nullptr, .precedence = Precedence::NONE }, // DOUBLE
                 Rule{ .prefix = &Compiler::Char, .infix = nullptr, .precedence = Precedence::NONE }, // CHAR
+                                                                                                     // 
                 Rule{ .prefix = &Compiler::LuxVector, .infix = nullptr, .precedence = Precedence::NONE }, // LUX_VECTOR				
                 Rule{ .prefix = &Compiler::LuxMap, .infix = nullptr, .precedence = Precedence::NONE }, // LUX_MAP_OPEN				
                 Rule{ .prefix = &Compiler::LuxMap, .infix = nullptr, .precedence = Precedence::NONE }, // LUX_MAP_CLOSE				

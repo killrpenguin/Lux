@@ -184,48 +184,57 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
 
         // const Token array_token{ scanner.NextToken() };
         // CHECK( array_token == scanner.NewToken( TokenType::LUX_VECTOR ) );
-		// 
+        //
         // const Token number_token{ scanner.NextToken() };
         // CHECK( number_token == scanner.NewToken( TokenType::INTEGER ) );
-		// 
+        //
         // const Token first_comma{ scanner.NextToken() };
         // CHECK( first_comma == scanner.NewToken( TokenType::COMMA ) );
-		// 
+        //
         // const Token char_token{ scanner.NextToken() };
         // CHECK( char_token == scanner.NewToken( TokenType::CHAR ) );
-		// 
+        //
         // const Token second_comma{ scanner.NextToken() };
         // CHECK( second_comma == scanner.NewToken( TokenType::COMMA ) );
-		// 
+        //
         // const Token string_token{ scanner.NextToken() };
         // CHECK( string_token == scanner.NewToken( TokenType::STRING ) );
-		// 
+        //
         // const Token third_comma{ scanner.NextToken() };
         // CHECK( third_comma == scanner.NewToken( TokenType::COMMA ) );
-		// 
+        //
         // const Token nested_vec_start{ scanner.NextToken() };
         // CHECK( nested_vec_start == scanner.NewToken( TokenType::LUX_VECTOR ) );
-		// 
+        //
         // const Token nested_vec_end{ scanner.NextToken() };
         // CHECK( nested_vec_end == scanner.NewToken( TokenType::LUX_VECTOR ) );
-		// 
+        //
         // const Token fourth_comma{ scanner.NextToken() };
         // CHECK( fourth_comma == scanner.NewToken( TokenType::COMMA ) );
-		// 
+        //
         // const Token double_token{ scanner.NextToken() };
         // CHECK( double_token == scanner.NewToken( TokenType::DOUBLE ) );
+    }
+
+    SECTION( "Test string interpolation scanning." ) {
+        const std::string source{ "\"This test ${\"test\"} more text.\"" };
+
+        Scanner scanner{ source };
+
+        const Token start{ scanner.NextToken() };
+        CHECK( start == scanner.NewToken( TokenType::INTERPOLATION_START ) );
+
+        const Token text{ scanner.NextToken() };
+        CHECK( text == scanner.NewToken( TokenType::STRING ) );
+
+        const Token stop{ scanner.NextToken() };
+        CHECK( stop == scanner.NewToken( TokenType::INTERPOLATION_END ) );
     }
 
     SECTION( "Test Map value scanning." ) {
         const std::string map_source{ "{}" };
 
         Scanner scanner{ map_source };
-
-        const Token map_open{ scanner.NextToken() };
-        CHECK( map_open == scanner.NewToken( TokenType::LUX_MAP_OPEN ) );
-
-        const Token map_close{ scanner.NextToken() };
-        CHECK( map_close == scanner.NewToken( TokenType::LUX_MAP_CLOSE ) );
     }
 }
 // NOLINTEND

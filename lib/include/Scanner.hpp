@@ -33,13 +33,12 @@ namespace LuxLibrary {
         using line_type = std::uint32_t;
 
       private:
-	  
-
         std::string::const_iterator start{};
         std::string::const_iterator current{};
         std::string::const_iterator end{};
 
         line_type line{ 1 };
+        bool in_string{ false };
 
         /*
          * @brief Checks if the given character is one of the 10 decimal digits.
@@ -67,6 +66,17 @@ namespace LuxLibrary {
          * @return bool True if the scanner has reached 1 passed the end of the source string.
          */
         auto IsAtEnd() const noexcept -> bool;
+
+        /*
+         * @brief Toggle the boolean value tracking whether the scanner is in an interpolated string.
+         */
+        auto InString() noexcept -> void;
+
+        /*
+         * @brief Checks if the scanner is in an interpolated string..
+         * @return bool True if the scanner has found a ${ in a string.
+         */
+        auto IsInString() const noexcept -> bool;
 
         /*
          * @brief .
@@ -176,6 +186,12 @@ namespace LuxLibrary {
          * @brief Generate a string with the text between two double quotes.
          * @return A string token.
          */
+        auto ContinueString() noexcept -> Token;
+
+        /*
+         * @brief Generate a string with the text between two double quotes.
+         * @return A string token.
+         */
         auto StringToken() noexcept -> Token;
 
         /*
@@ -210,14 +226,12 @@ namespace LuxLibrary {
         template < typename Variant >
             requires detail::IsTokenType< Variant >
         auto NewToken( const Variant& type ) const noexcept -> Token {
-            // clang-format off
             return Token{
-              .type = type,
-			  .start = start,
-			  .length = static_cast< std::size_t >( current - start ),
-			  .line = line
+                .type   = type,
+                .start  = start,
+                .length = static_cast< std::size_t >( current - start ),
+                .line   = line,
             };
-            // clang-format on
         }
     };
 }; // namespace LuxLibrary

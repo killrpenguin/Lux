@@ -112,6 +112,14 @@ namespace LuxLibrary {
         return current == end or *current == '\0';
     }
 
+    auto Scanner::InString() noexcept -> void {
+        in_string = !in_string;
+    }
+
+    auto Scanner::IsInString() const noexcept -> bool {
+        return in_string;
+    }
+
     auto Scanner::Match( const char_type expected ) noexcept -> bool {
         if ( IsAtEnd() ) { return false; }
         if ( static_cast< char_type >( *current ) != expected ) { return false; }
@@ -202,6 +210,7 @@ namespace LuxLibrary {
         switch ( current_char ) {
             case '(': return NewToken( TokenType::LEFT_PAREN );
             case ')': return NewToken( TokenType::RIGHT_PAREN );
+            case '{': return NewToken( TokenType::LEFT_BRACE );
             case ';': return NewToken( TokenType::SEMICOLON );
             case ',': return NewToken( TokenType::COMMA );
             case '.': return NewToken( TokenType::DOT );
@@ -209,6 +218,14 @@ namespace LuxLibrary {
             case '+': return NewToken( TokenType::PLUS );
             case '/': return NewToken( TokenType::SLASH );
             case '*': return NewToken( TokenType::STAR );
+            case '}': {
+                if ( in_string ) { return ContinueString(); }
+                return NewToken( TokenType::RIGHT_BRACE );
+            };
+            case '$': {
+                if ( in_string and Match( '{' ) ) { return NewToken( TokenType::RIGHT_BRACE ); }
+                return ErrorToken( "Invalid token." );
+            };
             case '!': {
                 if ( Match( '=' ) ) { return NewToken( TokenType::BANG_EQUAL ); }
                 return NewToken( TokenType::BANG );
@@ -229,9 +246,6 @@ namespace LuxLibrary {
 
             case ']' : return NewToken( TokenType::RIGHT_BRACKET );
             case '[' : return LuxVectorToken();
-
-            case '}' : return NewToken( TokenType::LUX_MAP_CLOSE );
-            case '{' : return LuxMapToken();
 
             case '\'': return CharToken();
             default  : return ErrorToken( "Invalid token." );
@@ -267,9 +281,37 @@ namespace LuxLibrary {
         return NewToken( TokenType::INTEGER );
     }
 
+    auto Scanner::ContinueString() noexcept -> Token {
+        while ( Peek() != '"' and !IsAtEnd() ) {
+            if ( Peek() == '\n' ) { line++; }
+
+            if ( Peek() == '$' and PeekNext() == '{' ) {
+                Next();
+                InString();
+                const Token token{ NewToken( TokenType::INTERPOLATION_START ) };
+                Next();
+                return token;
+            }
+            Next();
+        }
+
+        if ( IsAtEnd() ) { return ErrorToken( "Unterminated string." ); }
+
+        Next();
+        return NewToken( TokenType::INTERPOLATION_END );
+    }
+
     auto Scanner::StringToken() noexcept -> Token {
         while ( Peek() != '"' and !IsAtEnd() ) {
             if ( Peek() == '\n' ) { line++; }
+
+            if ( Peek() == '$' and PeekNext() == '{' ) {
+                Next();
+                InString();
+                const Token token{ NewToken( TokenType::INTERPOLATION_START ) };
+                Next();
+                return token;
+            }
             Next();
         }
 

@@ -161,7 +161,7 @@ namespace LuxLibrary {
             try {
                 return std::forward< Self >( self ).code.at( index );
             } catch ( const std::out_of_range& err ) {
-                fmt::println( std::cerr, "Index {} outof bounds.\nMessage: {}", index, err.what() );
+                fmt::println( std::cerr, "Index {} out of bounds.\nMessage: {}", index, err.what() );
                 std::exit( EXIT_FAILURE );
                 return std::forward< Self >( self ).code.back();
             } catch ( ... ) {

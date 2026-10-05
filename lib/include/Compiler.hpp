@@ -82,6 +82,7 @@ namespace LuxLibrary {
         auto Unary() noexcept -> void;
         auto LuxVector() noexcept -> void;
         auto LuxMap() noexcept -> void;
+        auto Interpolation() noexcept -> void;
         
         auto ErrorAt( const Token& token, const std::string_view message ) noexcept -> void;
 

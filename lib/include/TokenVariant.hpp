@@ -58,8 +58,8 @@ namespace LuxLibrary {
         LESS,
         LESS_EQUAL,
 
-        TOKEN_INTERPOLATION_START,  // The "Hello ${ part
-        TOKEN_INTERPOLATION_MIDDLE, // The } middle text ${ part
+        INTERPOLATION_START, // The "Hello ${ part
+        INTERPOLATION_END,   // The } middle text ${ part
 
         // Literals.
         IDENTIFIER,

@@ -144,6 +144,93 @@ TEST_CASE( "Crafting Interpreters cLox Section", "[main]" ) {
         CHECK( op_return_ln_two->second == 2 );
     }
 
+    SECTION( "Compile Concatenated String." ) {
+        Compiler compiler{};
+        Chunk expression{};
+
+        const std::string source{ "\"This is a \" + \"string \" + \"test.\"" };
+
+        const bool compiled_successfully{ compiler.Compile( source, expression ) };
+
+        REQUIRE( compiled_successfully );
+
+        // Debug::DisassembleChunk( expression, "Concat String" );
+
+        Debug::OpCodeAndLine start_of_str{ Debug::GetOpcode( expression, 0 ) };
+        REQUIRE( start_of_str.has_value() );
+        CHECK( start_of_str->first == OpCode::OP_CONSTANT );
+        CHECK( start_of_str->second == 1 );
+
+        Debug::OpCodeAndLine middle_of_str{ Debug::GetOpcode( expression, 2 ) };
+        REQUIRE( middle_of_str.has_value() );
+        CHECK( middle_of_str->first == OpCode::OP_CONSTANT );
+        CHECK( middle_of_str->second == 1 );
+
+        Debug::OpCodeAndLine concat_start_to_middle{ Debug::GetOpcode( expression, 4 ) };
+        REQUIRE( concat_start_to_middle.has_value() );
+        CHECK( concat_start_to_middle->first == OpCode::OP_ADD );
+        CHECK( concat_start_to_middle->second == 1 );
+
+        Debug::OpCodeAndLine end_of_str{ Debug::GetOpcode( expression, 5 ) };
+        REQUIRE( end_of_str.has_value() );
+        CHECK( end_of_str->first == OpCode::OP_CONSTANT );
+        CHECK( end_of_str->second == 1 );
+
+        Debug::OpCodeAndLine concat_end_to_middle{ Debug::GetOpcode( expression, 7 ) };
+        REQUIRE( concat_end_to_middle.has_value() );
+        CHECK( concat_end_to_middle->first == OpCode::OP_ADD );
+        CHECK( concat_end_to_middle->second == 1 );
+
+        Debug::OpCodeAndLine op_return{ Debug::GetOpcode( expression, 8 ) };
+        REQUIRE( op_return.has_value() );
+        CHECK( op_return->first == OpCode::OP_RETURN );
+        CHECK( op_return->second == 1 );
+    }
+
+    SECTION( "Compile Interpolated string." ) {
+        Compiler compiler{};
+        Chunk expression{};
+
+        // const std::string source{ "\"Test ${\"compiler\"} string.\"" };
+        const std::string source{ "\"Test ${\"compiler\"} string.\"" };
+
+        const bool compiled_successfully{ compiler.Compile( source, expression ) };
+
+        REQUIRE( compiled_successfully );
+
+        Debug::DisassembleChunk( expression, "Interpolation String" );
+
+        Debug::OpCodeAndLine start_of_str{ Debug::GetOpcode( expression, 0 ) };
+        REQUIRE( start_of_str.has_value() );
+        CHECK( start_of_str->first == OpCode::OP_CONSTANT );
+        CHECK( start_of_str->second == 1 );
+
+        Debug::OpCodeAndLine interpolated_str{ Debug::GetOpcode( expression, 2 ) };
+        REQUIRE( interpolated_str.has_value() );
+        CHECK( interpolated_str->first == OpCode::OP_CONSTANT );
+        CHECK( interpolated_str->second == 1 );
+
+        Debug::OpCodeAndLine pre_add_interpolated_expr{ Debug::GetOpcode( expression, 4 ) };
+        REQUIRE( pre_add_interpolated_expr.has_value() );
+        CHECK( pre_add_interpolated_expr->first == OpCode::OP_ADD );
+        CHECK( pre_add_interpolated_expr->second == 1 );
+
+        Debug::OpCodeAndLine end_of_str{ Debug::GetOpcode( expression, 5 ) };
+        REQUIRE( end_of_str.has_value() );
+        CHECK( end_of_str->first == OpCode::OP_CONSTANT );
+        CHECK( end_of_str->second == 1 );
+
+        Debug::OpCodeAndLine post_add_interpolated_expr{ Debug::GetOpcode( expression, 7 ) };
+        REQUIRE( post_add_interpolated_expr.has_value() );
+        CHECK( post_add_interpolated_expr->first == OpCode::OP_ADD );
+        CHECK( post_add_interpolated_expr->second == 1 );
+
+        Debug::OpCodeAndLine op_return{ Debug::GetOpcode( expression, 8 ) };
+        REQUIRE( op_return.has_value() );
+        CHECK( op_return->first == OpCode::OP_RETURN );
+        CHECK( op_return->second == 1 );
+    }
+
     SECTION( "Compile LuxArray" ) {
         Compiler compiler{};
         Chunk complex_expression{};

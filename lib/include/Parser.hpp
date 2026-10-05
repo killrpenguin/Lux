@@ -86,8 +86,8 @@ namespace LuxLibrary {
          * @brief
          * @return Set panic mode to true.
          */
-      auto PanicAndError() noexcept -> void;
-      
+        auto PanicAndError() noexcept -> void;
+
         /*
          * @brief
          * @return Set panic mode to true.
@@ -120,7 +120,7 @@ namespace LuxLibrary {
 
         /*
          * @brief
-         * @return bool True if the current token is an Error token.
+         * @return
          */
         auto Current() const noexcept -> const Token&;
 
