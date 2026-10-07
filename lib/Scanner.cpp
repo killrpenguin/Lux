@@ -238,7 +238,7 @@ namespace LuxLibrary {
             case '"' : return StringToken();
 
             case ']' : return NewToken( TokenType::RIGHT_BRACKET );
-            case '[' : return LuxVectorToken();
+            case '[' : return NewToken( TokenType::LUX_VECTOR );
 
             case '\'': return CharToken();
             default  : return ErrorToken( "Invalid token." );
@@ -315,15 +315,6 @@ namespace LuxLibrary {
     }
 
     auto Scanner::LuxVectorToken() noexcept -> Token {
-        while ( Peek() != ']' and !IsAtEnd() ) {
-            if ( Peek() == '\n' ) { line++; }
-            Next();
-        }
-
-        if ( IsAtEnd() ) { return ErrorToken( "Unterminated Vector." ); }
-
-        Next();
-        return NewToken( TokenType::LUX_VECTOR );
     }
 
     auto Scanner::LuxMapToken() noexcept -> Token {
