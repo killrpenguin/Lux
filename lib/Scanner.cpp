@@ -22,6 +22,7 @@
 
 #include <cctype>
 #include <iterator>
+#include <variant>
 
 namespace LuxLibrary {
     namespace ranges = std::ranges;
@@ -110,14 +111,6 @@ namespace LuxLibrary {
 
     auto Scanner::IsAtEnd() const noexcept -> bool {
         return current == end or *current == '\0';
-    }
-
-    auto Scanner::InString() noexcept -> void {
-        in_string = !in_string;
-    }
-
-    auto Scanner::IsInString() const noexcept -> bool {
-        return in_string;
     }
 
     auto Scanner::Match( const char_type expected ) noexcept -> bool {
@@ -219,11 +212,11 @@ namespace LuxLibrary {
             case '/': return NewToken( TokenType::SLASH );
             case '*': return NewToken( TokenType::STAR );
             case '}': {
-                if ( in_string ) { return ContinueString(); }
+                if ( InString() ) { return ContinueString(); }
                 return NewToken( TokenType::RIGHT_BRACE );
             };
             case '$': {
-                if ( in_string and Match( '{' ) ) { return NewToken( TokenType::RIGHT_BRACE ); }
+                if ( InString() and Match( '{' ) ) { return NewToken( TokenType::RIGHT_BRACE ); }
                 return ErrorToken( "Invalid token." );
             };
             case '!': {
@@ -297,7 +290,7 @@ namespace LuxLibrary {
         if ( IsAtEnd() ) { return ErrorToken( "Unterminated string." ); }
 
         Next();
-        InString();
+        DefaultScanning();
         return NewToken( TokenType::INTERPOLATION_END );
     }
 
@@ -307,7 +300,7 @@ namespace LuxLibrary {
 
             if ( Peek() == '$' and PeekNext() == '{' ) {
                 Next();
-                InString();
+                ScanningString();
                 const Token token{ NewToken( TokenType::INTERPOLATION_START ) };
                 Next();
                 return token;
@@ -364,4 +357,29 @@ namespace LuxLibrary {
 
         return NewToken( IdentifierType() );
     }
+
+    auto Scanner::DefaultScanning() noexcept -> void {
+        state = detail::DefaultMode{};
+    }
+
+    auto Scanner::ScanningString() noexcept -> void {
+        state = detail::StringMode{};
+    }
+
+    auto Scanner::InString() const noexcept -> bool {
+        return StateIs< detail::StringMode >();
+    }
+
+    auto Scanner::InArray() const noexcept -> bool {
+        return StateIs< detail::ArrayMode >();
+    }
+
+    auto Scanner::InMap() const noexcept -> bool {
+        return StateIs< detail::MapMode >();
+    }
+
+    auto Scanner::IsDefault() const noexcept -> bool {
+        return StateIs< detail::DefaultMode >();
+    }
+
 }; // namespace LuxLibrary

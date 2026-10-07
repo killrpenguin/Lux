@@ -24,8 +24,33 @@
 #include <cstdint>
 #include <cstring>
 #include <string>
+#include <variant>
 
 namespace LuxLibrary {
+
+    namespace detail {
+
+        struct StringMode {};
+        struct ArrayMode {};
+        struct MapMode {};
+        using DefaultMode = std::monostate;
+
+        using State = std::variant< StringMode, ArrayMode, MapMode, DefaultMode >;
+
+        template < typename T, typename ScannerState >
+        struct is_possible_state : std::false_type {};
+
+        template < typename T, typename... Args >
+        struct is_possible_state< T, std::variant< Args... > >
+            : std::bool_constant< ( std::is_same_v< T, Args > || ... ) > {};
+
+        template < typename T, typename ScannerState >
+        inline constexpr bool is_possible_state_v = is_possible_state< T, ScannerState >::value;
+
+        template < typename T, typename ScannerState >
+        concept IsStateVariant = is_possible_state_v< T, ScannerState >;
+
+    }; // namespace detail
 
     class Scanner {
       public:
@@ -38,7 +63,8 @@ namespace LuxLibrary {
         std::string::const_iterator end{};
 
         line_type line{ 1 };
-        bool in_string{ false };
+
+        State state{};
 
         /*
          * @brief Checks if the given character is one of the 10 decimal digits.
@@ -66,17 +92,6 @@ namespace LuxLibrary {
          * @return bool True if the scanner has reached 1 passed the end of the source string.
          */
         auto IsAtEnd() const noexcept -> bool;
-
-        /*
-         * @brief Toggle the boolean value tracking whether the scanner is in an interpolated string.
-         */
-        auto InString() noexcept -> void;
-
-        /*
-         * @brief Checks if the scanner is in an interpolated string..
-         * @return bool True if the scanner has found a ${ in a string.
-         */
-        auto IsInString() const noexcept -> bool;
 
         /*
          * @brief .
@@ -130,6 +145,12 @@ namespace LuxLibrary {
             if ( current - start == pos + length and ( sub_view == rest ) ) { return type; }
 
             return TokenType::IDENTIFIER;
+        }
+
+        template < typename T >
+            requires detail::IsStateVariant< T, detail::State >
+        constexpr auto StateIs() const noexcept -> bool {
+            return std::holds_alternative< T >( state );
         }
 
       public:
@@ -219,6 +240,40 @@ namespace LuxLibrary {
         auto IdentifierToken() noexcept -> Token;
 
         /*
+         * @brief Checks that the scanner is in String scanning mode.
+         * @return bool Returns true if in string mode.
+         */
+        auto InString() const noexcept -> bool;
+
+        /*
+         * @brief Checks that the scanner is in Array scanning mode.
+         * @return bool Returns true if in array mode.
+         */
+        auto InArray() const noexcept -> bool;
+
+        /*
+         * @brief Checks that the scanner is in Map scanning mode.
+         * @return bool Returns true if in map mode.
+         */
+        auto InMap() const noexcept -> bool;
+
+        /*
+         * @brief Checks that the scanner is in default scanning mode.
+         * @return bool Returns true if scanning a string.
+         */
+        auto IsDefault() const noexcept -> bool;
+
+        /*
+         * @brief Set the scanning mode to default.
+         */
+        auto DefaultScanning() noexcept -> void;
+
+        /*
+         * @brief Set the scanning mode to string.
+         */
+        auto ScanningString() noexcept -> void;
+
+        /*
          * @brief
          * @param
          * @return
@@ -234,4 +289,5 @@ namespace LuxLibrary {
             };
         }
     };
+
 }; // namespace LuxLibrary
