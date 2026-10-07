@@ -234,7 +234,7 @@ TEST_CASE( "Crafting Interpreters cLox Section", "[main]" ) {
         Compiler compiler{};
         Chunk expression{};
 
-        const std::string source{ "\"Comp ${\"cplx\"} tst ${\"str\" }.\"" };
+        const std::string source{ "\"Comp ${\"cplx\"} tst ${10 - 5}.\"" };
 
         const bool compiled_successfully{ compiler.Compile( source, expression ) };
 
@@ -257,37 +257,47 @@ TEST_CASE( "Crafting Interpreters cLox Section", "[main]" ) {
         CHECK( first_add->first == OpCode::OP_ADD );
         CHECK( first_add->second == 1 );
 
-        Debug::OpCodeAndLine third_str{ Debug::GetOpcode( expression, 5 ) };
-        REQUIRE( third_str.has_value() );
-        CHECK( third_str->first == OpCode::OP_CONSTANT );
-        CHECK( third_str->second == 1 );
-
-        Debug::OpCodeAndLine third_interpolated_str{ Debug::GetOpcode( expression, 7 ) };
+        Debug::OpCodeAndLine third_interpolated_str{ Debug::GetOpcode( expression, 5 ) };
         REQUIRE( third_interpolated_str.has_value() );
         CHECK( third_interpolated_str->first == OpCode::OP_CONSTANT );
         CHECK( third_interpolated_str->second == 1 );
 
-        Debug::OpCodeAndLine post_add_interpolated_expr{ Debug::GetOpcode( expression, 9 ) };
-        REQUIRE( post_add_interpolated_expr.has_value() );
-        CHECK( post_add_interpolated_expr->first == OpCode::OP_ADD );
-        CHECK( post_add_interpolated_expr->second == 1 );
+        Debug::OpCodeAndLine first_constant{ Debug::GetOpcode( expression, 7 ) };
+        REQUIRE( first_constant.has_value() );
+        CHECK( first_constant->first == OpCode::OP_CONSTANT );
+        CHECK( first_constant->second == 1 );
 
-        Debug::OpCodeAndLine end_of_str{ Debug::GetOpcode( expression, 10 ) };
-        REQUIRE( end_of_str.has_value() );
-        CHECK( end_of_str->first == OpCode::OP_CONSTANT );
-        CHECK( end_of_str->second == 1 );
+        Debug::OpCodeAndLine second_constant{ Debug::GetOpcode( expression, 9 ) };
+        REQUIRE( second_constant.has_value() );
+        CHECK( second_constant->first == OpCode::OP_CONSTANT );
+        CHECK( second_constant->second == 1 );
 
-        Debug::OpCodeAndLine third_add_interpolated_expr{ Debug::GetOpcode( expression, 12 ) };
+        Debug::OpCodeAndLine op_add{ Debug::GetOpcode( expression, 11 ) };
+        REQUIRE( op_add.has_value() );
+        CHECK( op_add->first == OpCode::OP_SUBTRACT );
+        CHECK( op_add->second == 1 );
+
+        Debug::OpCodeAndLine _third_add_interpolated_expr{ Debug::GetOpcode( expression, 12 ) };
+        REQUIRE( _third_add_interpolated_expr.has_value() );
+        CHECK( _third_add_interpolated_expr->first == OpCode::OP_ADD );
+        CHECK( _third_add_interpolated_expr->second == 1 );
+
+        Debug::OpCodeAndLine last_str{ Debug::GetOpcode( expression, 13 ) };
+        REQUIRE( last_str.has_value() );
+        CHECK( last_str->first == OpCode::OP_CONSTANT );
+        CHECK( last_str->second == 1 );
+
+        Debug::OpCodeAndLine third_add_interpolated_expr{ Debug::GetOpcode( expression, 15 ) };
         REQUIRE( third_add_interpolated_expr.has_value() );
         CHECK( third_add_interpolated_expr->first == OpCode::OP_ADD );
         CHECK( third_add_interpolated_expr->second == 1 );
 
-        Debug::OpCodeAndLine last_add{ Debug::GetOpcode( expression, 13 ) };
+        Debug::OpCodeAndLine last_add{ Debug::GetOpcode( expression, 16 ) };
         REQUIRE( last_add.has_value() );
         CHECK( last_add->first == OpCode::OP_ADD );
         CHECK( last_add->second == 1 );
 
-        Debug::OpCodeAndLine op_return{ Debug::GetOpcode( expression, 14 ) };
+        Debug::OpCodeAndLine op_return{ Debug::GetOpcode( expression, 17 ) };
         REQUIRE( op_return.has_value() );
         CHECK( op_return->first == OpCode::OP_RETURN );
         CHECK( op_return->second == 1 );
