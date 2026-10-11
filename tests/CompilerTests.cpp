@@ -282,9 +282,36 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
         Compiler compiler{};
         Chunk expression{};
 
-        const std::string source{ "[1, 'A', \"Apple\", 1.0]" };
+        const std::string source{ "[1, 'A', \"Apple\", 1.5]" };
 
-        // REQUIRE( compiler.Compile( source, expression ) );
+        const bool successful{ compiler.Compile( source, expression ) };
+
+        REQUIRE( successful );
+
+        Debug::OpCodeAndLine val{ Debug::GetOpcode( expression, 0 ) };
+
+        Debug::DisassembleChunk( expression, "Basic Array" );
+
+        REQUIRE( val.has_value() );
+        CHECK( val->first == OpCode::OP_CONSTANT );
+        CHECK( val->second == 1 );
+
+        auto compiled_array{ expression.GetConstant( 0 ) };
+
+        REQUIRE( compiled_array.IsLuxArray() );
+    }
+
+    SECTION( "Compile Simple LuxMap" ) {
+        Compiler compiler{};
+        Chunk expression{};
+
+        const std::string source{
+            "{\"ValA\": 1, \"Valb\": 'A', \"ValC\": \"Apple\", \"ValD\" :1.0}"
+        };
+
+        // const bool successful{ compiler.Compile( source, expression ) };
+        //
+        // REQUIRE( successful );
     }
 }
 

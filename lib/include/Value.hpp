@@ -77,6 +77,7 @@ namespace LuxLibrary {
         }
 
         friend struct fmt::formatter< Value >;
+        friend class Compiler;
 
       public:
         Value() = default;

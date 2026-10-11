@@ -18,6 +18,7 @@
  */
 
 #include "Compiler.hpp"
+#include "Chunk.hpp"
 #include "Common.hpp"
 #include "Debug.hpp"
 #include "OpCode.hpp"
@@ -27,10 +28,14 @@
 #include "TokenVariant.hpp"
 #include "Value.hpp"
 
+#include <algorithm>
+#include <cstddef>
 #include <cstdint>
 #include <expected>
 #include <iterator>
+#include <ranges>
 #include <string_view>
+#include <vector>
 
 #include <fmt/compile.h>
 #include <fmt/core.h>
@@ -221,6 +226,7 @@ namespace LuxLibrary {
 
     auto Compiler::Interpolation() noexcept -> void {
         String();
+
         while ( parser.Previous().type != TokenType::INTERPOLATION_END ) {
             Expression();
 
@@ -229,8 +235,30 @@ namespace LuxLibrary {
     }
 
     auto Compiler::LuxVector() noexcept -> void {
-        Expression();
-        Consume( TokenType::LUX_VECTOR, "Expected ] at end of array expression." );
+        const auto start_idx{ current_chunk->CountIndex() };
+
+        while ( !parser.CurrentType( TokenType::LUX_VECTOR_END ) ) {
+            if ( parser.CurrentType( TokenType::COMMA ) ) {
+                Consume( TokenType::COMMA, "Array values should be a comma seperated list." );
+            }
+
+            Expression();
+        }
+
+        Consume( TokenType::LUX_VECTOR_END, "Array values should be a comma seperated list." );
+
+        const std::span array_values{ current_chunk->constants_begin(),
+                                      current_chunk->constants_end() };
+
+        LuxArray new_array{};
+
+        for ( const auto& val : array_values ) {
+            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+        }
+
+        current_chunk->Remove( start_idx );
+
+        EmitConstant( Value( new_array ) );
     }
 
     auto Compiler::LuxMap() noexcept -> void {
@@ -285,5 +313,4 @@ namespace LuxLibrary {
 
         parser.SetError();
     }
-
 }; // namespace LuxLibrary

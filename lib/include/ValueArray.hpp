@@ -37,8 +37,10 @@ namespace LuxLibrary {
         Vector values;
 
       public:
-        using size_type  = Vector::size_type;
-        using value_type = Vector::value_type;
+        using size_type       = Vector::size_type;
+        using difference_type = Vector::difference_type;
+        using value_type      = Vector::value_type;
+        using reference       = Vector::reference;
 
         constexpr explicit ValueArray( const std::size_t reserve_size = 8 ) noexcept {
             values.reserve( reserve_size );
@@ -68,6 +70,8 @@ namespace LuxLibrary {
          */
         auto Count() const noexcept -> size_type;
 
+        auto Erase( const difference_type start, const difference_type end ) noexcept -> void;
+
         template < typename Self > auto cbegin( this Self&& self CLANG_LIFETIME_BOUND ) {
             return std::forward< Self >( self ).values.cbegin();
         }
@@ -90,7 +94,8 @@ namespace LuxLibrary {
             try {
                 return std::forward< Self >( self ).values.at( index );
             } catch ( const std::out_of_range& err ) {
-                fmt::println( std::cerr, "Index {} outof bounds.\nMessage: {}", index, err.what() );
+                fmt::println(
+                    std::cerr, "Index {} out of bounds.\n\tMessage: {}", index, err.what() );
                 return std::forward< Self >( self ).values.back();
             } catch ( ... ) {
                 std::cerr << "Uncaught exception..";

@@ -69,7 +69,8 @@ namespace LuxLibrary {
         CHAR,
 
         // Objects.
-        LUX_VECTOR,
+        LUX_VECTOR_START,
+        LUX_VECTOR_END,
         LUX_MAP_OPEN,
         LUX_MAP_CLOSE,
 

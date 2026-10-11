@@ -235,10 +235,15 @@ namespace LuxLibrary {
                 if ( Match( '=' ) ) { return NewToken( TokenType::GREATER_EQUAL ); }
                 return NewToken( TokenType::GREATER );
             }
-            case '"' : return StringToken();
-
-            case ']' : return NewToken( TokenType::RIGHT_BRACKET );
-            case '[' : return NewToken( TokenType::LUX_VECTOR );
+            case '"': return StringToken();
+            case '[': {
+                if ( InArray() ) { return ErrorToken( "Nested Arrays are unsupported." ); }
+                return LuxVectorStart();
+            }
+            case ']': {
+                if ( InArray() ) { return LuxVectorEnd(); }
+                return NewToken( TokenType::RIGHT_BRACKET );
+            };
 
             case '\'': return CharToken();
             default  : return ErrorToken( "Invalid token." );
@@ -314,7 +319,15 @@ namespace LuxLibrary {
         return NewToken( TokenType::STRING );
     }
 
-    auto Scanner::LuxVectorToken() noexcept -> Token {
+    auto Scanner::LuxVectorStart() noexcept -> Token {
+        ScanningArray();
+        return NewToken( TokenType::LUX_VECTOR_START );
+    }
+
+    auto Scanner::LuxVectorEnd() noexcept -> Token {
+        Next();
+        DefaultScanning();
+        return NewToken( TokenType::LUX_VECTOR_END );
     }
 
     auto Scanner::LuxMapToken() noexcept -> Token {
@@ -355,6 +368,10 @@ namespace LuxLibrary {
 
     auto Scanner::ScanningString() noexcept -> void {
         state = detail::StringMode{};
+    }
+
+    auto Scanner::ScanningArray() noexcept -> void {
+        state = detail::ArrayMode{};
     }
 
     auto Scanner::InString() const noexcept -> bool {

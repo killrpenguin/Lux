@@ -17,6 +17,7 @@
  */
 
 #include "Chunk.hpp"
+#include "Value.hpp"
 #include <limits>
 
 namespace LuxLibrary {
@@ -43,6 +44,23 @@ namespace LuxLibrary {
 
     auto Chunk::Count() const noexcept -> size_type {
         return code.size();
+    }
+
+    auto Chunk::Remove( const Index& start ) noexcept -> void {
+        constants.Erase(
+            start.constant, static_cast< difference_type >( constants.Count() ) - start.constant );
+
+        lines.erase( std::ranges::next( lines.begin(), start.line ), lines.end() );
+
+        code.erase( std::ranges::next( code.begin(), start.code ), code.end() );
+    }
+
+    auto Chunk::CountIndex() const noexcept -> Index {
+        return {
+            .code     = static_cast< difference_type >( code.size() ),
+            .line     = static_cast< difference_type >( lines.size() ),
+            .constant = static_cast< difference_type >( constants.Count() ),
+        };
     }
 
     auto Chunk::AddConstant( const Value& value ) noexcept -> std::uint8_t {

@@ -56,9 +56,10 @@ auto format_as( LuxLibrary::TokenType type ) -> std::string_view {
         case LuxLibrary::TokenType::INTEGER            : return "INTEGER";
         case LuxLibrary::TokenType::DOUBLE             : return "DOUBLE";
         case LuxLibrary::TokenType::CHAR               : return "CHAR";
-        case LuxLibrary::TokenType::LUX_VECTOR         : return "LUX_VECTOR";
-        case LuxLibrary::TokenType::LUX_MAP_OPEN       : return "LUX_MAP_OPEN";
-        case LuxLibrary::TokenType::LUX_MAP_CLOSE      : return "LUX_MAP_CLOSE";
+        case LuxLibrary::TokenType::LUX_VECTOR_START   : return "LUX_VECTOR_START";
+        case LuxLibrary::TokenType::LUX_VECTOR_END     : return "LUX_VECTOR_END";
+        case LuxLibrary::TokenType::LUX_MAP_OPEN       : return "LUX_MAP_START";
+        case LuxLibrary::TokenType::LUX_MAP_CLOSE      : return "LUX_MAP_END";
 
         case LuxLibrary::TokenType::AND                : return "AND";
         case LuxLibrary::TokenType::CLASS              : return "CLASS";

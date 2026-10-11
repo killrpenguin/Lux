@@ -179,11 +179,11 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
 
     SECTION( "Test Vector Value scanning." ) {
         // Inconsistent spacing in vec_source is deliberate. It shouldn't matter.
-        const std::string vec_source{ "[1, 'A', \"Apple\",[],1.0]" };
+        const std::string vec_source{ "[1, 'A', \"Apple\",1.0]" };
         Scanner scanner{ vec_source };
 
         const Token array_token{ scanner.NextToken() };
-        CHECK( array_token == scanner.NewToken( TokenType::LUX_VECTOR ) );
+        CHECK( array_token == scanner.NewToken( TokenType::LUX_VECTOR_START ) );
 
         const Token number_token{ scanner.NextToken() };
         CHECK( number_token == scanner.NewToken( TokenType::INTEGER ) );
@@ -203,17 +203,11 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
         const Token third_comma{ scanner.NextToken() };
         CHECK( third_comma == scanner.NewToken( TokenType::COMMA ) );
 
-        const Token nested_vec_start{ scanner.NextToken() };
-        CHECK( nested_vec_start == scanner.NewToken( TokenType::LUX_VECTOR ) );
-
-        const Token nested_vec_end{ scanner.NextToken() };
-        CHECK( nested_vec_end == scanner.NewToken( TokenType::RIGHT_BRACKET ) );
-
-        const Token fourth_comma{ scanner.NextToken() };
-        CHECK( fourth_comma == scanner.NewToken( TokenType::COMMA ) );
-
         const Token double_token{ scanner.NextToken() };
         CHECK( double_token == scanner.NewToken( TokenType::DOUBLE ) );
+
+        const Token array_end{ scanner.NextToken() };
+        CHECK( array_end == scanner.NewToken( TokenType::LUX_VECTOR_END ) );
     }
 
     SECTION( "Test string interpolation scanning." ) {

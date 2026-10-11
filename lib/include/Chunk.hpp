@@ -52,6 +52,12 @@ namespace LuxLibrary {
         using iterator       = ByteChunk::iterator;
         using const_iterator = ByteChunk::const_iterator;
 
+        struct Index {
+            difference_type code{};
+            difference_type line{};
+            difference_type constant{};
+        };
+
         constexpr explicit Chunk( const std::size_t reserve_size = 8 ) noexcept {
             code.reserve( reserve_size );
         };
@@ -106,7 +112,18 @@ namespace LuxLibrary {
          * @brief Get the number of elements in the byte chunk array.
          * @return The number of elements currently in the chunk.
          */
+        auto CountIndex() const noexcept -> Index;
+
+        /**
+         * @brief Get the number of elements in the byte chunk array.
+         * @return The number of elements currently in the chunk.
+         */
         auto Count() const noexcept -> size_type;
+
+        /**
+         * @brief Erase a range of constants in the values array.
+         */
+        auto Remove( const Index& start ) noexcept -> void;
 
         /**
          * @brief .
@@ -151,6 +168,24 @@ namespace LuxLibrary {
         }
 
         /**
+         * @brief Get an iterator to the beginning of the constants array.
+         * @return LegacyRandomAccessIterator, contiguous_iterator, and ConstexprIterator to
+         * value_type.
+         */
+        template < typename Self > auto constants_begin( this Self&& self CLANG_LIFETIME_BOUND ) {
+            return std::forward< Self >( self ).constants.begin();
+        }
+
+        /**
+         * @brief Get an iterator to the end of the byte constants array.
+         * @return LegacyRandomAccessIterator, contiguous_iterator, and ConstexprIterator to
+         * value_type.
+         */
+        template < typename Self > auto constants_end( this Self&& self CLANG_LIFETIME_BOUND ) {
+            return std::forward< Self >( self ).constants.end();
+        }
+
+        /**
          * @brief operator[] access specified element with bounds checking.
          * @param index Index of the element in the byte chunk array or the last value if index is
          * out of bounds.
@@ -161,7 +196,8 @@ namespace LuxLibrary {
             try {
                 return std::forward< Self >( self ).code.at( index );
             } catch ( const std::out_of_range& err ) {
-                fmt::println( std::cerr, "Index {} out of bounds.\nMessage: {}", index, err.what() );
+                fmt::println(
+                    std::cerr, "Index {} out of bounds.\nMessage: {}", index, err.what() );
                 std::exit( EXIT_FAILURE );
                 return std::forward< Self >( self ).code.back();
             } catch ( ... ) {

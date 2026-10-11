@@ -219,7 +219,13 @@ namespace LuxLibrary {
          * @brief Generate a Lux Vector with the values between two square brackets.
          * @return A LuxVector token.
          */
-        auto LuxVectorToken() noexcept -> Token;
+        auto LuxVectorStart() noexcept -> Token;
+
+        /*
+         * @brief Generate a Lux Vector closing brace token.
+         * @return A LuxVector token.
+         */
+        auto LuxVectorEnd() noexcept -> Token;
 
         /*
          * @brief Generate a Lux Map with the key and value pairs between two curly brackets.
@@ -272,6 +278,11 @@ namespace LuxLibrary {
          * @brief Set the scanning mode to string.
          */
         auto ScanningString() noexcept -> void;
+
+        /*
+         * @brief Set the scanning mode to array.
+         */
+        auto ScanningArray() noexcept -> void;
 
         /*
          * @brief

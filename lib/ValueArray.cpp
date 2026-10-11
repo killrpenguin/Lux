@@ -31,4 +31,12 @@ namespace LuxLibrary {
         return values.size();
     }
 
+    auto ValueArray::Erase( const difference_type start, const difference_type end ) noexcept
+        -> void {
+        const auto start_itr{ std::ranges::next( values.begin(), start ) };
+        const auto end_itr{ std::ranges::next( values.begin(), end ) };
+
+        values.erase( start_itr, end_itr );
+    }
+
 } // namespace LuxLibrary
