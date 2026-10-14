@@ -37,13 +37,37 @@
 namespace LuxLibrary {
     namespace detail {
 
+        /*
+           This allows us to use a string_view to check if a key exists.
+
+           Its called Heterogeneous lookup for unordered containers (transparent hashing).
+           I got this here : https://en.cppreference.com/cpp/container/unordered_map/find
+
+        */
+        using namespace std::literals;
+
+        struct string_hash {
+            using hash_type      = std::hash< std::string_view >;
+            using is_transparent = void;
+
+            std::size_t operator()( const char* str ) const {
+                return hash_type{}( str );
+            }
+            std::size_t operator()( std::string_view str ) const {
+                return hash_type{}( str );
+            }
+            std::size_t operator()( const std::string& str ) const {
+                return hash_type{}( str );
+            }
+        };
+
         struct Node;
 
         using Nil       = std::monostate;
         using character = char;
         using integer   = std::int64_t;
         using LuxArray  = std::vector< Node >;
-        using LuxMap    = std::unordered_map< std::string, Node >;
+        using LuxMap    = std::unordered_map< std::string, Node, string_hash, std::equal_to<> >;
         using LuxString = std::string;
 
         using Tag = std::variant<

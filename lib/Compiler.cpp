@@ -28,8 +28,6 @@
 #include "TokenVariant.hpp"
 #include "Value.hpp"
 
-#include <algorithm>
-#include <cstddef>
 #include <cstdint>
 #include <expected>
 #include <iterator>
@@ -245,12 +243,16 @@ namespace LuxLibrary {
             Expression();
         }
 
-        Consume( TokenType::LUX_VECTOR_END, "Array values should be a comma seperated list." );
+        Consume( TokenType::LUX_VECTOR_END, "Missing closing ']'." );
 
-        const std::span array_values{ current_chunk->constants_begin(),
-                                      current_chunk->constants_end() };
+        const auto end_idx{ current_chunk->CountIndex() };
 
-        LuxArray new_array{};
+        const auto start_offset =
+            std::ranges::next( current_chunk->constants_begin(), start_idx.constant );
+
+        const std::span array_values{ start_offset, current_chunk->constants_end() };
+
+        detail::LuxArray new_array{};
 
         for ( const auto& val : array_values ) {
             std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
@@ -262,6 +264,45 @@ namespace LuxLibrary {
     }
 
     auto Compiler::LuxMap() noexcept -> void {
+        const auto start_idx{ current_chunk->CountIndex() };
+
+        while ( !parser.CurrentType( TokenType::LUX_MAP_END ) ) {
+            if ( parser.CurrentType( TokenType::COMMA ) ) {
+                Consume( TokenType::COMMA, "Map pairs should be a comma seperated list." );
+            }
+
+            if ( parser.CurrentType( TokenType::COLON ) ) {
+                Consume( TokenType::COLON, "Map keys and values should be seperated by a colon." );
+            }
+
+            Expression();
+        }
+
+        Consume( TokenType::LUX_MAP_END, "Missing closing '}'." );
+
+        detail::LuxMap new_map{};
+
+        const auto start_offset =
+            std::ranges::next( current_chunk->constants_begin(), start_idx.constant );
+
+        const std::span parsed_constants{ start_offset, current_chunk->constants_end() };
+
+        for ( auto [key, val] :
+              parsed_constants | std::views::pairwise | std::views::stride( 2 ) ) {
+            if ( !key.IsString() ) { Error( "Maps require strings as keys." ); }
+
+            const std::string_view tmp_key{ key.AsStringView() };
+
+            if ( new_map.contains( tmp_key ) ) { Error( "Maps key exists." ); }
+
+            std::visit(
+                [&new_map, &tmp_key]( auto&& val ) { new_map[std::string( tmp_key )] = val; },
+                val.tag );
+        }
+
+        current_chunk->Remove( start_idx );
+
+        EmitConstant( Value( new_map ) );
     }
 
     auto Compiler::MakeConstant( const Value& val ) noexcept -> std::uint8_t {

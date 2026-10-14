@@ -306,12 +306,14 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
         Chunk expression{};
 
         const std::string source{
-            "{\"ValA\": 1, \"Valb\": 'A', \"ValC\": \"Apple\", \"ValD\" :1.0}"
+            "{\"Number\": 1, \"Char\": 'A', \"String\": \"Apple\", \"Double\" :1.5}"
         };
 
-        // const bool successful{ compiler.Compile( source, expression ) };
-        //
-        // REQUIRE( successful );
+        const bool successful{ compiler.Compile( source, expression ) };
+
+        REQUIRE( successful );
+
+        Debug::DisassembleChunk( expression, "Basic Map" );
     }
 }
 

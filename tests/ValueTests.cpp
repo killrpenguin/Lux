@@ -53,17 +53,12 @@ TEST_CASE( "Value Class Testing", "[main]" ) {
             { "apple3", true },
             { "apple3", "Test123" },
         };
-  
+
         const Value map_type{ map_values };
         REQUIRE( map_type.IsLuxMap() );
         REQUIRE( map_type.AsLuxMap() == map_values );
         REQUIRE( map_type.IsObject() );
     }
 
-    SECTION( "Compile LuxArray" ) {
-        Compiler compiler{};
-
-        Chunk lux_array{};
-    }
 } // namespace LL::detail
 // NOLINTEND

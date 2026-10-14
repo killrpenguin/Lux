@@ -36,6 +36,7 @@ auto format_as( LuxLibrary::TokenType type ) -> std::string_view {
         case LuxLibrary::TokenType::MINUS              : return "MINUS     ";
         case LuxLibrary::TokenType::PLUS               : return "PLUS      ";
         case LuxLibrary::TokenType::SEMICOLON          : return "SEMICOLON ";
+        case LuxLibrary::TokenType::COLON              : return "COLON     ";
         case LuxLibrary::TokenType::SLASH              : return "SLASH     ";
         case LuxLibrary::TokenType::STAR               : return "STAR";
 
@@ -58,8 +59,8 @@ auto format_as( LuxLibrary::TokenType type ) -> std::string_view {
         case LuxLibrary::TokenType::CHAR               : return "CHAR";
         case LuxLibrary::TokenType::LUX_VECTOR_START   : return "LUX_VECTOR_START";
         case LuxLibrary::TokenType::LUX_VECTOR_END     : return "LUX_VECTOR_END";
-        case LuxLibrary::TokenType::LUX_MAP_OPEN       : return "LUX_MAP_START";
-        case LuxLibrary::TokenType::LUX_MAP_CLOSE      : return "LUX_MAP_END";
+        case LuxLibrary::TokenType::LUX_MAP_START      : return "LUX_MAP_START";
+        case LuxLibrary::TokenType::LUX_MAP_END        : return "LUX_MAP_END";
 
         case LuxLibrary::TokenType::AND                : return "AND";
         case LuxLibrary::TokenType::CLASS              : return "CLASS";

@@ -203,18 +203,14 @@ namespace LuxLibrary {
         switch ( current_char ) {
             case '(': return NewToken( TokenType::LEFT_PAREN );
             case ')': return NewToken( TokenType::RIGHT_PAREN );
-            case '{': return NewToken( TokenType::LEFT_BRACE );
             case ';': return NewToken( TokenType::SEMICOLON );
+            case ':': return NewToken( TokenType::COLON );
             case ',': return NewToken( TokenType::COMMA );
             case '.': return NewToken( TokenType::DOT );
             case '-': return NewToken( TokenType::MINUS );
             case '+': return NewToken( TokenType::PLUS );
             case '/': return NewToken( TokenType::SLASH );
             case '*': return NewToken( TokenType::STAR );
-            case '}': {
-                if ( InString() ) { return ContinueString(); }
-                return NewToken( TokenType::RIGHT_BRACE );
-            };
             case '$': {
                 if ( InString() and Match( '{' ) ) { return NewToken( TokenType::RIGHT_BRACE ); }
                 return ErrorToken( "Invalid token." );
@@ -244,7 +240,15 @@ namespace LuxLibrary {
                 if ( InArray() ) { return LuxVectorEnd(); }
                 return NewToken( TokenType::RIGHT_BRACKET );
             };
-
+            case '{': {
+                if ( InString() ) { return NewToken( TokenType::LEFT_BRACE ); }
+                return LuxMapStart();
+            }
+            case '}': {
+                if ( InString() ) { return ContinueString(); }
+                if ( InMap() ) { return LuxMapEnd(); }
+                return NewToken( TokenType::RIGHT_BRACE );
+            };
             case '\'': return CharToken();
             default  : return ErrorToken( "Invalid token." );
         }
@@ -330,17 +334,15 @@ namespace LuxLibrary {
         return NewToken( TokenType::LUX_VECTOR_END );
     }
 
-    auto Scanner::LuxMapToken() noexcept -> Token {
-        if ( *start == '{' ) { return NewToken( TokenType::LUX_MAP_OPEN ); }
+    auto Scanner::LuxMapStart() noexcept -> Token {
+        ScanningMap();
+        return NewToken( TokenType::LUX_MAP_START );
+    }
 
-        while ( Peek() != '}' and !IsAtEnd() ) {
-            if ( Peek() == '\n' ) { line++; }
-            Next();
-        }
-
-        if ( IsAtEnd() ) { return ErrorToken( "Unterminated Map." ); }
-
-        return NewToken( TokenType::LUX_MAP_CLOSE );
+    auto Scanner::LuxMapEnd() noexcept -> Token {
+        Next();
+        DefaultScanning();
+        return NewToken( TokenType::LUX_MAP_END );
     }
 
     auto Scanner::CharToken() noexcept -> Token {
@@ -372,6 +374,10 @@ namespace LuxLibrary {
 
     auto Scanner::ScanningArray() noexcept -> void {
         state = detail::ArrayMode{};
+    }
+
+    auto Scanner::ScanningMap() noexcept -> void {
+        state = detail::MapMode{};
     }
 
     auto Scanner::InString() const noexcept -> bool {

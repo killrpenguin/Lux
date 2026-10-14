@@ -64,7 +64,7 @@ namespace LuxLibrary {
 
         line_type line{ 1 };
 
-        State state{};
+        State state{ detail::DefaultMode{} };
 
         /*
          * @brief Checks if the given character is one of the 10 decimal digits.
@@ -231,7 +231,13 @@ namespace LuxLibrary {
          * @brief Generate a Lux Map with the key and value pairs between two curly brackets.
          * @return A LuxMap token.
          */
-        auto LuxMapToken() noexcept -> Token;
+        auto LuxMapStart() noexcept -> Token;
+
+        /*
+         * @brief Generate a Lux Map with the key and value pairs between two curly brackets.
+         * @return A LuxMap token.
+         */
+        auto LuxMapEnd() noexcept -> Token;
 
         /*
          * @brief Generate a char token with a value between two single quotes.
@@ -283,6 +289,11 @@ namespace LuxLibrary {
          * @brief Set the scanning mode to array.
          */
         auto ScanningArray() noexcept -> void;
+
+        /*
+         * @brief Set the scanning mode to Map.
+         */
+        auto ScanningMap() noexcept -> void;
 
         /*
          * @brief

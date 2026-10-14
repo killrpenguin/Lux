@@ -45,6 +45,7 @@ namespace LuxLibrary {
         MINUS,
         PLUS,
         SEMICOLON,
+		COLON,
         SLASH,
         STAR,
 
@@ -71,8 +72,8 @@ namespace LuxLibrary {
         // Objects.
         LUX_VECTOR_START,
         LUX_VECTOR_END,
-        LUX_MAP_OPEN,
-        LUX_MAP_CLOSE,
+        LUX_MAP_START,
+        LUX_MAP_END,
 
         // Keywords.
         AND,

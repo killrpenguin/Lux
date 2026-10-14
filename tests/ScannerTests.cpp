@@ -179,7 +179,7 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
 
     SECTION( "Test Vector Value scanning." ) {
         // Inconsistent spacing in vec_source is deliberate. It shouldn't matter.
-        const std::string vec_source{ "[1, 'A', \"Apple\",1.0]" };
+        const std::string vec_source{ "[1, 'A', \"Apple\",1.5]" };
         Scanner scanner{ vec_source };
 
         const Token array_token{ scanner.NextToken() };
@@ -208,6 +208,65 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
 
         const Token array_end{ scanner.NextToken() };
         CHECK( array_end == scanner.NewToken( TokenType::LUX_VECTOR_END ) );
+    }
+
+    SECTION( "Test Map scanning." ) {
+        const std::string source{
+            "{ \"ValA\": 1, \"Valb\": 'A', \"ValC\" : \"Apple\", \"ValD\" :1.55 }"
+        };
+
+        Scanner scanner{ source };
+
+        const Token map_token{ scanner.NextToken() };
+        CHECK( map_token == scanner.NewToken( TokenType::LUX_MAP_START ) );
+
+        const Token number_key{ scanner.NextToken() };
+        CHECK( number_key == scanner.NewToken( TokenType::STRING ) );
+
+        const Token first_colon{ scanner.NextToken() };
+        CHECK( first_colon == scanner.NewToken( TokenType::COLON ) );
+
+        const Token number_token{ scanner.NextToken() };
+        CHECK( number_token == scanner.NewToken( TokenType::INTEGER ) );
+
+        const Token first_comma{ scanner.NextToken() };
+        CHECK( first_comma == scanner.NewToken( TokenType::COMMA ) );
+
+        const Token char_key{ scanner.NextToken() };
+        CHECK( char_key == scanner.NewToken( TokenType::STRING ) );
+
+        const Token second_colon{ scanner.NextToken() };
+        CHECK( second_colon == scanner.NewToken( TokenType::COLON ) );
+
+        const Token char_token{ scanner.NextToken() };
+        CHECK( char_token == scanner.NewToken( TokenType::CHAR ) );
+
+        const Token second_comma{ scanner.NextToken() };
+        CHECK( second_comma == scanner.NewToken( TokenType::COMMA ) );
+
+        const Token string_key{ scanner.NextToken() };
+        CHECK( char_key == scanner.NewToken( TokenType::STRING ) );
+
+        const Token third_colon{ scanner.NextToken() };
+        CHECK( third_colon == scanner.NewToken( TokenType::COLON ) );
+
+        const Token string_token{ scanner.NextToken() };
+        CHECK( string_token == scanner.NewToken( TokenType::STRING ) );
+
+        const Token third_comma{ scanner.NextToken() };
+        CHECK( third_comma == scanner.NewToken( TokenType::COMMA ) );
+
+        const Token dec_key{ scanner.NextToken() };
+        CHECK( char_key == scanner.NewToken( TokenType::STRING ) );
+
+        const Token fourth_colon{ scanner.NextToken() };
+        CHECK( fourth_colon == scanner.NewToken( TokenType::COLON ) );
+
+        const Token dec_token{ scanner.NextToken() };
+        CHECK( dec_token == scanner.NewToken( TokenType::DOUBLE ) );
+
+        const Token map_end{ scanner.NextToken() };
+        CHECK( map_end == scanner.NewToken( TokenType::LUX_MAP_END ) );
     }
 
     SECTION( "Test string interpolation scanning." ) {

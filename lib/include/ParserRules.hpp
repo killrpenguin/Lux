@@ -56,6 +56,7 @@ namespace LuxLibrary {
                 Rule{ .prefix = &Compiler::Unary, .infix = &Compiler::Binary, .precedence = Precedence::TERM },   // MINUS
                 Rule{ .prefix = nullptr, .infix = &Compiler::Binary, .precedence = Precedence::TERM },   // PLUS
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE },   // SEMICOLON
+                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE },   // COLON
                 Rule{ .prefix = nullptr, .infix = &Compiler::Binary, .precedence = Precedence::FACTOR }, // SLASH
                 Rule{ .prefix = nullptr, .infix = &Compiler::Binary, .precedence = Precedence::FACTOR }, // STAR
 
@@ -80,8 +81,8 @@ namespace LuxLibrary {
                                                                                                      // 
                 Rule{ .prefix = &Compiler::LuxVector, .infix = nullptr, .precedence = Precedence::ASSIGNMENT }, // LUX_VECTOR_START				
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // LUX_VECTOR_END				
-                Rule{ .prefix = &Compiler::LuxMap, .infix = nullptr, .precedence = Precedence::NONE }, // LUX_MAP_OPEN				
-                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // LUX_MAP_CLOSE				
+                Rule{ .prefix = &Compiler::LuxMap, .infix = nullptr, .precedence = Precedence::NONE }, // LUX_MAP_START				
+                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // LUX_MAP_END				
                                                                                              // 
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // AND
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // CLASS
