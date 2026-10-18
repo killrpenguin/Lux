@@ -290,7 +290,7 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
 
         Debug::OpCodeAndLine val{ Debug::GetOpcode( expression, 0 ) };
 
-        Debug::DisassembleChunk( expression, "Basic Array" );
+        // Debug::DisassembleChunk( expression, "Basic Array" );
 
         REQUIRE( val.has_value() );
         CHECK( val->first == OpCode::OP_CONSTANT );
@@ -313,7 +313,7 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
 
         REQUIRE( successful );
 
-        Debug::DisassembleChunk( expression, "Basic Map" );
+        // Debug::DisassembleChunk( expression, "Basic Map" );
     }
 }
 
