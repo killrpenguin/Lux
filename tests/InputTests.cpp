@@ -1,8 +1,9 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/generators/catch_generators_all.hpp>
 
-#include "Compiler.hpp"
+// #include "Compiler.hpp"
 #include "Debug.hpp"
+#include "GarbageCollector.hpp"
 #include "OpCode.hpp"
 #include "Stack.hpp"
 
@@ -33,7 +34,40 @@ TEST_CASE( "Crafting Interpreters cLox Section", "[main]" ) {
         CHECK( stack.Pop() == std::nullopt );
     }
 
+    SECTION( "Linked List Basics" ) {
+        GarbageCollector collector{};
 
+        REQUIRE( collector.empty() );
+
+        const std::string test_str{ "This is a long string for testing." };
+
+        collector.push_back( test_str );
+        collector.push_back( 1.2 );
+
+        const auto* num{ collector[1] };
+
+        REQUIRE( num != nullptr );
+
+        REQUIRE( num->IsDouble() );
+        REQUIRE( num->AsDouble() == 1.2 );
+
+        collector.push_front( 'a' );
+        const auto* char_val{ collector[0] };
+
+        REQUIRE( char_val != nullptr );
+
+        REQUIRE( char_val->IsChar() );
+        REQUIRE( char_val->AsChar() == 'a' );
+
+        const auto* str{ collector[1] };
+
+        REQUIRE( str != nullptr );
+
+        REQUIRE( str->IsString() );
+        REQUIRE( str->AsString() == test_str );
+
+        REQUIRE( collector.length() == 3 );
+    }
 
     SECTION( "Debug Output test from First Chapter" ) {
         Chunk chunk{};
