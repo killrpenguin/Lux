@@ -23,18 +23,15 @@
 #include <concepts>
 #include <cstdint>
 #include <expected>
-#include <optional>
 #include <string>
 #include <type_traits>
 
 namespace LuxLibrary {
 
-    using Instruction   = std::uint8_t;
-    using Expression    = std::string;
-    using OptionalError = std::optional< std::string >;
-    using Error         = std::string;
-    using ResultError   = std::unexpected< Error >;
+    using Instruction = std::uint8_t;
+    using Expression  = std::string;
 
+    using Error                          = std::string;
     template < typename T > using Result = std::expected< T, Error >;
 
     namespace detail {

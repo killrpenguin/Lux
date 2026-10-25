@@ -21,6 +21,7 @@
 #include "Chunk.hpp"
 #include "Common.hpp"
 #include "Compiler.hpp"
+#include "InterpretResult.hpp"
 #include "Object.hpp"
 #include "Repl.hpp"
 #include "Stack.hpp"
@@ -76,14 +77,14 @@ namespace LuxLibrary {
          * @param const std::string& A string of Lux source code to interpret.
          * @return InterpretResult The possible results.
          */
-        auto Interpret( const std::string& source ) noexcept -> Result< Value >;
+        auto Interpret( const std::string& source ) noexcept -> InterpretResult;
 
         /*
          * @brief The entry point to the virtual machine..
          * @param const std::string& A string of Lux source code to interpret.
          * @return InterpretResult The possible results.
          */
-        auto Run() noexcept -> Result< Value >;
+        auto Run() noexcept -> InterpretResult;
 
         /*
          * @brief The entry point to the Lux repl.

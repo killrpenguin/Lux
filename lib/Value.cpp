@@ -18,6 +18,7 @@
 
 #include "Value.hpp"
 #include "Common.hpp"
+#include "InterpretResult.hpp"
 #include "Object.hpp"
 
 namespace LuxLibrary {
@@ -132,9 +133,7 @@ namespace LuxLibrary {
     auto Value::ValuesEqual(
         const std::optional< Value >& lval, const std::optional< Value >& rval ) noexcept
         -> Result< bool > {
-        if ( !lval.has_value() or !rval.has_value() ) {
-            return ResultError( "Invalid expression." );
-        }
+        if ( !lval.has_value() or !rval.has_value() ) { return "Invalid expression."; }
         const auto [lhs, rhs] = [&lval, &rval] { return std::tuple{ *lval, *rval }; }();
 
         if ( lhs.tag.index() != rhs.tag.index() ) { return false; }
@@ -165,7 +164,7 @@ namespace LuxLibrary {
                         assert( false && "LuxMap is Unimplemented." );
                         return true;
                     } else {
-                        return ResultError( "Invalid expression." );
+                        return "Invalid expression.";
                     }
                 },
                 lhs.tag );

@@ -18,23 +18,47 @@
 
 #pragma once
 
+#include "Common.hpp"
+#include "Value.hpp"
+
+#include <optional>
 #include <variant>
 
 namespace LuxLibrary {
 
-    struct INTERPRET_OK {};
-    struct INTERPRET_COMPILE_ERROR {};
-    struct INTERPRET_RUNTIME_ERROR {};
+    struct INTERPRET_OK {
+        std::optional< Value > inner{ std::nullopt };
+    };
+    struct INTERPRET_COMPILE_ERROR {
+        Error error{};
+    };
+    struct INTERPRET_RUNTIME_ERROR {
+        Error error{};
+    };
 
     struct InterpretResultVisitor {
-        auto operator()( const INTERPRET_RUNTIME_ERROR /*error*/ ) const -> void {
+        auto operator()( const INTERPRET_RUNTIME_ERROR& val ) const -> std::string {
+            return val.error;
         }
-        auto operator()( const INTERPRET_COMPILE_ERROR /*error*/ ) const -> void {
+        auto operator()( const INTERPRET_COMPILE_ERROR& val ) const -> std::string {
+            return val.error;
         }
-        auto operator()( const INTERPRET_OK /*val*/ ) const -> void {
+        auto operator()( const INTERPRET_OK& val ) const -> std::string {
+            if ( val.inner.has_value() ) { return fmt::format( "{}", *val.inner ); }
+            return "";
         }
     };
 
-    using InterpretResult = std::variant< INTERPRET_OK, INTERPRET_COMPILE_ERROR, INTERPRET_RUNTIME_ERROR >;
+    using InterpretResult =
+        std::variant< INTERPRET_OK, INTERPRET_COMPILE_ERROR, INTERPRET_RUNTIME_ERROR >;
 
 }; // namespace LuxLibrary
+
+template <>
+struct fmt::formatter< LuxLibrary::InterpretResult > : fmt::formatter< std::string_view > {
+    template < typename FormatContext >
+    auto format( const LuxLibrary::InterpretResult& result, FormatContext& ctx ) const {
+        return fmt::format_to(
+            ctx.out(), "{}", std::visit( LuxLibrary::InterpretResultVisitor{}, result ) );
+    }
+};

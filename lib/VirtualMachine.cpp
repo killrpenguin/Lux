@@ -18,6 +18,7 @@
 
 #include "VirtualMachine.hpp"
 #include "Debug.hpp"
+#include "InterpretResult.hpp"
 #include "Value.hpp"
 
 #include <fmt/base.h>
@@ -40,7 +41,8 @@ namespace LuxLibrary {
         while ( repl.Running() ) {
             expressions.emplace_back( repl.Read( input, output ) );
 
-            results.emplace_back( Interpret( expressions.back() ) );
+            results.emplace_back(
+                std::visit( InterpretResultVisitor{}, Interpret( expressions.back() ) ) );
 
             repl.Print( { expressions }, { results }, output );
         }
@@ -53,7 +55,8 @@ namespace LuxLibrary {
 
         if ( source_code.empty() ) { return; }
 
-        const Result< Value > result{ Interpret( source_code ) };
+        const Result< Value > result{ std::visit(
+            InterpretResultVisitor{}, Interpret( source_code ) ) };
 
         if ( result ) {
             try {
@@ -73,13 +76,13 @@ namespace LuxLibrary {
     }
 
     // NOLINTNEXTLINE
-    auto VirtualMachine::Interpret( const std::string& source ) noexcept -> Result< Value > {
+    auto VirtualMachine::Interpret( const std::string& source ) noexcept -> InterpretResult {
         Chunk chunk{};
 
         if ( source.empty() ) { return {}; }
 
         if ( const auto result = compiler.Compile( source, chunk ); !result.has_value() ) {
-            return std::unexpected( result.error() );
+            return INTERPRET_COMPILE_ERROR{ result.error() };
         }
 
         current_chunk = &chunk;

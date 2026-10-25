@@ -16,10 +16,12 @@
  * limitations under the License.
  */
 
+#include "InterpretResult.hpp"
 #include "OpCode.hpp"
 #include "Value.hpp"
 #include "VirtualMachine.hpp"
 
+#include <expected>
 #include <fmt/base.h>
 #include <fmt/core.h>
 #include <fmt/ostream.h>
@@ -32,8 +34,7 @@ namespace LuxLibrary {
 
     namespace {
         template < typename Func >
-        auto BinaryOperation( auto& stack, Func operation ) noexcept
-            -> std::optional< std::string > {
+        auto BinaryOperation( auto& stack, Func operation ) noexcept -> Result< void > {
             auto [lhs, rhs] = [&stack] {
                 const std::optional< Value > _rhs{ stack.Pop() };
                 const std::optional< Value > _lhs{ stack.Pop() };
@@ -43,18 +44,18 @@ namespace LuxLibrary {
 
             if ( lhs.IsDouble() and rhs.IsDouble() ) {
                 stack.Push( operation( lhs.AsDouble(), rhs.AsDouble() ) );
-                return std::nullopt;
+                return {};
             }
 
             if ( lhs.IsInteger() and rhs.IsInteger() ) {
                 stack.Push( operation( lhs.AsInteger(), rhs.AsInteger() ) );
-                return std::nullopt;
+                return {};
             }
 
-            return std::string( "Operands must be numbers." );
+            return std::unexpected( "Operands must be numbers." );
         }
 
-        auto StringConcat( auto& stack ) noexcept -> std::optional< std::string > {
+        auto StringConcat( auto& stack ) noexcept -> Result< void > {
             auto [lhs, rhs] = [&stack] {
                 const std::optional< Value > _rhs{ stack.Pop() };
                 const std::optional< Value > _lhs{ stack.Pop() };
@@ -70,15 +71,15 @@ namespace LuxLibrary {
 
                 stack.Push( new_string );
 
-                return std::nullopt;
+                return {};
             }
-            return std::string( "Invalid operation on string." );
+            return std::unexpected( "Invalid operation on string." );
         }
     } // namespace
 
-    auto VirtualMachine::Run() noexcept -> Result< Value > {
+    auto VirtualMachine::Run() noexcept -> InterpretResult {
         if ( ip == current_chunk->cend() or current_chunk == nullptr ) {
-            return ResultError( "Cannot process empty code chunk." );
+            return INTERPRET_RUNTIME_ERROR{ "Cannot process empty code chunk." };
         }
 
         while ( true ) {
@@ -108,7 +109,7 @@ namespace LuxLibrary {
                         stack.Push( value->IsFalsey() );
                         break;
                     }
-                    return ResultError( RuntimeError( "Invalid expression." ) );
+                    return INTERPRET_RUNTIME_ERROR{ RuntimeError( "Invalid expression." ) };
                 }
                 case std::to_underlying( OpCode::OP_EQUAL ): {
                     const std::optional< Value > lhs{ stack.Pop() };
@@ -116,66 +117,82 @@ namespace LuxLibrary {
 
                     const Result< bool > compared_equal{ Value::ValuesEqual( lhs, rhs ) };
                     if ( !compared_equal ) {
-                        return ResultError( RuntimeError( compared_equal.error() ) );
+                        return INTERPRET_RUNTIME_ERROR{ RuntimeError( compared_equal.error() ) };
                     }
                     stack.Push( *compared_equal );
                     break;
                 }
                 case std::to_underlying( OpCode::OP_GREATER ): {
-                    const OptionalError error{ BinaryOperation( stack, std::greater<>() ) };
+                    const Result< void > success{ BinaryOperation( stack, std::greater<>() ) };
 
-                    if ( error.has_value() ) { return ResultError( RuntimeError( *error ) ); }
+                    if ( !success ) {
+                        return INTERPRET_RUNTIME_ERROR{ RuntimeError( success.error() ) };
+                    }
                     break;
                 }
                 case std::to_underlying( OpCode::OP_LESS ): {
-                    const OptionalError error{ BinaryOperation( stack, std::less<>() ) };
+                    const Result< void > success{ BinaryOperation( stack, std::less<>() ) };
 
-                    if ( error.has_value() ) { return ResultError( RuntimeError( *error ) ); }
+                    if ( !success ) {
+                        return INTERPRET_RUNTIME_ERROR{ RuntimeError( success.error() ) };
+                    }
                     break;
                 }
                 case std::to_underlying( OpCode::OP_ADD ): {
                     const Value& current{ stack.PeekPrev() };
                     if ( current.IsDouble() or current.IsInteger() ) {
-                        const OptionalError error{ BinaryOperation( stack, std::plus<>() ) };
+                        const Result< void > success{ BinaryOperation( stack, std::plus<>() ) };
 
-                        if ( error.has_value() ) { return ResultError( RuntimeError( *error ) ); }
+                        if ( !success ) {
+                            return INTERPRET_RUNTIME_ERROR{ RuntimeError( success.error() ) };
+                        }
                         break;
                     } else if ( current.IsString() ) {
-                        const OptionalError error{ StringConcat( stack ) };
+                        const Result< void > success{ StringConcat( stack ) };
 
-                        if ( error.has_value() ) { return ResultError( RuntimeError( *error ) ); }
+                        if ( !success ) {
+                            return INTERPRET_RUNTIME_ERROR{ RuntimeError( success.error() ) };
+                        }
                         break;
                     }
                     break;
                 }
                 case std::to_underlying( OpCode::OP_SUBTRACT ): {
-                    const OptionalError error{ BinaryOperation( stack, std::minus<>() ) };
+                    const Result< void > success{ BinaryOperation( stack, std::minus<>() ) };
 
-                    if ( error.has_value() ) { return ResultError( RuntimeError( *error ) ); }
+                    if ( !success ) {
+                        return INTERPRET_RUNTIME_ERROR{ RuntimeError( success.error() ) };
+                    }
                     break;
                 }
                 case std::to_underlying( OpCode::OP_MULTIPLY ): {
-                    const OptionalError error{ BinaryOperation( stack, std::multiplies<>() ) };
+                    const Result< void > success{ BinaryOperation( stack, std::multiplies<>() ) };
 
-                    if ( error.has_value() ) { return ResultError( RuntimeError( *error ) ); }
+                    if ( !success ) {
+                        return INTERPRET_RUNTIME_ERROR{ RuntimeError( success.error() ) };
+                    }
                     break;
                 }
                 case std::to_underlying( OpCode::OP_DIVIDE ): {
-                    const OptionalError error{ BinaryOperation( stack, std::divides<>() ) };
+                    const Result< void > success{ BinaryOperation( stack, std::divides<>() ) };
 
-                    if ( error.has_value() ) { return ResultError( RuntimeError( *error ) ); }
+                    if ( !success ) {
+                        return INTERPRET_RUNTIME_ERROR{ RuntimeError( success.error() ) };
+                    }
                     break;
                 }
                 case std::to_underlying( OpCode::OP_NEGATE ): {
                     if ( const Value& current{ stack.PeekPrev() };
                          !current.IsDouble() and !current.IsInteger() ) {
-                        return ResultError( RuntimeError( "Operand must be a number." ) );
+                        return INTERPRET_RUNTIME_ERROR{
+                            RuntimeError( "Operand must be a number." ),
+                        };
                     }
 
                     const StackOptional optional{ stack.Pop() };
 
                     if ( !optional.has_value() ) {
-                        return ResultError( RuntimeError( "Invalid expression." ) );
+                        return INTERPRET_RUNTIME_ERROR{ RuntimeError( "Invalid expression." ) };
                     }
                     if ( optional->IsDouble() ) {
                         const double num{ optional->AsDouble() };
@@ -186,14 +203,15 @@ namespace LuxLibrary {
                     stack.Push( -num );
                     break;
                 }
+
                 case std::to_underlying( OpCode::OP_RETURN ): {
                     if ( const StackOptional optional{ stack.Pop() }; optional.has_value() ) {
-                        return *optional;
+                        return INTERPRET_OK{ optional };
                     }
-                    return ResultError( RuntimeError( "Invalid expression." ) );
+                    return INTERPRET_RUNTIME_ERROR{ RuntimeError( "Invalid expression." ) };
                 }
                 default: {
-                    return ResultError( "Invalid opcode detected." );
+                    return INTERPRET_RUNTIME_ERROR{ "Invalid opcode detected." };
                 }
             }
         }
