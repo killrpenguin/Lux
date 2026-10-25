@@ -57,22 +57,6 @@ namespace LuxLibrary {
 
         const Result< Value > result{ std::visit(
             InterpretResultVisitor{}, Interpret( source_code ) ) };
-
-        if ( result ) {
-            try {
-                fmt::println( "{}", *result );
-            } catch ( const std::system_error& err ) {
-                std::cerr << "Error string: " << err.what() << '\n'
-                          << "Numeric code: " << err.code().value() << '\n';
-            }
-        } else {
-            try {
-                fmt::println( "{}", result.error() );
-            } catch ( const std::system_error& err ) {
-                std::cerr << "Error string: " << err.what() << '\n'
-                          << "Numeric code: " << err.code().value() << '\n';
-            }
-        }
     }
 
     // NOLINTNEXTLINE

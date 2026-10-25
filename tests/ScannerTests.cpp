@@ -156,6 +156,7 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
             CHECK( eof_token == scanner.NewToken( TokenType::END_OF_FILE ) );
         }
     }
+
     SECTION( "Test Primitive types." ) {
         const std::string double_source{ "5.8" };
 

@@ -66,6 +66,7 @@ namespace LuxLibrary {
                     constexpr std::size_t NextPos{ Pos + 1 };
 
                     const auto next_char{ ranges::next( start, 1, end ) };
+
                     switch ( *next_char ) {
                         case 'a':
                             return CheckKeyword(

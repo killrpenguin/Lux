@@ -39,9 +39,3 @@ auto format_as( LuxLibrary::OpCode code ) -> std::string_view {
         default                             : return "Unknown";
     }
 }
-
-template <> struct std::formatter< LuxLibrary::OpCode > : std::formatter< std::string_view > {
-    auto format( LuxLibrary::OpCode opcode, std::format_context& ctx ) const {
-        return std::formatter< std::string_view >::format( format_as( opcode ), ctx );
-    }
-};

@@ -205,11 +205,9 @@ namespace LuxLibrary {
                 }
 
                 case std::to_underlying( OpCode::OP_RETURN ): {
-                    if ( const StackOptional optional{ stack.Pop() }; optional.has_value() ) {
-                        return INTERPRET_OK{ optional };
-                    }
-                    return INTERPRET_RUNTIME_ERROR{ RuntimeError( "Invalid expression." ) };
+                    return INTERPRET_OK{ stack.Pop() };
                 }
+
                 default: {
                     return INTERPRET_RUNTIME_ERROR{ "Invalid opcode detected." };
                 }
