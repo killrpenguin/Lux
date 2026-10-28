@@ -22,20 +22,23 @@ namespace LuxLibrary {}; // namespace LuxLibrary
 
 auto format_as( LuxLibrary::OpCode code ) -> std::string_view {
     switch ( code ) {
-        case LuxLibrary::OpCode::OP_CONSTANT: return "OP_CONSTANT";
-        case LuxLibrary::OpCode::OP_NOT     : return "OP_NOT";
-        case LuxLibrary::OpCode::OP_NIL     : return "OP_NIL";
-        case LuxLibrary::OpCode::OP_TRUE    : return "OP_TRUE";
-        case LuxLibrary::OpCode::OP_FALSE   : return "OP_FALSE";
-        case LuxLibrary::OpCode::OP_EQUAL   : return "OP_EQUAL";
-        case LuxLibrary::OpCode::OP_GREATER : return "OP_GREATER";
-        case LuxLibrary::OpCode::OP_LESS    : return "OP_LESS";
-        case LuxLibrary::OpCode::OP_ADD     : return "OP_ADD";
-        case LuxLibrary::OpCode::OP_SUBTRACT: return "OP_SUBTRACT";
-        case LuxLibrary::OpCode::OP_MULTIPLY: return "OP_MULTIPLY";
-        case LuxLibrary::OpCode::OP_DIVIDE  : return "OP_DIVIDE";
-        case LuxLibrary::OpCode::OP_NEGATE  : return "OP_NEGATE";
-        case LuxLibrary::OpCode::OP_RETURN  : return "OP_RETURN";
-        default                             : return "Unknown";
+        case LuxLibrary::OpCode::OP_CONSTANT     : return "OP_CONSTANT";
+        case LuxLibrary::OpCode::OP_NOT          : return "OP_NOT";
+        case LuxLibrary::OpCode::OP_NIL          : return "OP_NIL";
+        case LuxLibrary::OpCode::OP_TRUE         : return "OP_TRUE";
+        case LuxLibrary::OpCode::OP_FALSE        : return "OP_FALSE";
+        case LuxLibrary::OpCode::OP_POP          : return "OP_POP";
+        case LuxLibrary::OpCode::OP_DEFINE_GLOBAL: return "OP_DEFINE_GLOBAL";
+        case LuxLibrary::OpCode::OP_EQUAL        : return "OP_EQUAL";
+        case LuxLibrary::OpCode::OP_GREATER      : return "OP_GREATER";
+        case LuxLibrary::OpCode::OP_LESS         : return "OP_LESS";
+        case LuxLibrary::OpCode::OP_ADD          : return "OP_ADD";
+        case LuxLibrary::OpCode::OP_SUBTRACT     : return "OP_SUBTRACT";
+        case LuxLibrary::OpCode::OP_MULTIPLY     : return "OP_MULTIPLY";
+        case LuxLibrary::OpCode::OP_DIVIDE       : return "OP_DIVIDE";
+        case LuxLibrary::OpCode::OP_NEGATE       : return "OP_NEGATE";
+        case LuxLibrary::OpCode::OP_PRINT        : return "OP_PRINT";
+        case LuxLibrary::OpCode::OP_RETURN       : return "OP_RETURN";
+        default                                  : return "Unknown";
     }
 }

@@ -14,7 +14,10 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
         Compiler compiler{};
 
         Chunk simple_expression{};
-        REQUIRE( compiler.Compile( "10 + 20", simple_expression ) );
+
+        const bool success{ compiler.Compile( "10 + 20", simple_expression ) };
+
+        REQUIRE( success );
 
         // Debug::DisassembleChunk( simple_expression, "Simple expression" );
 
@@ -48,8 +51,13 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
 
         Chunk complex_expression{};
 
-        REQUIRE( compiler.Compile( "(53 * (31 - 13)) + -10", complex_expression ) );
-        REQUIRE( compiler.Compile( "\n23 / 3", complex_expression ) );
+        const bool success_one{ compiler.Compile( "(53 * (31 - 13)) + -10", complex_expression ) };
+
+        REQUIRE( success_one );
+
+        const bool success_two{ compiler.Compile( "\n23 / 3", complex_expression ) };
+
+        REQUIRE( success_two );
 
         // Debug::DisassembleChunk( complex_expression, "Complex Expression" );
 
@@ -125,9 +133,9 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
 
         const std::string source{ "\"This is a \" + \"string \" + \"test.\"" };
 
-        const bool compiled_successfully{ compiler.Compile( source, expression ) };
+        const bool success{ compiler.Compile( source, expression ) };
 
-        REQUIRE( compiled_successfully );
+        REQUIRE( success );
 
         // Debug::DisassembleChunk( expression, "Concat String" );
 
@@ -168,9 +176,9 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
 
         const std::string source{ "\"Compile ${\"test\"} string.\"" };
 
-        const bool compiled_successfully{ compiler.Compile( source, expression ) };
+        const bool success{ compiler.Compile( source, expression ) };
 
-        REQUIRE( compiled_successfully );
+        REQUIRE( success );
 
         // Debug::DisassembleChunk( expression, "Interpolation String" );
 
@@ -211,11 +219,11 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
 
         const std::string source{ "\"Comp ${\"cplx\"} tst ${10 - 5}.\"" };
 
-        const bool compiled_successfully{ compiler.Compile( source, expression ) };
+        const bool success{ compiler.Compile( source, expression ) };
 
         // Debug::DisassembleChunk( expression, "Complex Interpolation String" );
 
-        REQUIRE( compiled_successfully );
+        REQUIRE( success );
 
         Debug::OpCodeAndLine first_lhr_str{ Debug::GetOpcode( expression, 0 ) };
         REQUIRE( first_lhr_str.has_value() );
@@ -284,9 +292,9 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
 
         const std::string source{ "[1, 'A', \"Apple\", 1.5]" };
 
-        const bool successful{ compiler.Compile( source, expression ) };
+        const bool success{ compiler.Compile( source, expression ) };
 
-        REQUIRE( successful );
+        REQUIRE( success );
 
         Debug::OpCodeAndLine val{ Debug::GetOpcode( expression, 0 ) };
 
@@ -309,9 +317,9 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
             "{\"Number\": 1, \"Char\": 'A', \"String\": \"Apple\", \"Double\" :1.5}"
         };
 
-        const bool successful{ compiler.Compile( source, expression ) };
+        const bool success{ compiler.Compile( source, expression ) };
 
-        REQUIRE( successful );
+        REQUIRE( success );
 
         Debug::DisassembleChunk( expression, "Basic Map" );
     }

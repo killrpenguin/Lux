@@ -92,7 +92,7 @@ namespace LuxLibrary {
          * @brief
          * @return Set panic mode to true.
          */
-        auto Panic() noexcept -> void;
+        auto Panic( const bool mode = true ) noexcept -> void;
 
         /*
          * @brief

@@ -104,6 +104,10 @@ namespace LuxLibrary {
                     stack.Push( false );
                     break;
                 }
+                case std::to_underlying( OpCode::OP_POP ): {
+                    stack.Pop();
+                    break;
+                }
                 case std::to_underlying( OpCode::OP_NOT ): {
                     if ( const StackOptional value{ stack.Pop() }; value.has_value() ) {
                         stack.Push( value->IsFalsey() );
@@ -203,11 +207,18 @@ namespace LuxLibrary {
                     stack.Push( -num );
                     break;
                 }
-
+                case std::to_underlying( OpCode::OP_PRINT ): {
+                    if ( const auto& val{ stack.Pop() }; val.has_value() ) {
+                        fmt::println( "{}", *val );
+                    }
+                    break;
+                }
+                case std::to_underlying( OpCode::OP_DEFINE_GLOBAL ): {
+                    break;
+                }
                 case std::to_underlying( OpCode::OP_RETURN ): {
                     return INTERPRET_OK{ stack.Pop() };
                 }
-
                 default: {
                     return INTERPRET_RUNTIME_ERROR{ "Invalid opcode detected." };
                 }

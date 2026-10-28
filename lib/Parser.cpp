@@ -49,8 +49,8 @@ namespace LuxLibrary {
         SetError();
     }
 
-    auto Parser::Panic() noexcept -> void {
-        panic_mode = true;
+    auto Parser::Panic( const bool mode ) noexcept -> void {
+        panic_mode = mode;
     }
 
     auto Parser::HadError() const noexcept -> bool {

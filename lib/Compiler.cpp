@@ -70,13 +70,14 @@ namespace LuxLibrary {
 
         Advance();
 
-        Expression();
-
-        Consume( TokenType::END_OF_FILE, "Expect end of expression." );
+        while ( !Match( TokenType::END_OF_FILE ) ) {
+            Declaration();
+        }
 
         EndCompiler();
 
         if ( parser.HadError() ) { return std::unexpected( error_message ); }
+
         return {};
     }
 
@@ -353,5 +354,101 @@ namespace LuxLibrary {
         }
 
         parser.SetError();
+    }
+
+    auto Compiler::ExpressionStatement() noexcept -> void {
+        Expression();
+
+        Consume( TokenType::SEMICOLON, "Expect ';' after expression." );
+
+        EmitByte( OpCode::OP_POP );
+    }
+
+    auto Compiler::PrintStatement() noexcept -> void {
+        Expression();
+
+        Consume( TokenType::SEMICOLON, "Expect ';' after value." );
+
+        EmitByte( OpCode::OP_PRINT );
+    }
+
+    auto Compiler::Match( const TokenType type ) noexcept -> bool {
+        if ( !Check( type ) ) { return false; }
+        Advance();
+        return true;
+    }
+
+    auto Compiler::Check( const TokenType type ) const noexcept -> bool {
+        return parser.CurrentType( type );
+    }
+
+    auto Compiler::Statement() noexcept -> void {
+        if ( Match( TokenType::PRINT ) ) {
+            PrintStatement();
+        } else {
+            ExpressionStatement();
+        }
+    }
+
+    auto Compiler::DefineVariable( const std::uint8_t global ) noexcept -> void {
+        EmitBytes( OpCode::OP_DEFINE_GLOBAL, global );
+    }
+
+    auto Compiler::ParseVariable( const std::string_view error_message ) noexcept -> std::uint8_t {
+        Consume( TokenType::IDENTIFIER, error_message );
+        return IdentifierConstant( parser.Previous() );
+    }
+
+    auto Compiler::IdentifierConstant( const Token& ident_token ) noexcept -> std::uint8_t {
+
+        const std::string name{ ident_token.start, ident_token.length };
+
+        return MakeConstant( Value( name ) );
+    }
+
+    auto Compiler::VariableDeclaration() noexcept -> void {
+        const std::uint8_t global{ ParseVariable( "Expect variable name." ) };
+
+        if ( Match( TokenType::EQUAL ) ) {
+            Expression();
+        } else {
+            EmitByte( OpCode::OP_NIL );
+        }
+
+        Consume( TokenType::SEMICOLON, "Expect ';' after variable declaration." );
+
+        DefineVariable( global );
+    }
+
+    auto Compiler::Declaration() noexcept -> void {
+        if ( Match( TokenType::VAR ) ) {
+            VariableDeclaration();
+        } else {
+            Statement();
+        }
+
+        if ( parser.PanicMode() ) { Synchronize(); }
+    }
+
+    auto Compiler::Synchronize() noexcept -> void {
+        parser.Panic( false );
+
+        while ( !parser.CurrentType( TokenType::END_OF_FILE ) ) {
+            if ( parser.Previous().type == TokenType::SEMICOLON ) { return; }
+
+            switch ( parser.Current().type ) {
+                case TokenType::CLASS :
+                case TokenType::FUN   :
+                case TokenType::VAR   :
+                case TokenType::FOR   :
+                case TokenType::IF    :
+                case TokenType::WHILE :
+                case TokenType::PRINT :
+                case TokenType::RETURN: return;
+                default               :; // Do nothing.
+            }
+
+            Advance();
+        }
     }
 }; // namespace LuxLibrary

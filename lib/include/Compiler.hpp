@@ -49,12 +49,20 @@ namespace LuxLibrary {
         auto EmitByte( const OpCode byte ) noexcept -> void;
         auto EmitByte( const std::uint8_t byte ) noexcept -> void;
         auto EmitConstant( const Value& val ) noexcept -> void;
+        auto IdentifierConstant( const Token& ident_token ) noexcept -> std::uint8_t;
         auto EmitReturn() noexcept -> void;
+        auto Match( const TokenType type ) noexcept -> bool;
+        auto Check( const TokenType type ) const noexcept -> bool;
         auto EndCompiler() noexcept -> void;
         auto Error( const std::string_view message ) noexcept -> void;
         auto ErrorAtCurrent( const std::string_view message ) noexcept -> void;
+        auto Synchronize() noexcept -> void;
         auto MakeConstant( const Value& val ) noexcept -> std::uint8_t;
         auto ParsePrecedence( Precedence precedence ) noexcept -> void;
+        auto ParseVariable( const std::string_view error_message ) noexcept -> std::uint8_t;
+        auto DefineVariable( const std::uint8_t global ) noexcept -> void;
+        auto PrintStatement() noexcept -> void;
+        auto ExpressionStatement() noexcept -> void;
 
       public:
         Compiler() = default;
@@ -72,6 +80,9 @@ namespace LuxLibrary {
         auto Compile( const std::string& source, Chunk& chunk ) noexcept -> Result< void >;
         auto Consume( const TokenType token, const std::string_view message ) noexcept -> void;
         auto Expression() noexcept -> void;
+        auto Statement() noexcept -> void;
+        auto Declaration() noexcept -> void;
+        auto VariableDeclaration() noexcept -> void;
 
         auto Binary() noexcept -> void;
         auto Grouping() noexcept -> void;
@@ -83,7 +94,7 @@ namespace LuxLibrary {
         auto LuxVector() noexcept -> void;
         auto LuxMap() noexcept -> void;
         auto Interpolation() noexcept -> void;
-        
+
         auto ErrorAt( const Token& token, const std::string_view message ) noexcept -> void;
 
         template < detail::IsEnumType... Args > auto EmitBytes( Args&&... args ) noexcept -> void {

@@ -68,6 +68,15 @@ namespace LuxLibrary {
             case std::to_underlying( OpCode::OP_LESS ): {
                 return OpCode::OP_LESS;
             }
+            case std::to_underlying( OpCode::OP_PRINT ): {
+                return OpCode::OP_PRINT;
+            }
+            case std::to_underlying( OpCode::OP_DEFINE_GLOBAL ): {
+                return OpCode::OP_DEFINE_GLOBAL;
+            }
+            case std::to_underlying( OpCode::OP_POP ): {
+                return OpCode::OP_POP;
+            }
             default: {
                 assert( false && "Undefined instruction in to_opcode. " );
             }
@@ -153,6 +162,9 @@ namespace LuxLibrary {
             case std::to_underlying( OpCode::OP_LESS ): {
                 return ConstantInstruction( OpCode::OP_LESS, chunk, offset, stream );
             }
+            case std::to_underlying( OpCode::OP_DEFINE_GLOBAL ): {
+                return ConstantInstruction( OpCode::OP_DEFINE_GLOBAL, chunk, offset, stream );
+            }
             case std::to_underlying( OpCode::OP_CONSTANT ): {
                 return ConstantInstruction( OpCode::OP_CONSTANT, chunk, offset, stream );
             }
@@ -167,6 +179,12 @@ namespace LuxLibrary {
             }
             case std::to_underlying( OpCode::OP_DIVIDE ): {
                 return SimpleInstruction( OpCode::OP_DIVIDE, offset, stream );
+            }
+            case std::to_underlying( OpCode::OP_PRINT ): {
+                return SimpleInstruction( OpCode::OP_PRINT, offset, stream );
+            }
+            case std::to_underlying( OpCode::OP_POP ): {
+                return SimpleInstruction( OpCode::OP_POP, offset, stream );
             }
             default: {
                 try {
