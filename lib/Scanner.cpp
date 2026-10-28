@@ -55,9 +55,13 @@ namespace LuxLibrary {
         constexpr std::size_t Pos{ 1 };
 
         switch ( *start ) {
+            case 'A':
             case 'a': return CheckKeyword( Pos, r_AND.size(), r_AND, TokenType::AND );
+            case 'C':
             case 'c': return CheckKeyword( Pos, r_CLASS.size(), r_CLASS, TokenType::CLASS );
+            case 'E':
             case 'e': return CheckKeyword( Pos, r_ELSE.size(), r_ELSE, TokenType::ELSE );
+            case 'F':
             case 'f': {
                 if ( current - start > 1 ) {
                     constexpr std::string_view r_FALSE{ "lse" };
@@ -68,11 +72,14 @@ namespace LuxLibrary {
                     const auto next_char{ ranges::next( start, 1, end ) };
 
                     switch ( *next_char ) {
+                        case 'A':
                         case 'a':
                             return CheckKeyword(
                                 NextPos, r_FALSE.size(), r_FALSE, TokenType::FALSE );
+                        case 'O':
                         case 'o':
                             return CheckKeyword( NextPos, r_FOR.size(), r_FOR, TokenType::FOR );
+                        case 'U':
                         case 'u':
                             return CheckKeyword( NextPos, r_FUN.size(), r_FUN, TokenType::FUN );
                         default: return TokenType::IDENTIFIER;
@@ -80,12 +87,19 @@ namespace LuxLibrary {
                 }
                 break;
             }
+            case 'I':
             case 'i': return CheckKeyword( Pos, r_IF.size(), r_IF, TokenType::IF );
+            case 'N':
             case 'n': return CheckKeyword( Pos, r_NIL.size(), r_NIL, TokenType::NIL );
+            case 'O':
             case 'o': return CheckKeyword( Pos, r_OR.size(), r_OR, TokenType::OR );
+            case 'P':
             case 'p': return CheckKeyword( Pos, r_PRINT.size(), r_PRINT, TokenType::PRINT );
+            case 'R':
             case 'r': return CheckKeyword( Pos, r_RETURN.size(), r_RETURN, TokenType::RETURN );
+            case 'S':
             case 's': return CheckKeyword( Pos, r_SUPER.size(), r_SUPER, TokenType::SUPER );
+            case 'T':
             case 't': {
                 if ( current - start > 1 ) {
                     constexpr std::string_view r_THIS{ "is" };
@@ -94,8 +108,10 @@ namespace LuxLibrary {
 
                     const auto next_char{ ranges::next( start, 1, end ) };
                     switch ( *next_char ) {
+                        case 'H':
                         case 'h':
                             return CheckKeyword( NextPos, r_THIS.size(), r_THIS, TokenType::THIS );
+                        case 'R':
                         case 'r':
                             return CheckKeyword( NextPos, r_TRUE.size(), r_TRUE, TokenType::TRUE );
                         default: return TokenType::IDENTIFIER;
@@ -103,7 +119,9 @@ namespace LuxLibrary {
                 }
                 break;
             }
+            case 'V':
             case 'v': return CheckKeyword( Pos, r_VAR.size(), r_VAR, TokenType::VAR );
+            case 'W':
             case 'w': return CheckKeyword( Pos, r_WHILE.size(), r_WHILE, TokenType::WHILE );
             default : return TokenType::IDENTIFIER;
         }
