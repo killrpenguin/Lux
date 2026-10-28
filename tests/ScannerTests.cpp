@@ -94,7 +94,8 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
         }
 
         const std::string keywords{
-            "and class else if nil or print return super var while this true false for fun apple"
+            "and clAss Else iF nil NIL or print PRINT retuRn Super var while "
+            "this true TRUE false FALSE for fuN apple"
         };
 
         scanner.NewSource( keywords );
@@ -114,11 +115,17 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
         const Token nil_token{ scanner.NextToken() };
         CHECK( nil_token == scanner.NewToken( TokenType::NIL ) );
 
+        const Token cap_nil_token{ scanner.NextToken() };
+        CHECK( cap_nil_token == scanner.NewToken( TokenType::NIL ) );
+
         const Token or_token{ scanner.NextToken() };
         CHECK( or_token == scanner.NewToken( TokenType::OR ) );
 
         const Token print_token{ scanner.NextToken() };
         CHECK( print_token == scanner.NewToken( TokenType::PRINT ) );
+
+        const Token cap_print_token{ scanner.NextToken() };
+        CHECK( cap_print_token == scanner.NewToken( TokenType::PRINT ) );
 
         const Token return_token{ scanner.NextToken() };
         CHECK( return_token == scanner.NewToken( TokenType::RETURN ) );
@@ -138,8 +145,14 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
         const Token true_token{ scanner.NextToken() };
         CHECK( true_token == scanner.NewToken( TokenType::TRUE ) );
 
+        const Token cap_true_token{ scanner.NextToken() };
+        CHECK( cap_true_token == scanner.NewToken( TokenType::TRUE ) );
+
         const Token false_token{ scanner.NextToken() };
         CHECK( false_token == scanner.NewToken( TokenType::FALSE ) );
+
+        const Token cap_false_token{ scanner.NextToken() };
+        CHECK( cap_false_token == scanner.NewToken( TokenType::FALSE ) );
 
         const Token for_token{ scanner.NextToken() };
         CHECK( for_token == scanner.NewToken( TokenType::FOR ) );

@@ -142,7 +142,14 @@ namespace LuxLibrary {
             const int pos, const int length, const std::string_view rest, Variant type )
             -> TokenType {
             const std::string_view sub_view{ start + pos, start + length + pos };
-            if ( current - start == pos + length and ( sub_view == rest ) ) { return type; }
+
+            std::string result( sub_view );
+
+            std::transform( result.begin(), result.end(), result.begin(), []( unsigned char c ) {
+                return static_cast< char >( std::tolower( c ) );
+            } );
+
+            if ( current - start == pos + length and ( result == rest ) ) { return type; }
 
             return TokenType::IDENTIFIER;
         }

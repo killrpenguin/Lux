@@ -10,6 +10,7 @@ set(HEADER_LIST
 	"${INCLUDE_PATH}EventManager.hpp"
 	"${INCLUDE_PATH}GarbageCollector.hpp"
 	"${INCLUDE_PATH}InterpretResult.hpp"
+	"${INCLUDE_PATH}KeywordTable.hpp"
 	"${INCLUDE_PATH}OpCode.hpp"
 	"${INCLUDE_PATH}Object.hpp"
         "${INCLUDE_PATH}Parser.hpp"
