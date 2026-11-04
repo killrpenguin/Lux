@@ -21,6 +21,7 @@
 #include <algorithm>
 #include <cmath>
 #include <concepts>
+#include <cstddef>
 #include <cstdint>
 #include <expected>
 #include <string>
@@ -30,6 +31,8 @@ namespace LuxLibrary {
 
     using Instruction = std::uint8_t;
     using Expression  = std::string;
+
+    using Identifier = std::string;
 
     using Error                          = std::string;
     template < typename T > using Result = std::expected< T, Error >;
@@ -79,6 +82,22 @@ namespace LuxLibrary {
             return diff <= abs_tol or
                    diff <= ( rel_tol * std::ranges::max( std::abs( lhs ), std::abs( rhs ) ) );
         }
+
+        // Transparent hashing for Global Variables unordered_map.
+        struct GlobalVarsStringHash {
+            using hash_type      = std::hash< std::string_view >;
+            using is_transparent = void;
+
+            auto operator()( const char* str ) const -> std::size_t {
+                return hash_type{}( str );
+            }
+            auto operator()( std::string_view str ) const -> std::size_t {
+                return hash_type{}( str );
+            }
+            auto operator()( const std::string& str ) const -> std::size_t {
+                return hash_type{}( str );
+            }
+        };
 
     }; // namespace detail
 

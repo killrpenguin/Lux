@@ -17,6 +17,12 @@ using namespace LuxLibrary::detail;
 
 // NOLINTBEGIN
 TEST_CASE( "Crafting Interpreters cLox Section", "[main]" ) {
+    SECTION( "Keyword Table Basics" ) {
+        // KeywordTable table{};
+        // REQUIRE( table.contains( "for" ) );
+        // REQUIRE( !table.contains( "apple" ) );
+    }
+
     SECTION( "Stack Class Basics" ) {
         LuxLibrary::Stack< int, 3 > stack{};
 

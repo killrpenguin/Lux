@@ -58,6 +58,7 @@ namespace LuxLibrary {
         using line_type = std::uint32_t;
 
       private:
+
         std::string::const_iterator start{};
         std::string::const_iterator current{};
         std::string::const_iterator end{};

@@ -306,6 +306,20 @@ namespace LuxLibrary {
         EmitConstant( Value( new_map ) );
     }
 
+    auto Compiler::Variable() noexcept -> void {
+        NamedVariable( parser.Previous() );
+    }
+
+    auto Compiler::NamedVariable( const Token& name ) noexcept -> void {
+        const std::uint8_t arg{ IdentifierConstant( name ) };
+        if ( Match( TokenType::EQUAL ) ) {
+            Expression();
+            EmitBytes( OpCode::OP_SET_GLOBAL, arg );
+        } else {
+            EmitBytes( OpCode::OP_GET_GLOBAL, arg );
+        }
+    }
+
     auto Compiler::MakeConstant( const Value& val ) noexcept -> std::uint8_t {
         if ( const std::uint8_t constant{ current_chunk->AddConstant( val ) };
              constant < std::numeric_limits< std::uint8_t >::max() ) {
@@ -396,18 +410,24 @@ namespace LuxLibrary {
 
     auto Compiler::ParseVariable( const std::string_view error_message ) noexcept -> std::uint8_t {
         Consume( TokenType::IDENTIFIER, error_message );
+
         return IdentifierConstant( parser.Previous() );
     }
 
     auto Compiler::IdentifierConstant( const Token& ident_token ) noexcept -> std::uint8_t {
-
-        const std::string name{ ident_token.start, ident_token.length };
+        const std::string_view name{
+            ident_token.start,
+            std::ranges::next(
+                ident_token.start,
+                static_cast< std::iter_difference_t< decltype( ident_token.start ) > >(
+                    ident_token.length ) )
+        };
 
         return MakeConstant( Value( name ) );
     }
 
     auto Compiler::VariableDeclaration() noexcept -> void {
-        const std::uint8_t global{ ParseVariable( "Expect variable name." ) };
+        const std::uint8_t global{ ParseVariable( "Expected variable name." ) };
 
         if ( Match( TokenType::EQUAL ) ) {
             Expression();

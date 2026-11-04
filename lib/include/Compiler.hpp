@@ -63,6 +63,7 @@ namespace LuxLibrary {
         auto DefineVariable( const std::uint8_t global ) noexcept -> void;
         auto PrintStatement() noexcept -> void;
         auto ExpressionStatement() noexcept -> void;
+        auto NamedVariable( const Token& name ) noexcept -> void;
 
       public:
         Compiler() = default;
@@ -94,6 +95,7 @@ namespace LuxLibrary {
         auto LuxVector() noexcept -> void;
         auto LuxMap() noexcept -> void;
         auto Interpolation() noexcept -> void;
+        auto Variable() noexcept -> void;
 
         auto ErrorAt( const Token& token, const std::string_view message ) noexcept -> void;
 

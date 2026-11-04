@@ -74,6 +74,12 @@ namespace LuxLibrary {
             case std::to_underlying( OpCode::OP_DEFINE_GLOBAL ): {
                 return OpCode::OP_DEFINE_GLOBAL;
             }
+            case std::to_underlying( OpCode::OP_SET_GLOBAL ): {
+                return OpCode::OP_SET_GLOBAL;
+            }
+            case std::to_underlying( OpCode::OP_GET_GLOBAL ): {
+                return OpCode::OP_GET_GLOBAL;
+            }
             case std::to_underlying( OpCode::OP_POP ): {
                 return OpCode::OP_POP;
             }
@@ -162,8 +168,14 @@ namespace LuxLibrary {
             case std::to_underlying( OpCode::OP_LESS ): {
                 return ConstantInstruction( OpCode::OP_LESS, chunk, offset, stream );
             }
+            case std::to_underlying( OpCode::OP_SET_GLOBAL ): {
+                return ConstantInstruction( OpCode::OP_SET_GLOBAL, chunk, offset, stream );
+            }
             case std::to_underlying( OpCode::OP_DEFINE_GLOBAL ): {
                 return ConstantInstruction( OpCode::OP_DEFINE_GLOBAL, chunk, offset, stream );
+            }
+            case std::to_underlying( OpCode::OP_GET_GLOBAL ): {
+                return ConstantInstruction( OpCode::OP_GET_GLOBAL, chunk, offset, stream );
             }
             case std::to_underlying( OpCode::OP_CONSTANT ): {
                 return ConstantInstruction( OpCode::OP_CONSTANT, chunk, offset, stream );

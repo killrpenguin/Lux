@@ -43,7 +43,6 @@ namespace LuxLibrary {
 
         static constexpr std::array< Rule, RulesMax > rules{
             // clang-format off
-
             Rule{ .prefix = &Compiler::Grouping, .infix = nullptr, .precedence = Precedence::NONE },     // LEFT_PAREN
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // RIGHT_PAREN
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // LEFT_BRACE {
@@ -70,10 +69,10 @@ namespace LuxLibrary {
                 Rule{ .prefix = nullptr, .infix = &Compiler::Binary, .precedence = Precedence::COMPARISON }, // LESS
                 Rule{ .prefix = nullptr, .infix = &Compiler::Binary, .precedence = Precedence::COMPARISON }, // LESS_EQUAL
 
-                  Rule{ .prefix = &Compiler::Interpolation, .infix = nullptr, .precedence = Precedence::NONE }, // INTERPOLATION_START
-                  Rule{ .prefix = &Compiler::String, .infix = nullptr, .precedence = Precedence::NONE }, // INTERPOLATION_END
-                                                                                                              // 
-                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // IDENTIFIER
+                Rule{ .prefix = &Compiler::Interpolation, .infix = nullptr, .precedence = Precedence::NONE }, // INTERPOLATION_START
+                Rule{ .prefix = &Compiler::String, .infix = nullptr, .precedence = Precedence::NONE }, // INTERPOLATION_END
+
+    	 		  Rule{ .prefix = &Compiler::Variable, .infix = nullptr, .precedence = Precedence::NONE }, // IDENTIFIER
                 Rule{ .prefix = &Compiler::String, .infix = nullptr, .precedence = Precedence::NONE }, // STRING
                 Rule{ .prefix = &Compiler::Number, .infix = nullptr, .precedence = Precedence::NONE }, // INTEGER
                 Rule{ .prefix = &Compiler::Number, .infix = nullptr, .precedence = Precedence::NONE }, // DOUBLE

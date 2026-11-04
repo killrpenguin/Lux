@@ -213,8 +213,46 @@ namespace LuxLibrary {
                     }
                     break;
                 }
-                case std::to_underlying( OpCode::OP_DEFINE_GLOBAL ): {
+                case std::to_underlying( OpCode::OP_SET_GLOBAL ): {
+                    const Value tmp{ InstructionPtrConstant() };
+
+                    const std::string_view identifier{ tmp.AsStringView() };
+
                     break;
+                }
+                case std::to_underlying( OpCode::OP_GET_GLOBAL ): {
+                    const Value tmp{ stack.PeekPrev() };
+
+                    if ( tmp.IsString() ) {
+                        const std::string_view identifier{ tmp.AsStringView() };
+
+                        if ( global_variables.contains( identifier ) ) {
+                            stack.Push( global_variables[identifier] );
+                        } else {
+                            return INTERPRET_RUNTIME_ERROR{
+                                RuntimeError( "Undefined variable ", identifier ),
+                            };
+                        }
+                    }
+                    break;
+                }
+                case std::to_underlying( OpCode::OP_DEFINE_GLOBAL ): {
+                    const Value identifier{ InstructionPtrConstant() };
+
+                    if ( identifier.IsString() ) {
+                        if ( const auto var_exists{
+                                 global_variables.insert(
+                                     { identifier.AsString(), stack.PeekPrev() } ),
+                             };
+                             var_exists.second ) {
+                            stack.Pop();
+                            break;
+                        } else {
+                            stack.Pop();
+                            return INTERPRET_RUNTIME_ERROR{ "Global variable already exists." };
+                        }
+                    }
+                    return INTERPRET_RUNTIME_ERROR{ "Invalid Identifier for global variable." };
                 }
                 case std::to_underlying( OpCode::OP_RETURN ): {
                     return INTERPRET_OK{ stack.Pop() };

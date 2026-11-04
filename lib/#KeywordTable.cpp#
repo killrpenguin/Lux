@@ -1,0 +1,90 @@
+/*
+ * Copyright (c) 2026 David McFarland
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * Licensed under the Apache License, Version 2.0 the "License";
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include "KeywordTable.hpp"
+
+#include <stdexcept>
+
+namespace LuxLibrary {
+    KeywordTable::KeywordTable() noexcept {
+        bool success{ false };
+
+        // Find a seed that produces zero collisions
+        while ( !success ) {
+            for ( std::string_view& val : table ) {
+                if ( !val.empty() ) { val = std::string_view{}; }
+            }
+
+            success = true;
+            seed++;
+
+            for ( std::size_t table_idx{ 0 }; std::cmp_less( table_idx, TableSize ); ++table_idx ) {
+                try {
+                    const std::uint32_t hsh =
+                        hash( LuxKeywords.at( table_idx ), seed ) % table_size;
+
+                    const std::string_view table_val{ table.at( hsh ) };
+
+                    if ( !table_val.empty() ) { // Collision detected, try next seed
+                        success = false;
+                        break;
+                    }
+
+                    table.at( hsh ) = LuxKeywords.at( table_idx );
+
+                } catch ( const std::out_of_range& err ) {
+                    std::cerr << "Out of bounds access in KeywordHashSet: \n" << err.what();
+                    break;
+                }
+            }
+        }
+    }
+
+    auto KeywordTable::hash( const KeywordType str, const std::uint32_t current_seed ) noexcept
+        -> std::uint32_t {
+        constexpr std::uint32_t SeedStart{ 2166136261U };
+
+        std::uint32_t hsh{ SeedStart ^ current_seed };
+
+        constexpr std::uint32_t Mul{ 16777619U };
+        for ( const auto& ltr : str ) {
+            hsh ^= static_cast< unsigned char >( ltr );
+            hsh *= Mul;
+        }
+        return hsh;
+    }
+
+    auto KeywordTable::contains( const KeywordType key ) const -> bool {
+        if ( key.empty() ) { return false; }
+
+        const std::uint32_t idx{ hash( key, seed ) % table_size };
+
+        try {
+            const std::string_view possible_key{ table.at( idx ) };
+
+            if ( !possible_key.empty() && possible_key == key ) {
+                return true; // 0.6.8
+            }
+
+        } catch ( const std::exception& err ) {
+            std::cerr << "Caught an unknown exception:\n\t" << err.what();
+        }
+
+        return false;
+    }
+} // namespace LuxLibrary

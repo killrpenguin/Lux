@@ -22,24 +22,29 @@
 #include "Common.hpp"
 #include "Compiler.hpp"
 #include "InterpretResult.hpp"
-#include "Object.hpp"
 #include "Repl.hpp"
 #include "Stack.hpp"
 #include "Value.hpp"
 
 #include <filesystem>
+#include <functional>
 #include <istream>
 #include <iterator>
 #include <ostream>
 #include <string>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
 namespace LuxLibrary {
-    namespace fs = std::filesystem;
     using namespace detail;
 
+    namespace fs = std::filesystem;
+
     using StackOptional = std::optional< Value >;
+
+    using GlobalsMap =
+        std::unordered_map< Identifier, Value, GlobalVarsStringHash, std::equal_to<> >;
 
     class VirtualMachine {
       private:
@@ -53,7 +58,7 @@ namespace LuxLibrary {
         std::vector< Expression > expressions;
         std::vector< Result< Value > > results;
 
-        std::vector< Object > objects{};
+        GlobalsMap global_variables{};
 
         auto static ReadFile( const fs::path& path ) noexcept -> std::string;
         auto TraceDebug() const noexcept -> void;

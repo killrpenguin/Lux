@@ -29,6 +29,7 @@ auto format_as( LuxLibrary::OpCode code ) -> std::string_view {
         case LuxLibrary::OpCode::OP_FALSE        : return "OP_FALSE";
         case LuxLibrary::OpCode::OP_POP          : return "OP_POP";
         case LuxLibrary::OpCode::OP_DEFINE_GLOBAL: return "OP_DEFINE_GLOBAL";
+        case LuxLibrary::OpCode::OP_GET_GLOBAL   : return "OP_GET_GLOBAL";
         case LuxLibrary::OpCode::OP_EQUAL        : return "OP_EQUAL";
         case LuxLibrary::OpCode::OP_GREATER      : return "OP_GREATER";
         case LuxLibrary::OpCode::OP_LESS         : return "OP_LESS";
