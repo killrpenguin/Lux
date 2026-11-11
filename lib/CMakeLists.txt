@@ -33,6 +33,7 @@ set(SRC_LIST
 	"EventManager.cpp"
 	"GarbageCollector.cpp"
 	"InterpretResult.cpp"
+	"KeywordTable.cpp"
 	"OpCode.cpp"
 	"Object.cpp"
     	"Parser.cpp"
