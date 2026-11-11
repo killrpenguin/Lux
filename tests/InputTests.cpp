@@ -4,6 +4,7 @@
 // #include "Compiler.hpp"
 #include "Debug.hpp"
 #include "GarbageCollector.hpp"
+#include "KeywordTable.hpp"
 #include "OpCode.hpp"
 #include "Stack.hpp"
 
@@ -17,6 +18,15 @@ using namespace LuxLibrary::detail;
 
 // NOLINTBEGIN
 TEST_CASE( "Crafting Interpreters cLox Section", "[main]" ) {
+    SECTION( "Keyword table Basics" ) {
+
+
+        // KeywordTable table{};
+		// 
+        // REQUIRE( table.contains( "for" ) );
+        // REQUIRE( !table.contains( "Test" ) );
+    }
+
     SECTION( "Stack Class Basics" ) {
         LuxLibrary::Stack< int, 3 > stack{};
 
