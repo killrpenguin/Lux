@@ -24,6 +24,7 @@
 #include "OpCode.hpp"
 #include "Parser.hpp"
 #include "ParserRules.hpp"
+#include "Scanner.hpp"
 #include "Token.hpp"
 #include "TokenVariant.hpp"
 #include "Value.hpp"

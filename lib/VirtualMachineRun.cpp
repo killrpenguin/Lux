@@ -221,19 +221,21 @@ namespace LuxLibrary {
                     break;
                 }
                 case std::to_underlying( OpCode::OP_GET_GLOBAL ): {
-                    const Value tmp{ stack.PeekPrev() };
+                    const Value tmp{ InstructionPtrConstant() };
 
-                    if ( tmp.IsString() ) {
-                        const std::string_view identifier{ tmp.AsStringView() };
+                    const std::string_view identifier{ tmp.AsStringView() };
 
-                        if ( global_variables.contains( identifier ) ) {
-                            stack.Push( global_variables[identifier] );
-                        } else {
-                            return INTERPRET_RUNTIME_ERROR{
-                                RuntimeError( "Undefined variable ", identifier ),
-                            };
-                        }
+                    if ( global_variables.contains( identifier ) ) {
+                        const Value val{ global_variables[identifier] };
+
+                        stack.Push( val );
+
+                    } else {
+                        return INTERPRET_RUNTIME_ERROR{
+                            RuntimeError( "Undefined variable ", identifier ),
+                        };
                     }
+
                     break;
                 }
                 case std::to_underlying( OpCode::OP_DEFINE_GLOBAL ): {
@@ -255,7 +257,7 @@ namespace LuxLibrary {
                     return INTERPRET_RUNTIME_ERROR{ "Invalid Identifier for global variable." };
                 }
                 case std::to_underlying( OpCode::OP_RETURN ): {
-                    return INTERPRET_OK{ stack.Pop() };
+                    return INTERPRET_OK{};
                 }
                 default: {
                     return INTERPRET_RUNTIME_ERROR{ "Invalid opcode detected." };

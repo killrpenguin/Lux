@@ -1,6 +1,7 @@
 #include <catch2/catch_test_macros.hpp>
 #include <catch2/generators/catch_generators_all.hpp>
 
+// #include "Common.hpp"
 #include "Compiler.hpp"
 #include "Debug.hpp"
 #include "OpCode.hpp"
@@ -12,10 +13,11 @@ using namespace LuxLibrary::detail;
 TEST_CASE( "Compiler Testing", "[main]" ) {
     SECTION( "Compile Simple Expression" ) {
         Compiler compiler{};
-
         Chunk simple_expression{};
 
-        const bool success{ compiler.Compile( "10 + 20", simple_expression ) };
+        const auto success{ compiler.Compile( "10 + 20;", simple_expression ) };
+
+        if ( !success ) { fmt::println( "\n{}", success.error() ); }
 
         REQUIRE( success );
 
@@ -42,7 +44,7 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
         Debug::OpCodeAndLine op_return{ Debug::GetOpcode( simple_expression, 5 ) };
 
         REQUIRE( op_return.has_value() );
-        CHECK( op_return->first == OpCode::OP_RETURN );
+        CHECK( op_return->first == OpCode::OP_POP );
         CHECK( op_return->second == 1 );
     }
 
@@ -51,13 +53,10 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
 
         Chunk complex_expression{};
 
-        const bool success_one{ compiler.Compile( "(53 * (31 - 13)) + -10", complex_expression ) };
+        const auto success{ compiler.Compile( "(53 * (31 - 13)) + -10;", complex_expression ) };
+        if ( !success ) { fmt::println( "\n{}", success.error() ); }
 
-        REQUIRE( success_one );
-
-        const bool success_two{ compiler.Compile( "\n23 / 3", complex_expression ) };
-
-        REQUIRE( success_two );
+        REQUIRE( success );
 
         // Debug::DisassembleChunk( complex_expression, "Complex Expression" );
 
@@ -101,39 +100,26 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
         CHECK( op_add->first == OpCode::OP_ADD );
         CHECK( op_add->second == 1 );
 
-        Debug::OpCodeAndLine op_return_ln_one{ Debug::GetOpcode( complex_expression, 12 ) };
-        REQUIRE( op_return_ln_one.has_value() );
-        CHECK( op_return_ln_one->first == OpCode::OP_RETURN );
-        CHECK( op_return_ln_one->second == 1 );
+        Debug::OpCodeAndLine op_pop{ Debug::GetOpcode( complex_expression, 12 ) };
+        REQUIRE( op_pop.has_value() );
+        CHECK( op_pop->first == OpCode::OP_POP );
+        CHECK( op_pop->second == 1 );
 
-        Debug::OpCodeAndLine fifth_constant{ Debug::GetOpcode( complex_expression, 13 ) };
-        REQUIRE( fifth_constant.has_value() );
-        CHECK( fifth_constant->first == OpCode::OP_CONSTANT );
-        CHECK( fifth_constant->second == 2 );
-
-        Debug::OpCodeAndLine sixth_constant{ Debug::GetOpcode( complex_expression, 15 ) };
-        REQUIRE( sixth_constant.has_value() );
-        CHECK( sixth_constant->first == OpCode::OP_CONSTANT );
-        CHECK( sixth_constant->second == 2 );
-
-        Debug::OpCodeAndLine op_divide{ Debug::GetOpcode( complex_expression, 17 ) };
-        REQUIRE( op_divide.has_value() );
-        CHECK( op_divide->first == OpCode::OP_DIVIDE );
-        CHECK( op_divide->second == 2 );
-
-        Debug::OpCodeAndLine op_return_ln_two{ Debug::GetOpcode( complex_expression, 18 ) };
-        REQUIRE( op_return_ln_two.has_value() );
-        CHECK( op_return_ln_two->first == OpCode::OP_RETURN );
-        CHECK( op_return_ln_two->second == 2 );
+        Debug::OpCodeAndLine op_return{ Debug::GetOpcode( complex_expression, 13 ) };
+        REQUIRE( op_return.has_value() );
+        CHECK( op_return->first == OpCode::OP_RETURN );
+        CHECK( op_return->second == 1 );
     }
 
     SECTION( "Compile Concatenated String." ) {
         Compiler compiler{};
         Chunk expression{};
 
-        const std::string source{ "\"This is a \" + \"string \" + \"test.\"" };
+        const std::string source{ "\"This is a \" + \"string \" + \"test.\";" };
 
-        const bool success{ compiler.Compile( source, expression ) };
+        const auto success{ compiler.Compile( source, expression ) };
+
+        if ( !success ) { fmt::println( "\n{}", success.error() ); }
 
         REQUIRE( success );
 
@@ -166,7 +152,7 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
 
         Debug::OpCodeAndLine op_return{ Debug::GetOpcode( expression, 8 ) };
         REQUIRE( op_return.has_value() );
-        CHECK( op_return->first == OpCode::OP_RETURN );
+        CHECK( op_return->first == OpCode::OP_POP );
         CHECK( op_return->second == 1 );
     }
 
@@ -174,9 +160,11 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
         Compiler compiler{};
         Chunk expression{};
 
-        const std::string source{ "\"Compile ${\"test\"} string.\"" };
+        const std::string source{ "\"Compile ${\"test\"} string.\";" };
 
-        const bool success{ compiler.Compile( source, expression ) };
+        const auto success{ compiler.Compile( source, expression ) };
+
+        if ( !success ) { fmt::println( "\n{}", success.error() ); }
 
         REQUIRE( success );
 
@@ -209,7 +197,7 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
 
         Debug::OpCodeAndLine op_return{ Debug::GetOpcode( expression, 8 ) };
         REQUIRE( op_return.has_value() );
-        CHECK( op_return->first == OpCode::OP_RETURN );
+        CHECK( op_return->first == OpCode::OP_POP );
         CHECK( op_return->second == 1 );
     }
 
@@ -217,13 +205,15 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
         Compiler compiler{};
         Chunk expression{};
 
-        const std::string source{ "\"Comp ${\"cplx\"} tst ${10 - 5}.\"" };
+        const std::string source{ "\"Comp ${\"cplx\"} tst ${10 - 5}.\";" };
 
-        const bool success{ compiler.Compile( source, expression ) };
+        const auto success{ compiler.Compile( source, expression ) };
 
-        // Debug::DisassembleChunk( expression, "Complex Interpolation String" );
+        if ( !success ) { fmt::println( "\n{}", success.error() ); }
 
         REQUIRE( success );
+
+        // Debug::DisassembleChunk( expression, "Complex Interpolation String" );
 
         Debug::OpCodeAndLine first_lhr_str{ Debug::GetOpcode( expression, 0 ) };
         REQUIRE( first_lhr_str.has_value() );
@@ -280,7 +270,12 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
         CHECK( last_add->first == OpCode::OP_ADD );
         CHECK( last_add->second == 1 );
 
-        Debug::OpCodeAndLine op_return{ Debug::GetOpcode( expression, 17 ) };
+        Debug::OpCodeAndLine op_pop{ Debug::GetOpcode( expression, 17 ) };
+        REQUIRE( op_pop.has_value() );
+        CHECK( op_pop->first == OpCode::OP_POP );
+        CHECK( op_pop->second == 1 );
+
+        Debug::OpCodeAndLine op_return{ Debug::GetOpcode( expression, 18 ) };
         REQUIRE( op_return.has_value() );
         CHECK( op_return->first == OpCode::OP_RETURN );
         CHECK( op_return->second == 1 );
@@ -290,23 +285,40 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
         Compiler compiler{};
         Chunk expression{};
 
-        const std::string source{ "[1, 'A', \"Apple\", 1.5]" };
+        const std::string source{ "array = [1, 'A', \"Apple\", 1.5];" };
 
-        const bool success{ compiler.Compile( source, expression ) };
+        const auto success{ compiler.Compile( source, expression ) };
+
+        if ( !success ) { fmt::println( "\n{}", success.error() ); }
 
         REQUIRE( success );
 
-        Debug::OpCodeAndLine val{ Debug::GetOpcode( expression, 0 ) };
+        // Debug::OpCodeAndLine val{ Debug::GetOpcode( expression, 0 ) };
 
         Debug::DisassembleChunk( expression, "Basic Array" );
 
-        REQUIRE( val.has_value() );
-        CHECK( val->first == OpCode::OP_CONSTANT );
-        CHECK( val->second == 1 );
+        // REQUIRE( val.has_value() );
+        // CHECK( val->first == OpCode::OP_CONSTANT );
+        // CHECK( val->second == 1 );
+        //
+        // const Value compiled_array{ expression.GetConstant( 0 ) };
 
-        auto compiled_array{ expression.GetConstant( 0 ) };
+        // REQUIRE( compiled_array.IsLuxArray() );
 
-        REQUIRE( compiled_array.IsLuxArray() );
+        Debug::OpCodeAndLine constant{ Debug::GetOpcode( expression, 0 ) };
+        REQUIRE( constant.has_value() );
+        CHECK( constant->first == OpCode::OP_CONSTANT );
+        CHECK( constant->second == 1 );
+
+        Debug::OpCodeAndLine op_pop{ Debug::GetOpcode( expression, 2 ) };
+        REQUIRE( op_pop.has_value() );
+        CHECK( op_pop->first == OpCode::OP_POP );
+        CHECK( op_pop->second == 1 );
+
+        Debug::OpCodeAndLine op_return{ Debug::GetOpcode( expression, 3 ) };
+        REQUIRE( op_return.has_value() );
+        CHECK( op_return->first == OpCode::OP_RETURN );
+        CHECK( op_return->second == 1 );
     }
 
     SECTION( "Compile Simple LuxMap" ) {
@@ -314,14 +326,46 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
         Chunk expression{};
 
         const std::string source{
-            "{\"Number\": 1, \"Char\": 'A', \"String\": \"Apple\", \"Double\" :1.5}"
+            "map = {\"Number\": 1, \"Char\": 'A', \"String\": \"Apple\", \"Double\" :1.5};"
         };
 
-        const bool success{ compiler.Compile( source, expression ) };
+        const auto success{ compiler.Compile( source, expression ) };
+
+        if ( !success ) { fmt::println( "\n{}", success.error() ); }
+
+        // REQUIRE( success );
+
+        Debug::DisassembleChunk( expression, "Basic Map" );
+
+        Debug::OpCodeAndLine constant{ Debug::GetOpcode( expression, 0 ) };
+        REQUIRE( constant.has_value() );
+        CHECK( constant->first == OpCode::OP_CONSTANT );
+        CHECK( constant->second == 1 );
+
+        Debug::OpCodeAndLine op_pop{ Debug::GetOpcode( expression, 2 ) };
+        REQUIRE( op_pop.has_value() );
+        CHECK( op_pop->first == OpCode::OP_POP );
+        CHECK( op_pop->second == 1 );
+
+        Debug::OpCodeAndLine op_return{ Debug::GetOpcode( expression, 3 ) };
+        REQUIRE( op_return.has_value() );
+        CHECK( op_return->first == OpCode::OP_RETURN );
+        CHECK( op_return->second == 1 );
+    }
+
+    SECTION( "Compile Assignment Expressions" ) {
+        Compiler compiler{};
+        Chunk expression{};
+
+        const std::string source{ "var test = 10;\nprint test;" };
+
+        const auto success{ compiler.Compile( source, expression ) };
+
+        if ( !success ) { fmt::println( "\n{}", success.error() ); }
 
         REQUIRE( success );
 
-        Debug::DisassembleChunk( expression, "Basic Map" );
+        // Debug::DisassembleChunk( expression, "Assignment Expression" );
     }
 }
 

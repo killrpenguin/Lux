@@ -1,2 +1,2 @@
-var test = 10;
+var test = 5+5;
 print test;
