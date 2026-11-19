@@ -63,7 +63,7 @@ namespace LuxLibrary {
         auto DefineVariable( const std::uint8_t global ) noexcept -> void;
         auto PrintStatement() noexcept -> void;
         auto ExpressionStatement() noexcept -> void;
-        auto NamedVariable( const Token& name ) noexcept -> void;
+        auto NamedVariable( const Token& name, const bool can_assign ) noexcept -> void;
 
       public:
         Compiler() = default;
@@ -85,17 +85,17 @@ namespace LuxLibrary {
         auto Declaration() noexcept -> void;
         auto VariableDeclaration() noexcept -> void;
 
-        auto Binary() noexcept -> void;
-        auto Grouping() noexcept -> void;
-        auto Literal() noexcept -> void;
-        auto Number() noexcept -> void;
-        auto String() noexcept -> void;
-        auto Char() noexcept -> void;
-        auto Unary() noexcept -> void;
-        auto LuxVector() noexcept -> void;
-        auto LuxMap() noexcept -> void;
-        auto Interpolation() noexcept -> void;
-        auto Variable() noexcept -> void;
+        auto Binary( const bool can_assign ) noexcept -> void;
+        auto Grouping( const bool can_assign ) noexcept -> void;
+        auto Literal( const bool can_assign ) noexcept -> void;
+        auto Number( const bool can_assign ) noexcept -> void;
+        auto String( const bool can_assign ) noexcept -> void;
+        auto Char( const bool can_assign ) noexcept -> void;
+        auto Unary( const bool can_assign ) noexcept -> void;
+        auto LuxVector( const bool can_assign ) noexcept -> void;
+        auto LuxMap( const bool can_assign ) noexcept -> void;
+        auto Interpolation( const bool can_assign ) noexcept -> void;
+        auto Variable( const bool can_assign ) noexcept -> void;
 
         auto ErrorAt( const Token& token, const std::string_view message ) noexcept -> void;
 

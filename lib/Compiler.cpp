@@ -113,7 +113,9 @@ namespace LuxLibrary {
 
         const Token& prefix_token{ parser.Previous() };
 
-        ParserRules::CallPrefix( this, prefix_token.type );
+        const bool can_assign{ precedence <= Precedence::ASSIGNMENT };
+
+        ParserRules::CallPrefix( this, prefix_token.type, can_assign );
 
         const Token& current_token{ parser.Current() };
 
@@ -122,11 +124,13 @@ namespace LuxLibrary {
 
             const Token& infix_token{ parser.Previous() };
 
-            ParserRules::CallInfix( this, infix_token.type );
+            ParserRules::CallInfix( this, infix_token.type, can_assign );
         }
+
+        if ( can_assign and Match( TokenType::EQUAL ) ) { Error( "Invalid assignment target." ); }
     }
 
-    auto Compiler::Binary() noexcept -> void {
+    auto Compiler::Binary( const bool /* can_assign */ ) noexcept -> void {
         const Token& operator_token{ parser.Previous() };
 
         Precedence precedence{ ParserRules::Precedence( operator_token.type ) };
@@ -148,12 +152,12 @@ namespace LuxLibrary {
         }
     }
 
-    auto Compiler::Grouping() noexcept -> void {
+    auto Compiler::Grouping( const bool /* can_assign */ ) noexcept -> void {
         Expression();
         Consume( TokenType::RIGHT_PAREN, "Expect ')' after expression." );
     }
 
-    auto Compiler::Number() noexcept -> void {
+    auto Compiler::Number( const bool /* can_assign */ ) noexcept -> void {
         const std::optional< Value > number = [this] -> std::optional< Value > {
             const Token& num{ parser.Previous() };
             try {
@@ -178,7 +182,7 @@ namespace LuxLibrary {
         if ( number.has_value() ) { EmitConstant( *number ); }
     }
 
-    auto Compiler::Literal() noexcept -> void {
+    auto Compiler::Literal( const bool /* can_assign */ ) noexcept -> void {
         const auto last_token{ parser.Previous() };
         switch ( last_token.type ) {
             case LuxLibrary::TokenType::FALSE: EmitByte( OpCode::OP_FALSE ); break;
@@ -188,7 +192,7 @@ namespace LuxLibrary {
         }
     }
 
-    auto Compiler::Unary() noexcept -> void {
+    auto Compiler::Unary( const bool /* can_assign */ ) noexcept -> void {
         const Token& token{ parser.Previous() };
 
         ParsePrecedence( Precedence::UNARY );
@@ -206,7 +210,7 @@ namespace LuxLibrary {
         }
     }
 
-    auto Compiler::Char() noexcept -> void {
+    auto Compiler::Char( const bool /* can_assign */ ) noexcept -> void {
         const Token token{ parser.Previous() };
 
         const auto character{ std::ranges::next( token.start, 1 ) };
@@ -214,7 +218,7 @@ namespace LuxLibrary {
         EmitConstant( Value( static_cast< detail::character >( *character ) ) );
     }
 
-    auto Compiler::String() noexcept -> void {
+    auto Compiler::String( const bool /* can_assign */ ) noexcept -> void {
         const Token token{ parser.Previous() };
 
         const auto text_start{ std::ranges::next( token.start, 1 ) };
@@ -224,8 +228,8 @@ namespace LuxLibrary {
         EmitConstant( Value( text ) );
     }
 
-    auto Compiler::Interpolation() noexcept -> void {
-        String();
+    auto Compiler::Interpolation( const bool can_assign ) noexcept -> void {
+        String( can_assign );
 
         while ( parser.Previous().type != TokenType::INTERPOLATION_END ) {
             Expression();
@@ -234,7 +238,7 @@ namespace LuxLibrary {
         }
     }
 
-    auto Compiler::LuxVector() noexcept -> void {
+    auto Compiler::LuxVector( const bool /* can_assign */ ) noexcept -> void {
         const auto start_idx{ current_chunk->CountIndex() };
 
         while ( !parser.CurrentType( TokenType::LUX_VECTOR_END ) ) {
@@ -265,7 +269,7 @@ namespace LuxLibrary {
         EmitConstant( Value( new_array ) );
     }
 
-    auto Compiler::LuxMap() noexcept -> void {
+    auto Compiler::LuxMap( const bool /* can_assign */ ) noexcept -> void {
         const auto start_idx{ current_chunk->CountIndex() };
 
         while ( !parser.CurrentType( TokenType::LUX_MAP_END ) ) {
@@ -307,13 +311,13 @@ namespace LuxLibrary {
         EmitConstant( Value( new_map ) );
     }
 
-    auto Compiler::Variable() noexcept -> void {
-        NamedVariable( parser.Previous() );
+    auto Compiler::Variable( const bool can_assign ) noexcept -> void {
+        NamedVariable( parser.Previous(), can_assign );
     }
 
-    auto Compiler::NamedVariable( const Token& name ) noexcept -> void {
+    auto Compiler::NamedVariable( const Token& name, const bool can_assign ) noexcept -> void {
         const std::uint8_t arg{ IdentifierConstant( name ) };
-        if ( Match( TokenType::EQUAL ) ) {
+        if ( can_assign and Match( TokenType::EQUAL ) ) {
             Expression();
             EmitBytes( OpCode::OP_SET_GLOBAL, arg );
         } else {

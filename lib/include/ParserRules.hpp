@@ -30,7 +30,7 @@ namespace LuxLibrary {
 
     class ParserRules {
       public:
-        using ParseFn = void ( Compiler::* )();
+        using ParseFn = void ( Compiler::* )( const bool CanAssign );
 
         struct Rule {
             ParseFn prefix{};
@@ -129,11 +129,12 @@ namespace LuxLibrary {
         template < typename T >
             requires detail::IsTokenType< T >
         static constexpr auto CallPrefix(
-            Compiler* const instance, T type, std::ostream& cerr = std::cerr ) noexcept -> void {
+            Compiler* const instance, T type, const bool can_assign,
+            std::ostream& cerr = std::cerr ) noexcept -> void {
             const Rule& rule{ ParserRules::Get( type ) };
 
             if ( rule.prefix != nullptr ) {
-                std::invoke( rule.prefix, instance );
+                std::invoke( rule.prefix, instance, can_assign );
                 return;
             }
             fmt::println( cerr, "No prefix rule defined for {}", type );
@@ -142,11 +143,12 @@ namespace LuxLibrary {
         template < typename T >
             requires detail::IsTokenType< T >
         static constexpr auto CallInfix(
-            Compiler* const instance, T type, std::ostream& cerr = std::cerr ) noexcept -> void {
+            Compiler* const instance, T type, const bool can_assign,
+            std::ostream& cerr = std::cerr ) noexcept -> void {
             const Rule& rule{ ParserRules::Get( type ) };
 
             if ( rule.infix != nullptr ) {
-                std::invoke( rule.infix, instance );
+                std::invoke( rule.infix, instance, can_assign );
                 return;
             }
             fmt::println( cerr, "No infix rule defined for {}", type );

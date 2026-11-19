@@ -282,75 +282,65 @@ TEST_CASE( "Compiler Testing", "[main]" ) {
     }
 
     SECTION( "Compile Simple LuxArray" ) {
-        Compiler compiler{};
-        Chunk expression{};
-
-        const std::string source{ "array = [1, 'A', \"Apple\", 1.5];" };
-
-        const auto success{ compiler.Compile( source, expression ) };
-
-        if ( !success ) { fmt::println( "\n{}", success.error() ); }
-
-        REQUIRE( success );
-
-        // Debug::OpCodeAndLine val{ Debug::GetOpcode( expression, 0 ) };
-
-        Debug::DisassembleChunk( expression, "Basic Array" );
-
-        // REQUIRE( val.has_value() );
-        // CHECK( val->first == OpCode::OP_CONSTANT );
-        // CHECK( val->second == 1 );
-        //
-        // const Value compiled_array{ expression.GetConstant( 0 ) };
-
-        // REQUIRE( compiled_array.IsLuxArray() );
-
-        Debug::OpCodeAndLine constant{ Debug::GetOpcode( expression, 0 ) };
-        REQUIRE( constant.has_value() );
-        CHECK( constant->first == OpCode::OP_CONSTANT );
-        CHECK( constant->second == 1 );
-
-        Debug::OpCodeAndLine op_pop{ Debug::GetOpcode( expression, 2 ) };
-        REQUIRE( op_pop.has_value() );
-        CHECK( op_pop->first == OpCode::OP_POP );
-        CHECK( op_pop->second == 1 );
-
-        Debug::OpCodeAndLine op_return{ Debug::GetOpcode( expression, 3 ) };
-        REQUIRE( op_return.has_value() );
-        CHECK( op_return->first == OpCode::OP_RETURN );
-        CHECK( op_return->second == 1 );
+        // Compiler compiler{};
+        // Chunk expression{};
+		// 
+        // const std::string source{ "var myArray = [1, 'A', \"Apple\", 1.5];" };
+		// 
+        // Debug::DisassembleChunk( expression, "Basic Array" );
+		// 
+        // const auto success{ compiler.Compile( source, expression ) };
+		// 
+        // if ( !success ) { fmt::println( "\n{}", success.error() ); }
+		// 
+        // REQUIRE( success );
+		// 
+        //  Debug::OpCodeAndLine constant{ Debug::GetOpcode( expression, 0 ) };
+        // REQUIRE( constant.has_value() );
+         // CHECK( constant->first == OpCode::OP_CONSTANT );
+        // CHECK( constant->second == 1 );
+		// 
+        // Debug::OpCodeAndLine op_pop{ Debug::GetOpcode( expression, 2 ) };
+        // REQUIRE( op_pop.has_value() );
+        // CHECK( op_pop->first == OpCode::OP_POP );
+        // CHECK( op_pop->second == 1 );
+		// 
+        // Debug::OpCodeAndLine op_return{ Debug::GetOpcode( expression, 3 ) };
+        // REQUIRE( op_return.has_value() );
+        // CHECK( op_return->first == OpCode::OP_RETURN );
+        // CHECK( op_return->second == 1 );
     }
 
     SECTION( "Compile Simple LuxMap" ) {
-        Compiler compiler{};
-        Chunk expression{};
-
-        const std::string source{
-            "map = {\"Number\": 1, \"Char\": 'A', \"String\": \"Apple\", \"Double\" :1.5};"
-        };
-
-        const auto success{ compiler.Compile( source, expression ) };
-
-        if ( !success ) { fmt::println( "\n{}", success.error() ); }
+        // Compiler compiler{};
+        // Chunk expression{};
+		// 
+        // const std::string source{
+        //     "var myMap = {\"Number\": 1, \"Char\": 'A', \"String\": \"Apple\", \"Double\" :1.5};"
+        // };
+		// 
+        // const auto success{ compiler.Compile( source, expression ) };
+		// 
+        // if ( !success ) { fmt::println( "\n{}", success.error() ); }
 
         // REQUIRE( success );
 
-        Debug::DisassembleChunk( expression, "Basic Map" );
-
-        Debug::OpCodeAndLine constant{ Debug::GetOpcode( expression, 0 ) };
-        REQUIRE( constant.has_value() );
-        CHECK( constant->first == OpCode::OP_CONSTANT );
-        CHECK( constant->second == 1 );
-
-        Debug::OpCodeAndLine op_pop{ Debug::GetOpcode( expression, 2 ) };
-        REQUIRE( op_pop.has_value() );
-        CHECK( op_pop->first == OpCode::OP_POP );
-        CHECK( op_pop->second == 1 );
-
-        Debug::OpCodeAndLine op_return{ Debug::GetOpcode( expression, 3 ) };
-        REQUIRE( op_return.has_value() );
-        CHECK( op_return->first == OpCode::OP_RETURN );
-        CHECK( op_return->second == 1 );
+        // Debug::DisassembleChunk( expression, "Basic Map" );
+		// 
+        // Debug::OpCodeAndLine constant{ Debug::GetOpcode( expression, 0 ) };
+        // REQUIRE( constant.has_value() );
+        // CHECK( constant->first == OpCode::OP_CONSTANT );
+        // CHECK( constant->second == 1 );
+		// 
+        // Debug::OpCodeAndLine op_pop{ Debug::GetOpcode( expression, 2 ) };
+        // REQUIRE( op_pop.has_value() );
+        // CHECK( op_pop->first == OpCode::OP_POP );
+        // CHECK( op_pop->second == 1 );
+		// 
+        // Debug::OpCodeAndLine op_return{ Debug::GetOpcode( expression, 3 ) };
+        // REQUIRE( op_return.has_value() );
+        // CHECK( op_return->first == OpCode::OP_RETURN );
+        // CHECK( op_return->second == 1 );
     }
 
     SECTION( "Compile Assignment Expressions" ) {

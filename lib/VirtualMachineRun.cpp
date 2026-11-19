@@ -218,6 +218,14 @@ namespace LuxLibrary {
 
                     const std::string_view identifier{ tmp.AsStringView() };
 
+                    if ( global_variables.contains( identifier ) ) {
+                        global_variables[identifier] = stack.PeekPrev();
+                    } else {
+                        return INTERPRET_RUNTIME_ERROR{
+                            RuntimeError( "Undefined variable ", identifier ),
+                        };
+                    }
+
                     break;
                 }
                 case std::to_underlying( OpCode::OP_GET_GLOBAL ): {
