@@ -57,10 +57,10 @@ auto format_as( LuxLibrary::TokenType type ) -> std::string_view {
         case LuxLibrary::TokenType::INTEGER            : return "INTEGER";
         case LuxLibrary::TokenType::DOUBLE             : return "DOUBLE";
         case LuxLibrary::TokenType::CHAR               : return "CHAR";
-        case LuxLibrary::TokenType::LUX_VECTOR_START   : return "LUX_VECTOR_START";
-        case LuxLibrary::TokenType::LUX_VECTOR_END     : return "LUX_VECTOR_END";
-        case LuxLibrary::TokenType::LUX_MAP_START      : return "LUX_MAP_START";
-        case LuxLibrary::TokenType::LUX_MAP_END        : return "LUX_MAP_END";
+        case LuxLibrary::TokenType::VECTOR_START       : return "VECTOR_START";
+        case LuxLibrary::TokenType::VECTOR_END         : return "VECTOR_END";
+        case LuxLibrary::TokenType::MAP_START          : return "MAP_START";
+        case LuxLibrary::TokenType::MAP_END            : return "MAP_END";
 
         case LuxLibrary::TokenType::AND                : return "AND";
         case LuxLibrary::TokenType::CLASS              : return "CLASS";
@@ -78,6 +78,8 @@ auto format_as( LuxLibrary::TokenType type ) -> std::string_view {
         case LuxLibrary::TokenType::TRUE               : return "TRUE";
         case LuxLibrary::TokenType::VAR                : return "VAR";
         case LuxLibrary::TokenType::WHILE              : return "WHILE";
+        case LuxLibrary::TokenType::VECTOR             : return "VECTOR";
+        case LuxLibrary::TokenType::MAP                : return "MAP";
 
         case LuxLibrary::TokenType::ERROR              : return "ERROR";
         case LuxLibrary::TokenType::END_OF_FILE        : return "END_OF_FILE";

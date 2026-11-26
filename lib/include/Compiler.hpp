@@ -82,9 +82,11 @@ namespace LuxLibrary {
         auto Consume( const TokenType token, const std::string_view message ) noexcept -> void;
         auto Expression() noexcept -> void;
         auto Statement() noexcept -> void;
+
         auto Declaration() noexcept -> void;
         auto VariableDeclaration() noexcept -> void;
-
+        auto ArrayDeclaration() noexcept -> void;
+        auto MapDeclaration() noexcept -> void;
         auto Binary( const bool can_assign ) noexcept -> void;
         auto Grouping( const bool can_assign ) noexcept -> void;
         auto Literal( const bool can_assign ) noexcept -> void;
@@ -92,8 +94,6 @@ namespace LuxLibrary {
         auto String( const bool can_assign ) noexcept -> void;
         auto Char( const bool can_assign ) noexcept -> void;
         auto Unary( const bool can_assign ) noexcept -> void;
-        auto LuxVector( const bool can_assign ) noexcept -> void;
-        auto LuxMap( const bool can_assign ) noexcept -> void;
         auto Interpolation( const bool can_assign ) noexcept -> void;
         auto Variable( const bool can_assign ) noexcept -> void;
 

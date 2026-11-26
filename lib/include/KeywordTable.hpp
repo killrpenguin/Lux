@@ -30,13 +30,13 @@ namespace LuxLibrary {
     namespace keyword_details {
         constexpr static std::uint32_t DefaultSeed{ 0x811C9DC5 };
 
-        static constexpr std::size_t KeywordCount{ 16 };
+        static constexpr std::size_t KeywordCount{ 18 };
         using KeywordType   = std::string_view;
         using KeywordsArray = std::array< KeywordType, KeywordCount >;
 
         static constexpr KeywordsArray LuxKeywords{
-            "and",   "class", "else",  "if",   "nil",  "or",    "print", "return",
-            "super", "var",   "while", "this", "true", "false", "for",   "fun",
+            "and", "class", "else", "if",   "nil",   "or",  "print", "return", "super",
+            "var", "while", "this", "true", "false", "for", "fun",   "map",    "vector",
         };
 
         template < std::size_t NUM > consteval auto IsPrime() noexcept -> bool {

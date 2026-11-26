@@ -12,6 +12,24 @@ using namespace LuxLibrary::detail;
 // NOLINTBEGIN
 TEST_CASE( "Scanner Testing", "[main]" ) {
     SECTION( "Scanner Class Tokens" ) {
+        const std::string source{ "map vector \"apple\"" };
+
+        Scanner scanner{ source };
+
+        scanner.DefaultScanning();
+        CHECK( scanner.IsDefault() );
+
+        scanner.ScanningArray();
+        CHECK( scanner.InArray() );
+
+        scanner.ScanningMap();
+        CHECK( scanner.InMap() );
+
+        scanner.ScanningString();
+        CHECK( scanner.InString() );
+    }
+
+    SECTION( "Scanner Class Tokens" ) {
         const std::string source{ "();,.-+/*=!<>!= //comment\n==\t<=\r>=\"string\"5.9" };
 
         Scanner scanner{ source };
@@ -95,7 +113,7 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
 
         const std::string keywords{
             "and clAss Else iF nil NIL or print PRINT retuRn Super var while "
-            "this true TRUE false FALSE for fuN apple"
+            "this true TRUE false FALSE for fuN map vector apple"
         };
 
         scanner.NewSource( keywords );
@@ -160,8 +178,13 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
         const Token fun_token{ scanner.NextToken() };
         CHECK( fun_token == scanner.NewToken( TokenType::FUN ) );
 
-        const Token identifier_token{ scanner.NextToken() };
+        const Token map_token{ scanner.NextToken() };
+        CHECK( map_token == scanner.NewToken( TokenType::MAP ) );
 
+        const Token array_token{ scanner.NextToken() };
+        CHECK( array_token == scanner.NewToken( TokenType::VECTOR ) );
+
+        const Token identifier_token{ scanner.NextToken() };
         CHECK( identifier_token == scanner.NewToken( TokenType::IDENTIFIER ) );
 
         {
@@ -191,13 +214,53 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
         CHECK( char_token == scanner.NewToken( TokenType::CHAR ) );
     }
 
-    SECTION( "Test Vector Value scanning." ) {
-        // Inconsistent spacing in vec_source is deliberate. It shouldn't matter.
-        const std::string vec_source{ "[1, 'A', \"Apple\",1.5]" };
+    SECTION( "Test basic Vector scanning." ) {
+        const std::string vec_source{ "vector myVec = [];" };
+
         Scanner scanner{ vec_source };
 
+        const Token vec_keyword{ scanner.NextToken() };
+        CHECK( vec_keyword == scanner.NewToken( TokenType::VECTOR ) );
+
+        const Token vec_ident{ scanner.NextToken() };
+        CHECK( vec_ident == scanner.NewToken( TokenType::IDENTIFIER ) );
+
+        const Token vec_assign{ scanner.NextToken() };
+        CHECK( vec_assign == scanner.NewToken( TokenType::EQUAL ) );
+
         const Token array_token{ scanner.NextToken() };
-        CHECK( array_token == scanner.NewToken( TokenType::LUX_VECTOR_START ) );
+        CHECK( array_token == scanner.NewToken( TokenType::VECTOR_START ) );
+
+        const Token array_end{ scanner.NextToken() };
+        CHECK( array_end == scanner.NewToken( TokenType::VECTOR_END ) );
+
+        const Token statement_end{ scanner.NextToken() };
+        CHECK( statement_end == scanner.NewToken( TokenType::SEMICOLON ) );
+
+        const Token vec_eof{ scanner.NextToken() };
+        CHECK( vec_eof == scanner.NewToken( TokenType::END_OF_FILE ) );
+
+        CHECK( scanner.IsDefault() );
+    }
+
+    SECTION( "Test Vector Value scanning." ) {
+        // Inconsistent spacing in vec_source is deliberate. It shouldn't matter.
+
+        const std::string vec_source{ "vector myVec = [1, 'A', \"Apple\",1.5];" };
+
+        Scanner scanner{ vec_source };
+
+        const Token vec_keyword{ scanner.NextToken() };
+        CHECK( vec_keyword == scanner.NewToken( TokenType::VECTOR ) );
+
+        const Token vec_ident{ scanner.NextToken() };
+        CHECK( vec_ident == scanner.NewToken( TokenType::IDENTIFIER ) );
+
+        const Token vec_assign{ scanner.NextToken() };
+        CHECK( vec_assign == scanner.NewToken( TokenType::EQUAL ) );
+
+        const Token array_token{ scanner.NextToken() };
+        CHECK( array_token == scanner.NewToken( TokenType::VECTOR_START ) );
 
         const Token number_token{ scanner.NextToken() };
         CHECK( number_token == scanner.NewToken( TokenType::INTEGER ) );
@@ -221,18 +284,62 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
         CHECK( double_token == scanner.NewToken( TokenType::DOUBLE ) );
 
         const Token array_end{ scanner.NextToken() };
-        CHECK( array_end == scanner.NewToken( TokenType::LUX_VECTOR_END ) );
+        CHECK( array_end == scanner.NewToken( TokenType::VECTOR_END ) );
+
+        const Token statement_end{ scanner.NextToken() };
+        CHECK( statement_end == scanner.NewToken( TokenType::SEMICOLON ) );
+
+        const Token vec_eof{ scanner.NextToken() };
+        CHECK( vec_eof == scanner.NewToken( TokenType::END_OF_FILE ) );
     }
 
-    SECTION( "Test Map scanning." ) {
+    SECTION( "Test Map basic scanning." ) {
+        const std::string source{ "map myMap = {};" };
+
+        Scanner scanner{ source };
+
+        const Token map_keyword{ scanner.NextToken() };
+        CHECK( map_keyword == scanner.NewToken( TokenType::MAP ) );
+
+        const Token map_ident{ scanner.NextToken() };
+        CHECK( map_ident == scanner.NewToken( TokenType::IDENTIFIER ) );
+
+        const Token map_assign{ scanner.NextToken() };
+        CHECK( map_assign == scanner.NewToken( TokenType::EQUAL ) );
+
+        const Token map_token{ scanner.NextToken() };
+        CHECK( map_token == scanner.NewToken( TokenType::MAP_START ) );
+
+        const Token map_end{ scanner.NextToken() };
+        CHECK( map_end == scanner.NewToken( TokenType::MAP_END ) );
+
+        const Token statement_end{ scanner.NextToken() };
+        CHECK( statement_end == scanner.NewToken( TokenType::SEMICOLON ) );
+
+        const Token map_eof{ scanner.NextToken() };
+        CHECK( map_eof == scanner.NewToken( TokenType::END_OF_FILE ) );
+
+        CHECK( scanner.IsDefault() );
+    }
+
+    SECTION( "Test Map value scanning." ) {
         const std::string source{
-            "{ \"ValA\": 1, \"Valb\": 'A', \"ValC\" : \"Apple\", \"ValD\" :1.55 }"
+            "map myMap = { \"ValA\": 1, \"Valb\": 'A', \"ValC\" : \"Apple\", \"ValD\" :1.55 };"
         };
 
         Scanner scanner{ source };
 
+        const Token map_keyword{ scanner.NextToken() };
+        CHECK( map_keyword == scanner.NewToken( TokenType::MAP ) );
+
+        const Token map_ident{ scanner.NextToken() };
+        CHECK( map_ident == scanner.NewToken( TokenType::IDENTIFIER ) );
+
+        const Token map_assign{ scanner.NextToken() };
+        CHECK( map_assign == scanner.NewToken( TokenType::EQUAL ) );
+
         const Token map_token{ scanner.NextToken() };
-        CHECK( map_token == scanner.NewToken( TokenType::LUX_MAP_START ) );
+        CHECK( map_token == scanner.NewToken( TokenType::MAP_START ) );
 
         const Token number_key{ scanner.NextToken() };
         CHECK( number_key == scanner.NewToken( TokenType::STRING ) );
@@ -280,7 +387,15 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
         CHECK( dec_token == scanner.NewToken( TokenType::DOUBLE ) );
 
         const Token map_end{ scanner.NextToken() };
-        CHECK( map_end == scanner.NewToken( TokenType::LUX_MAP_END ) );
+        CHECK( map_end == scanner.NewToken( TokenType::MAP_END ) );
+
+        const Token statement_end{ scanner.NextToken() };
+        CHECK( statement_end == scanner.NewToken( TokenType::SEMICOLON ) );
+
+        CHECK( scanner.IsDefault() );
+
+        const Token map_eof{ scanner.NextToken() };
+        CHECK( map_eof == scanner.NewToken( TokenType::END_OF_FILE ) );
     }
 
     SECTION( "Test string interpolation scanning." ) {
@@ -296,12 +411,6 @@ TEST_CASE( "Scanner Testing", "[main]" ) {
 
         const Token stop{ scanner.NextToken() };
         CHECK( stop == scanner.NewToken( TokenType::INTERPOLATION_END ) );
-    }
-
-    SECTION( "Test Map value scanning." ) {
-        const std::string map_source{ "{}" };
-
-        Scanner scanner{ map_source };
     }
 }
 // NOLINTEND

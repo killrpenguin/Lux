@@ -1,2 +1,1518 @@
 Reading symbols from ./build/tests/UnitTests...
 +exit
+++source /home/david/bin/kittydbg/gdbinit.py
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+++py import pwndbg
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+Pwndbg integrates with IDA, Binary Ninja, Ghidra and angr-management decompilers. Use di install ida|binja|ghidra|angr to install the plugin and di connect to start the integration
++break Compile
+Breakpoint 1 at 0x361c8: file /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp, line 66.
++run
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, LuxLibrary::Compiler::Compile (this=0x7fffffffcd20, source="10 + 20;", chunk=...) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:66
+66	        scanner.NewSource( source );
+Exception occurred: Error: invalid syntax (<unknown>, line 1) (<class 'SyntaxError'>)
+For more info invoke `set exception-verbose on` and rerun the command
+or debug it by yourself with `set exception-debugger on`
+Python Exception <class 'SyntaxError'>: invalid syntax (<unknown>, line 1)
+Exception occurred: Error: invalid syntax (<unknown>, line 1) (<class 'SyntaxError'>)
+For more info invoke `set exception-verbose on` and rerun the command
+or debug it by yourself with `set exception-debugger on`
+Python Exception <class 'SyntaxError'>: invalid syntax (<unknown>, line 1)
++exit
++source /home/david/bin/kittydbg/gdbinit.py
+Python Exception <class 'TypeError'>: argument must be an int, or have a fileno() method.
+❌️ /home/david/.config/gdb/gdbinit:10: Error in sourced command file:
+Error occurred in Python: argument must be an int, or have a fileno() method.
+Reading symbols from ./build/tests/UnitTests...
++exit
++source /home/david/bin/kittydbg/gdbinit.py
+Python Exception <class 'TypeError'>: argument must be an int, or have a fileno() method.
+❌️ /home/david/.config/gdb/gdbinit:10: Error in sourced command file:
+Error occurred in Python: argument must be an int, or have a fileno() method.
+Reading symbols from ./build/tests/UnitTests...
++break /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:164
+Breakpoint 1 at 0x1d0a8: file /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp, line 164.
++run
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:164
++s
+LuxLibrary::Scanner::NewToken (this=this@entry=0x7fffffffccf8, variant=@0x7fffffffc788: LuxLibrary::TokenType::MAP_START)
+    at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:301
++p scanner
+❌️ No symbol "scanner" in current context.
++p this
+$1 = (const LuxLibrary::Scanner *) 0x7fffffffccf8
++p *this
+$2 = {start = 97 'a', current = 32 ' ', end = 0 '\000', line = 1, state = std::variant [index 3] = {{<No data fields>}}}
++exit
++source /home/david/bin/kittydbg/gdbinit.py
+Python Exception <class 'TypeError'>: argument must be an int, or have a fileno() method.
+❌️ /home/david/.config/gdb/gdbinit:10: Error in sourced command file:
+Error occurred in Python: argument must be an int, or have a fileno() method.
+Reading symbols from ./build/tests/UnitTests...
++break /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:269
+Breakpoint 1 at 0x1e68b: file /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp, line 269.
++run
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:269
++s
+LuxLibrary::Scanner::Scanner (this=0x7fffffffcd40, source="map myMap = {}") at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:32
++n
+LuxLibrary::Scanner::Scanner (this=0x7fffffffcd40, source="map myMap = {}") at /home/david/Programming/cpp_dev/Lux/lib/include/Scanner.hpp:65
++n
++n
+LuxLibrary::Scanner::Scanner (this=0x7fffffffcd40, source="map myMap = {}") at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:32
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:271
++s
+LuxLibrary::Scanner::NextToken (this=0x7fffffffcd40) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:232
++p *this
+$1 = {start = 109 'm', current = 109 'm', end = 0 '\000', line = 1, state = std::variant [index 3] = {{<No data fields>}}}
++n
++n
++n
++n
++n
++n
++n
++n
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:272
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:274
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:277
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:280
++s
+LuxLibrary::Scanner::NextToken (this=0x7fffffffcd40) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:232
++p *this
+$2 = {start = 61 '=', current = 32 ' ', end = 0 '\000', line = 1, state = std::variant [index 3] = {{<No data fields>}}}
++n
++n
++n
++n
++n
++p *this
+$3 = {start = 123 '{', current = 123 '{', end = 0 '\000', line = 1, state = std::variant [index 3] = {{<No data fields>}}}
++n
++n
++n
++n
++n
++s
++s
+LuxLibrary::Scanner::InString (this=0x7fffffffcd40) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:445
++s
+LuxLibrary::Scanner::StateIs<LuxLibrary::detail::StringMode>() const requires detail::IsStateVariant<LuxLibrary::detail::StringMode, std::variant<LuxLibrary::detail::StringMode, LuxLibrary::detail::ArrayMode, LuxLibrary::detail::MapMode, std::monostate> > (this=0x7fffffffcd40)
+    at /home/david/Programming/cpp_dev/Lux/lib/include/Scanner.hpp:160
++s
+std::holds_alternative<LuxLibrary::detail::StringMode, LuxLibrary::detail::StringMode, LuxLibrary::detail::ArrayMode, LuxLibrary::detail::MapMode, std::monostate> (
+    __v=std::variant [index 3] = {...}) at /usr/lib/gcc/x86_64-pc-linux-gnu/16/include/g++-v16/variant:1159
++s
+std::variant<LuxLibrary::detail::StringMode, LuxLibrary::detail::ArrayMode, LuxLibrary::detail::MapMode, std::monostate>::index (this=0x7fffffffcd5c)
+    at /usr/lib/gcc/x86_64-pc-linux-gnu/16/include/g++-v16/variant:1709
++s
+LuxLibrary::Scanner::NextToken (this=0x7fffffffcd40) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:285
++s
+0x0000555555585840 in LuxLibrary::Scanner::NextToken (this=0x7fffffffcd40)
++s
+LuxLibrary::Scanner::NewToken (this=<optimized out>, variant=<optimized out>) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:301
++n
++n
+LuxLibrary::Scanner::NextToken (this=0x7fffffffcd40) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:245
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:281
++p token
+$4 = {int (void)} 0x7ffff7735bf0 <token>
++p map_token
+$5 = {type = LuxLibrary::TokenType::LEFT_BRACE, start = 123 '{', length = 1, line = 1}
++run
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:269
++n
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:274
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:277
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:280
++s
+LuxLibrary::Scanner::NextToken (this=0x7fffffffcd40) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:232
++p this
+$6 = (LuxLibrary::Scanner *) 0x7fffffffcd40
++p *this
+$7 = {start = 61 '=', current = 32 ' ', end = 0 '\000', line = 1, state = std::variant [index 3] = {{<No data fields>}}}
++n
++n
++n
++n
++n
++n
++n
++n
++n
++n
++p *this
+$8 = {start = 123 '{', current = 125 '}', end = 0 '\000', line = 1, state = std::variant [index 3] = {{<No data fields>}}}
++p current_char
+$9 = 123 '{'
++s
++InString()
+❌️ Undefined command: "InString".  Try "help".
++this->InString()
+❌️ Undefined command: "this->InString".  Try "help".
++s
+LuxLibrary::Scanner::InString (this=0x7fffffffcd40) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:445
++s
+LuxLibrary::Scanner::StateIs<LuxLibrary::detail::StringMode>() const requires detail::IsStateVariant<LuxLibrary::detail::StringMode, std::variant<LuxLibrary::detail::StringMode, LuxLibrary::detail::ArrayMode, LuxLibrary::detail::MapMode, std::monostate> > (this=0x7fffffffcd40) at /home/david/Programming/cpp_dev/Lux/lib/include/Scanner.hpp:160
++s
+std::holds_alternative<LuxLibrary::detail::StringMode, LuxLibrary::detail::StringMode, LuxLibrary::detail::ArrayMode, LuxLibrary::detail::MapMode, std::monostate> (
+    __v=std::variant [index 3] = {...}) at /usr/lib/gcc/x86_64-pc-linux-gnu/16/include/g++-v16/variant:1159
++s
+std::variant<LuxLibrary::detail::StringMode, LuxLibrary::detail::ArrayMode, LuxLibrary::detail::MapMode, std::monostate>::index (this=0x7fffffffcd5c)
+    at /usr/lib/gcc/x86_64-pc-linux-gnu/16/include/g++-v16/variant:1709
++s
+LuxLibrary::Scanner::NextToken (this=0x7fffffffcd40) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:285
++p *this
+$10 = {start = 123 '{', current = 125 '}', end = 0 '\000', line = 1, state = std::variant [index 3] = {{<No data fields>}}}
++s
+0x0000555555585840 in LuxLibrary::Scanner::NextToken (this=0x7fffffffcd40)
++p *this
+$11 = {start = 123 '{', current = 125 '}', end = 0 '\000', line = 1, state = std::variant [index 3] = {{<No data fields>}}}
++n
++n
++exit
++source /home/david/bin/kittydbg/gdbinit.py
+Python Exception <class 'TypeError'>: argument must be an int, or have a fileno() method.
+❌️ /home/david/.config/gdb/gdbinit:10: Error in sourced command file:
+Error occurred in Python: argument must be an int, or have a fileno() method.
+Reading symbols from ./build/tests/UnitTests...
++break /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:266
+Breakpoint 1 at 0x1e5ed: /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:266. (2 locations)
++ru
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1.1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:266
++n
+
+Breakpoint 1.2, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:266
++n
++run
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1.1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:266
++s
+
+Breakpoint 1.2, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:266
++s
++s
+Catch::SourceLineInfo::SourceLineInfo (this=0x7fffffffccf8, _line=289, _file=<optimized out>) at /usr/include/catch2/internal/catch_source_line_info.hpp:20
++s
+❌️ Quit
++exit
++source /home/david/bin/kittydbg/gdbinit.py
+Python Exception <class 'TypeError'>: argument must be an int, or have a fileno() method.
+❌️ /home/david/.config/gdb/gdbinit:10: Error in sourced command file:
+Error occurred in Python: argument must be an int, or have a fileno() method.
+Reading symbols from ./build/tests/UnitTests...
++break /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:269
+Breakpoint 1 at 0x1e68b: file /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp, line 269.
++ru
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:269
++n
++p scanner
+$1 = {start = 109 'm', current = 109 'm', end = 0 '\000', line = 1, state = std::variant [index 3] = {{<No data fields>}}}
++p scanner.state
+$2 = std::variant [index 3] = {{<No data fields>}}
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:274
++p map_keyword
+$3 = {type = LuxLibrary::TokenType::MAP, start = 109 'm', length = 3, line = 1}
++p scanner->ScanningMap()
+❌️ Cannot resolve method LuxLibrary::Scanner::ScanningMap to any overloaded instance
++p scanner
+$4 = {start = 109 'm', current = 32 ' ', end = 0 '\000', line = 1, state = std::variant [index 3] = {{<No data fields>}}}
++exit
++source /home/david/bin/kittydbg/gdbinit.py
+Python Exception <class 'TypeError'>: argument must be an int, or have a fileno() method.
+❌️ /home/david/.config/gdb/gdbinit:10: Error in sourced command file:
+Error occurred in Python: argument must be an int, or have a fileno() method.
+Reading symbols from ./build/tests/UnitTests...
++break /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:202
+Breakpoint 1 at 0x1dfad: file /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp, line 202.
++run
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:202
++n
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:207
++p scanner
+$1 = {start = 118 'v', current = 32 ' ', end = 0 '\000', line = 1, state = std::variant [index 3] = {{<No data fields>}}}
++exit
++source /home/david/bin/kittydbg/gdbinit.py
+Python Exception <class 'TypeError'>: argument must be an int, or have a fileno() method.
+❌️ /home/david/.config/gdb/gdbinit:10: Error in sourced command file:
+Error occurred in Python: argument must be an int, or have a fileno() method.
+Reading symbols from ./build/tests/UnitTests...
++break /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:202
+Breakpoint 1 at 0x1dfad: file /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp, line 202.
++run
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:202
++n
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:207
++p scanner
+$1 = {start = 118 'v', current = 32 ' ', end = 0 '\000', line = 1, state = std::variant [index 3] = {{<No data fields>}}}
++p scanner.state
+$2 = std::variant [index 3] = {{<No data fields>}}
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:210
++p scanner.state
+$3 = std::variant [index 3] = {{<No data fields>}}
++exit
++source /home/david/bin/kittydbg/gdbinit.py
+Python Exception <class 'TypeError'>: argument must be an int, or have a fileno() method.
+❌️ /home/david/.config/gdb/gdbinit:10: Error in sourced command file:
+Error occurred in Python: argument must be an int, or have a fileno() method.
+Reading symbols from ./build/tests/UnitTests...
++break /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:232
+Breakpoint 1 at 0x1e702: file /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp, line 232.
++run
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:232
++p scanner
+$1 = {start = 91 '[', current = 93 ']', end = 0 '\000', line = 1, state = std::variant [index 1] = {{<No data fields>}}}
++p array_token
+$2 = {type = LuxLibrary::TokenType::ERROR, start = 91 '[', length = 30, line = 1}
++exit
++source /home/david/bin/kittydbg/gdbinit.py
+Python Exception <class 'TypeError'>: argument must be an int, or have a fileno() method.
+❌️ /home/david/.config/gdb/gdbinit:10: Error in sourced command file:
+Error occurred in Python: argument must be an int, or have a fileno() method.
+Reading symbols from ./build/tests/UnitTests...
++break /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:287
+Breakpoint 1 at 0x1eaf1: /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:287. (2 locations)
++run
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1.1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:287
++exit
++source /home/david/bin/kittydbg/gdbinit.py
+Python Exception <class 'TypeError'>: argument must be an int, or have a fileno() method.
+❌️ /home/david/.config/gdb/gdbinit:10: Error in sourced command file:
+Error occurred in Python: argument must be an int, or have a fileno() method.
+Reading symbols from ./build/tests/UnitTests...
++exit
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+++py import pwndbg
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+Disable Pwndbg context information display with set context-sections ''
++break /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:287
+Breakpoint 1 at 0x1eaf1: /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:287. (2 locations)
++run
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1.1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:287
+287	    SECTION( "Test Map basic scanning." ) {
+Exception occurred: Error: invalid syntax (<unknown>, line 1) (<class 'SyntaxError'>)
+For more info invoke `set exception-verbose on` and rerun the command
+or debug it by yourself with `set exception-debugger on`
+Python Exception <class 'SyntaxError'>: invalid syntax (<unknown>, line 1)
+Exception occurred: Error: invalid syntax (<unknown>, line 1) (<class 'SyntaxError'>)
+For more info invoke `set exception-verbose on` and rerun the command
+or debug it by yourself with `set exception-debugger on`
+Python Exception <class 'SyntaxError'>: invalid syntax (<unknown>, line 1)
++exit
+++source /home/david/bin/kittydbg/gdbinit.py
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+++py import pwndbg
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+Use stepret and stepsyscall to step into functions until a ret or syscall instruction is hit
++start
+Temporary breakpoint 1 at 0x7350
+++run
+
+Temporary breakpoint 1.2, 0x00007ffff7fe2e20 in _start () from /lib64/ld-linux-x86-64.so.2
+Exception occurred: Error: invalid syntax (<unknown>, line 1) (<class 'SyntaxError'>)
+For more info invoke `set exception-verbose on` and rerun the command
+or debug it by yourself with `set exception-debugger on`
+Python Exception <class 'SyntaxError'>: invalid syntax (<unknown>, line 1)
+Exception occurred: Error: invalid syntax (<unknown>, line 1) (<class 'SyntaxError'>)
+For more info invoke `set exception-verbose on` and rerun the command
+or debug it by yourself with `set exception-debugger on`
+Python Exception <class 'SyntaxError'>: invalid syntax (<unknown>, line 1)
++exit
++source /home/david/bin/kittydbg/gdbinit.py
+Python Exception <class 'TypeError'>: argument must be an int, or have a fileno() method.
+❌️ /home/david/.config/gdb/gdbinit:10: Error in sourced command file:
+Error occurred in Python: argument must be an int, or have a fileno() method.
+Reading symbols from ./build/tests/UnitTests...
++break /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:292
+Breakpoint 1 at 0x1eb9f: file /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp, line 292.
++run
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:292
+⚠️ warning: Source file is more recent than executable.
++exit
++source /home/david/bin/kittydbg/gdbinit.py
+Python Exception <class 'TypeError'>: argument must be an int, or have a fileno() method.
+❌️ /home/david/.config/gdb/gdbinit:10: Error in sourced command file:
+Error occurred in Python: argument must be an int, or have a fileno() method.
+Reading symbols from ./build/tests/UnitTests...
++break /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:292
+Breakpoint 1 at 0x1eb9f: file /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp, line 292.
++run
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:292
++p scanner
+$1 = {
+  start = 109 'm',
+  current = 109 'm',
+  end = 0 '\000',
+  line = 1,
+  state = std::variant [index 3] = {{<No data fields>}}
+}
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:295
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:298
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:301
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:304
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:307
++p scanner
+$2 = {
+  start = 125 '}',
+  current = 0 '\000',
+  end = 0 '\000',
+  line = 1,
+  state = std::variant [index 3] = {{<No data fields>}}
+}
++p statement_end
+$3 = {
+  type = LuxLibrary::TokenType::MAP_END,
+  start = 125 '}',
+  length = 2,
+  line = 1
+}
++p map_end
+$4 = {
+  type = LuxLibrary::TokenType::MAP_END,
+  start = 125 '}',
+  length = 2,
+  line = 1
+}
++s
+LuxLibrary::Scanner::NextToken (this=0x7fffffffcc88) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:233
++n
++n
++n
++n
++n
++p current_char
+$5 = <optimized out>
++p *this
+$6 = {
+  start = 0 '\000',
+  current = 0 '\000',
+  end = 0 '\000',
+  line = 1,
+  state = std::variant [index 3] = {{<No data fields>}}
+}
++s
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:308
++n
++p statement_token
+❌️ No symbol "statement_token" in current context.
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:310
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:287
++run
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:292
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:295
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:298
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:301
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:304
++n
++n
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:307
++s
+LuxLibrary::Scanner::NextToken (this=0x7fffffffcc88) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:233
++n
++n
++n
++s
++s
+LuxLibrary::Scanner::IsAtEnd (this=0x7fffffffcc88) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:155
++n
+LuxLibrary::Scanner::NextToken (this=0x7fffffffcc88) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:237
++n
++s
++s
+CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:308
++p statement_end
+$7 = {
+  type = LuxLibrary::TokenType::END_OF_FILE,
+  start = 0 '\000',
+  length = 0,
+  line = 1
+}
++p *this
+❌️ No symbol "this" in current context.
++exit
++source /home/david/bin/kittydbg/gdbinit.py
+Python Exception <class 'TypeError'>: argument must be an int, or have a fileno() method.
+❌️ /home/david/.config/gdb/gdbinit:10: Error in sourced command file:
+Error occurred in Python: argument must be an int, or have a fileno() method.
+Reading symbols from ./build/tests/UnitTests...
++exit
++source /home/david/bin/kittydbg/gdbinit.py
+Python Exception <class 'TypeError'>: argument must be an int, or have a fileno() method.
+❌️ /home/david/.config/gdb/gdbinit:10: Error in sourced command file:
+Error occurred in Python: argument must be an int, or have a fileno() method.
+Reading symbols from ./build/tests/UnitTests...
++exit
+++source /home/david/bin/kittydbg/gdbinit.py
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+++py import pwndbg
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+Use GDB's pi command to run an interactive Python console where you can use Pwndbg APIs like pwndbg.aglib.memory.read(addr, len), pwndbg.aglib.memory.write(addr, data), pwndbg.aglib.vmmap.get() and so on!
++pi
+Use exit() or Ctrl-D (i.e. EOF) to exit
+++source /home/david/bin/kittydbg/gdbinit.py
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+++py import pwndbg
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+Use the vmmap command for a better & colored memory maps display (than the GDB's info proc mappings)
++start
+Temporary breakpoint 1 at 0x7350
+++run
+
+Temporary breakpoint 1.2, 0x00007ffff7fe2e20 in _start () from /lib64/ld-linux-x86-64.so.2
+Exception occurred: Error: invalid syntax (<unknown>, line 1) (<class 'SyntaxError'>)
+For more info invoke `set exception-verbose on` and rerun the command
+or debug it by yourself with `set exception-debugger on`
+Python Exception <class 'SyntaxError'>: invalid syntax (<unknown>, line 1)
+Exception occurred: Error: invalid syntax (<unknown>, line 1) (<class 'SyntaxError'>)
+For more info invoke `set exception-verbose on` and rerun the command
+or debug it by yourself with `set exception-debugger on`
+Python Exception <class 'SyntaxError'>: invalid syntax (<unknown>, line 1)
++set exception-verbose on
+Set print a full stacktrace for exceptions raised in Pwndbg commands to 'on'.
+╭─────────────────────────────── Traceback (most recent call last) ────────────────────────────────╮
+│ /usr/lib/python3.14/site-packages/pwndbg/gdblib/events.py:365 in invoke_event                    │
+│                                                                                                  │
+│   362 │   │   # Run all the event handlers for this event from lowest to highest priority.       │
+│   363 │   │   for prio in EventHandlerPriority:                                                  │
+│   364 │   │   │   for func in handlers.get(prio, []):                                            │
+│ ❱ 365 │   │   │   │   func()                                                                     │
+│   366 │   except Exception as e:                                                                 │
+│   367 │   │   import pwndbg.exception                                                            │
+│   368                                                                                            │
+│                                                                                                  │
+│ /usr/lib/python3.14/site-packages/pwndbg/gdblib/events.py:315 in _dev_wrapper                    │
+│                                                                                                  │
+│   312 │   │   │   │   │   f"{event_name} ({priority.name}) {fn.__module__}.{fn.__qualname__}\n   │
+│   313 │   │   │   │   )                                                                          │
+│   314 │   │   │                                                                                  │
+│ ❱ 315 │   │   │   return fn(*a, **kw)                                                            │
+│   316 │   │                                                                                      │
+│   317 │   │   # Register this event handler with us.                                             │
+│   318 │   │   registered[event_registry].setdefault(priority, []).append(_dev_wrapper)           │
+│                                                                                                  │
+│ /usr/lib/python3.14/site-packages/pwndbg/commands/context.py:1815 in save_signal                 │
+│                                                                                                  │
+│   1812 │   global last_signal                                                                    │
+│   1813 │   last_signal = result = []                                                             │
+│   1814 │                                                                                         │
+│ ❱ 1815 │   if pwndbg.dbg.is_gdblib_available() and _is_rr_present():                             │
+│   1816 │   │   # When users use rr (https://rr-project.org or https://github.com/mozilla/rr)     │
+│   1817 │   │   # we can't access $_siginfo, so lets just show current pc                         │
+│   1818 │   │   # see also issue 476                                                              │
+│                                                                                                  │
+│ /usr/lib/python3.14/site-packages/pwndbg/lib/cache.py:214 in decorator                           │
+│                                                                                                  │
+│   211 │   │   │   │   if cached_value is not _NOT_FOUND_IN_CACHE:                                │
+│   212 │   │   │   │   │   return cached_value                                                    │
+│   213 │   │   │   │                                                                              │
+│ ❱ 214 │   │   │   │   value = func(*a, **kw)                                                     │
+│   215 │   │   │   │                                                                              │
+│   216 │   │   │   │   # Sanity check: its not perfect and won't cover all cases like ([],)       │
+│   217 │   │   │   │   # but it should be good enough                                             │
+│                                                                                                  │
+│ /usr/lib/python3.14/site-packages/pwndbg/commands/context.py:1898 in _is_rr_present              │
+│                                                                                                  │
+│   1895 │   # this is ugly but I couldn't find a better way to do it                              │
+│   1896 │   # feel free to refactor it                                                            │
+│   1897 │   globals_list_literal_str = gdb.execute("python print(list(globals().keys()))", to_st  │
+│ ❱ 1898 │   interpreter_globals = ast.literal_eval(globals_list_literal_str)                      │
+│   1899 │                                                                                         │
+│   1900 │   return "RRCmd" in interpreter_globals and "RRWhere" in interpreter_globals            │
+│   1901                                                                                           │
+│                                                                                                  │
+│ /usr/lib/python3.14/ast.py:60 in literal_eval                                                    │
+│                                                                                                  │
+│    57 │   Caution: A complex expression can overflow the C stack and cause a crash.              │
+│    58 │   """                                                                                    │
+│    59 │   if isinstance(node_or_string, str):                                                    │
+│ ❱  60 │   │   node_or_string = parse(node_or_string.lstrip(" \t"), mode='eval')                  │
+│    61 │   if isinstance(node_or_string, Expression):                                             │
+│    62 │   │   node_or_string = node_or_string.body                                               │
+│    63 │   def _raise_malformed_node(node):                                                       │
+│                                                                                                  │
+│ /usr/lib/python3.14/ast.py:46 in parse                                                           │
+│                                                                                                  │
+│    43 │   │   │   raise ValueError(f"Unsupported major version: {major}")                        │
+│    44 │   │   feature_version = minor                                                            │
+│    45 │   # Else it should be an int giving the minor version for 3.x.                           │
+│ ❱  46 │   return compile(source, filename, mode, flags,                                          │
+│    47 │   │   │   │      _feature_version=feature_version, optimize=optimize)                    │
+│    48                                                                                            │
+│    49                                                                                            │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭──────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ ++python print(list(globals().keys()))                                                           │
+│          ▲                                                                                       │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+SyntaxError: invalid syntax
+If that is an issue, you can report it on https://github.com/pwndbg/pwndbg/issues
+(Please don't forget to search if it hasn't been reported before)
+To generate the report and open a browser, you may run `bugreport --run-browser`
+PS: Pull requests are welcome
+Traceback (most recent call last):
+  File "/usr/lib/python3.14/site-packages/pwndbg/gdblib/prompt.py", line 91, in prompt_hook
+    pwndbg.gdblib.events.after_reload(fire_start=cur is None)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/site-packages/pwndbg/gdblib/events.py", line 375, in after_reload
+    invoke_event(gdb.events.stop)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/site-packages/pwndbg/gdblib/events.py", line 370, in invoke_event
+    raise e
+  File "/usr/lib/python3.14/site-packages/pwndbg/gdblib/events.py", line 365, in invoke_event
+    func()
+    ~~~~^^
+  File "/usr/lib/python3.14/site-packages/pwndbg/gdblib/events.py", line 315, in _dev_wrapper
+    return fn(*a, **kw)
+  File "/usr/lib/python3.14/site-packages/pwndbg/commands/context.py", line 1815, in save_signal
+    if pwndbg.dbg.is_gdblib_available() and _is_rr_present():
+                                            ~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.14/site-packages/pwndbg/lib/cache.py", line 214, in decorator
+    value = func(*a, **kw)
+  File "/usr/lib/python3.14/site-packages/pwndbg/commands/context.py", line 1898, in _is_rr_present
+    interpreter_globals = ast.literal_eval(globals_list_literal_str)
+  File "/usr/lib/python3.14/ast.py", line 60, in literal_eval
+    node_or_string = parse(node_or_string.lstrip(" \t"), mode='eval')
+  File "/usr/lib/python3.14/ast.py", line 46, in parse
+    return compile(source, filename, mode, flags,
+                   _feature_version=feature_version, optimize=optimize)
+  File "<unknown>", line 1
+    ++python print(list(globals().keys()))
+             ^^^^^
+SyntaxError: invalid syntax. Did you mean 'in'?
++exit
+++source /home/david/bin/kittydbg/gdbinit.py
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+++py import pwndbg
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+Use the pipe <cmd> | <prog> command to pass output of a GDB/Pwndbg command to a shell program, e.g. pipe elfsections | grep bss. This can also be shortened to: | <cmd> | <prog>
++exit
+++source /home/david/bin/kittydbg/gdbinit.py
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+++py import pwndbg
+------- tip of the day (disable with set show-tips off) -------
+Pwndbg's hexdump colorizes by byte type and lets you re-run with no args to keep dumping forward
++run
+Starting program:  
+❌️ No executable file specified.
+Use the "file" or "exec-file" command.
++exit
+++source /home/david/bin/kittydbg/gdbinit.py
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+++py import pwndbg
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+Disable Pwndbg context information display with set context-sections ''
++break /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:293
+Breakpoint 1 at 0x1ebbe: file /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp, line 293.
++run
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:293
+293	        CHECK( map_keyword == scanner.NewToken( TokenType::MAP ) );
+Exception occurred: Error: invalid syntax (<unknown>, line 1) (<class 'SyntaxError'>)
+For more info invoke `set exception-verbose on` and rerun the command
+or debug it by yourself with `set exception-debugger on`
+Python Exception <class 'SyntaxError'>: invalid syntax (<unknown>, line 1)
+Exception occurred: Error: invalid syntax (<unknown>, line 1) (<class 'SyntaxError'>)
+For more info invoke `set exception-verbose on` and rerun the command
+or debug it by yourself with `set exception-debugger on`
+Python Exception <class 'SyntaxError'>: invalid syntax (<unknown>, line 1)
++exit
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+Use patch <address> '<assembly>' to patch an address with given assembly code
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+Use attachp <name|pid|args|/dev/...> to attach to a process by name or args (instead of running pidof in another terminal to run attach <pid|dev>)
+Breakpoint 1 at 0x1eb9f: file /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp, line 292.
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:292
+292	        const Token map_keyword{ scanner.NextToken() };
+[2S[2A$1 = "map myMap = {};"
+❌️ No symbol "operator*" in current context.
+$2 = {
+  start = 0x6d,
+  current = 0x6d,
+  end = 0x0,
+  line = 0x1,
+  state = std::variant [index 3] = {{<No data fields>}}
+}
+293	        CHECK( map_keyword == scanner.NewToken( TokenType::MAP ) );
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:295
+295	        const Token map_ident{ scanner.NextToken() };
+[2S[2A296	        CHECK( map_ident == scanner.NewToken( TokenType::IDENTIFIER ) );
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:298
+298	        const Token map_assign{ scanner.NextToken() };
+[2S[2A299	        CHECK( map_assign == scanner.NewToken( TokenType::EQUAL ) );
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:301
+301	        const Token map_token{ scanner.NextToken() };
+[2S[2A302	        CHECK( map_token == scanner.NewToken( TokenType::MAP_START ) );
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:304
+304	        const Token map_end{ scanner.NextToken() };
+[2S[2A305	        CHECK( map_end == scanner.NewToken( TokenType::MAP_END ) );
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:307
+307	        const Token statement_end{ scanner.NextToken() };
+[2S[2ALuxLibrary::Scanner::NextToken (this=0x7fffffffcc48) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:233
+233	        SkipWhitespace();
+[2S[2A235	        start = current;
+[2S[2A237	        if ( IsAtEnd() ) { return NewToken( TokenType::END_OF_FILE ); }
+[2S[2A235	        start = current;
+[2S[2A237	        if ( IsAtEnd() ) { return NewToken( TokenType::END_OF_FILE ); }
+[2S[2A246	            case '(': return NewToken( TokenType::LEFT_PAREN );
+[2S[2A$3 = <optimized out>
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:292
+292	        const Token map_keyword{ scanner.NextToken() };
+[2S[2A293	        CHECK( map_keyword == scanner.NewToken( TokenType::MAP ) );
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:295
+295	        const Token map_ident{ scanner.NextToken() };
+[2S[2A296	        CHECK( map_ident == scanner.NewToken( TokenType::IDENTIFIER ) );
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:298
+298	        const Token map_assign{ scanner.NextToken() };
+[2S[2A299	        CHECK( map_assign == scanner.NewToken( TokenType::EQUAL ) );
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:301
+301	        const Token map_token{ scanner.NextToken() };
+[2S[2A302	        CHECK( map_token == scanner.NewToken( TokenType::MAP_START ) );
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:304
+304	        const Token map_end{ scanner.NextToken() };
+[2S[2A305	        CHECK( map_end == scanner.NewToken( TokenType::MAP_END ) );
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:307
+307	        const Token statement_end{ scanner.NextToken() };
+[2S[2ALuxLibrary::Scanner::NextToken (this=0x7fffffffcc48) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:233
+233	        SkipWhitespace();
+[2S[2A235	        start = current;
+[2S[2A$4 = 0x0
+$5 = 0x7d
+237	        if ( IsAtEnd() ) { return NewToken( TokenType::END_OF_FILE ); }
+[2S[2A235	        start = current;
+[2S[2A237	        if ( IsAtEnd() ) { return NewToken( TokenType::END_OF_FILE ); }
+[2S[2A❌️ No symbol "rdi" in current context.
+❌️ No symbol "RDI" in current context.
+$6 = void
+LuxLibrary::Scanner::IsAtEnd (this=0x7fffffffcc48) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:155
+155	        return current == end or *current == '\0';
+[2S[2Aoperator== (__lhs=0x0, __rhs=0x0) at /usr/lib/gcc/x86_64-pc-linux-gnu/16/include/g++-v16/bits/stl_iterator.h:1198
+1198	      { return __lhs.base() == __rhs.base(); }
+[2S[2ALuxLibrary::Scanner::IsAtEnd (this=0x7fffffffcc48) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:155
+155	        return current == end or *current == '\0';
+[2S[2ALuxLibrary::Scanner::NextToken (this=0x7fffffffcc48) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:237
+237	        if ( IsAtEnd() ) { return NewToken( TokenType::END_OF_FILE ); }
+[2S[2ALuxLibrary::Scanner::NewToken (this=0x7fffffffcc48, variant=<optimized out>) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:299
+299	        return Token{
+[2S[2A301	            .start  = start,
+[2S[2A299	        return Token{
+[2S[2ALuxLibrary::Scanner::NextToken (this=0x7fffffffcc48) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:246
+246	            case '(': return NewToken( TokenType::LEFT_PAREN );
+[2S[2A296	    }
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:308
+308	        CHECK( statement_end == scanner.NewToken( TokenType::SEMICOLON ) );
+[2S[2A310	        CHECK( scanner.IsDefault() );
+[2S[2AStarting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:292
+292	        const Token map_keyword{ scanner.NextToken() };
+[2S[2A293	        CHECK( map_keyword == scanner.NewToken( TokenType::MAP ) );
+[2S[2AStarting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:292
+292	        const Token map_keyword{ scanner.NextToken() };
+[2S[2AStarting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:292
+292	        const Token map_keyword{ scanner.NextToken() };
+[2S[2A293	        CHECK( map_keyword == scanner.NewToken( TokenType::MAP ) );
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:295
+295	        const Token map_ident{ scanner.NextToken() };
+[2S[2A296	        CHECK( map_ident == scanner.NewToken( TokenType::IDENTIFIER ) );
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:298
+298	        const Token map_assign{ scanner.NextToken() };
+[2S[2A299	        CHECK( map_assign == scanner.NewToken( TokenType::EQUAL ) );
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:301
+301	        const Token map_token{ scanner.NextToken() };
+[2S[2A302	        CHECK( map_token == scanner.NewToken( TokenType::MAP_START ) );
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:304
+304	        const Token map_end{ scanner.NextToken() };
+[2S[2ALuxLibrary::Scanner::NextToken (this=0x7fffffffcc48) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:233
+233	        SkipWhitespace();
+[2S[2ALuxLibrary::Scanner::SkipWhitespace (this=0x7fffffffcc48) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:188
+188	            switch ( val ) {
+[2S[2A210	    }
+[2S[2ALuxLibrary::Scanner::NextToken (this=0x7fffffffcc48) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:235
+235	        start = current;
+[2S[2A237	        if ( IsAtEnd() ) { return NewToken( TokenType::END_OF_FILE ); }
+[2S[2ALuxLibrary::Scanner::IsAtEnd (this=0x7fffffffcc48) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:155
+155	        return current == end or *current == '\0';
+[2S[2A0x0000555555585d32 in operator== (__lhs=0x7d, __rhs=0x0) at /usr/lib/gcc/x86_64-pc-linux-gnu/16/include/g++-v16/bits/stl_iterator.h:1198
+1198	      { return __lhs.base() == __rhs.base(); }
+[2S[2ALuxLibrary::Scanner::NextToken (this=0x7fffffffcc48) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:235
+235	        start = current;
+[2S[2A237	        if ( IsAtEnd() ) { return NewToken( TokenType::END_OF_FILE ); }
+[2S[2A$7 = 0x7d
+$8 = 0x7d
+239	        const char_type current_char{ NextChar() };
+[2S[2A241	        if ( IsAlpha( current_char ) ) { return IdentifierToken(); }
+[2S[2A$9 = 0xff
+$10 = 0x7d
+$11 = 0x7d
+$12 = 125
+239	        const char_type current_char{ NextChar() };
+[2S[2A241	        if ( IsAlpha( current_char ) ) { return IdentifierToken(); }
+[2S[2A$13 = 125
+$14 = 0x7d
+$15 = 0x7d
+❌️ Undefined command: "exot".  Try "help".
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+Want to NOP some instructions? Use patch <address> 'nop; nop; nop'
+Breakpoint 1 at 0x1eb9f: file /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp, line 292.
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:292
+292	        const Token map_keyword{ scanner.NextToken() };
+[2S[2ALuxLibrary::Scanner::NextToken (this=0x7fffffffcc48) at /home/david/Programming/cpp_dev/Lux/lib/Scanner.cpp:233
+233	        SkipWhitespace();
+[2S[2A235	        start = current;
+[2S[2A237	        if ( IsAtEnd() ) { return NewToken( TokenType::END_OF_FILE ); }
+[2S[2A235	        start = current;
+[2S[2A237	        if ( IsAtEnd() ) { return NewToken( TokenType::END_OF_FILE ); }
+[2S[2A239	        const char_type current_char{ NextChar() };
+[2S[2A241	        if ( IsAlpha( current_char ) ) { return IdentifierToken(); }
+[2S[2A$1 = 0x6d
+$2 = 0x6d
+239	        const char_type current_char{ NextChar() };
+[2S[2A241	        if ( IsAlpha( current_char ) ) { return IdentifierToken(); }
+[2S[2A296	    }
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:293
+293	        CHECK( map_keyword == scanner.NewToken( TokenType::MAP ) );
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:295
+295	        const Token map_ident{ scanner.NextToken() };
+[2S[2A296	        CHECK( map_ident == scanner.NewToken( TokenType::IDENTIFIER ) );
+[2S[2ACatch::SourceLineInfo::SourceLineInfo (this=0x7fffffffcd40, _line=0x128, _file=<optimized out>) at /usr/include/catch2/internal/catch_source_line_info.hpp:20
+20	            file( _file ),
+[2S[2A21	            line( _line )
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:296
+296	        CHECK( map_ident == scanner.NewToken( TokenType::IDENTIFIER ) );
+[2S[2A0x00007ffff7f04170 in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f04174 in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f04178 in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f0417c in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f0417f in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f04183 in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f04187 in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f0418b in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f04192 in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f04196 in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f04199 in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f041a0 in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f041a5 in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f041a9 in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f041ac in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f041ae in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f041b2 in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f041b5 in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f041b9 in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f041bc in Catch::AssertionHandler::AssertionHandler(Catch::StringRef, Catch::SourceLineInfo const&, Catch::StringRef, Catch::ResultDisposition::Flags) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7eb0ce0 in Catch::RunContext::notifyAssertionStarted(Catch::AssertionInfo const&)@plt () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7eb0ce4 in Catch::RunContext::notifyAssertionStarted(Catch::AssertionInfo const&)@plt () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f2c0f0 in Catch::RunContext::notifyAssertionStarted(Catch::AssertionInfo const&) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f2c0f4 in Catch::RunContext::notifyAssertionStarted(Catch::AssertionInfo const&) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f2c0f8 in Catch::RunContext::notifyAssertionStarted(Catch::AssertionInfo const&) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2A0x00007ffff7f2c101 in Catch::RunContext::notifyAssertionStarted(Catch::AssertionInfo const&) () from /usr/lib64/libCatch2.so.3.16.1
+[2S[2Apwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+Pwndbg's hexdump colorizes by byte type and lets you re-run with no args to keep dumping forward
+print, inspect, p
+Print value of expression EXP.
+Usage: print [[OPTION]... --] [/FMT] [EXP]
+
+Options:
+  -address [on|off]
+    Set printing of addresses.
+
+  -array [on|off]
+    Set pretty formatting of arrays.
+
+  -array-indexes [on|off]
+    Set printing of array indexes.
+
+  -nibbles [on|off]
+    Set whether to print binary values in groups of four bits.
+
+  -characters NUMBER|elements|unlimited
+    Set limit on string chars to print.
+    "elements" causes the array element limit to be used.
+    "unlimited" causes there to be no limit.
+
+  -elements NUMBER|unlimited
+    Set limit on array elements to print.
+    "unlimited" causes there to be no limit.
+    This setting also applies to string chars when "print characters"
+    is set to "elements".
+
+  -max-depth NUMBER|unlimited
+    Set maximum print depth for nested structures, unions and arrays.
+    When structures, unions, or arrays are nested beyond this depth then they
+    will be replaced with either '{...}' or '(...)' depending on the language.
+    Use "unlimited" to print the complete structure.
+
+  -memory-tag-violations [on|off]
+    Set printing of memory tag violations for pointers.
+    Issue a warning when the printed value is a pointer
+    whose logical tag doesn't match the allocation tag of the memory
+    location it points to.
+
+  -null-stop [on|off]
+    Set printing of char arrays to stop at first null char.
+
+  -object [on|off]
+    Set printing of C++ virtual function tables.
+
+  -pretty [on|off]
+    Set pretty formatting of structures.
+
+  -raw-values [on|off]
+    Set whether to print values in raw form.
+    If set, values are printed in raw form, bypassing any
+    pretty-printers for that value.
+
+  -repeats NUMBER|unlimited
+    Set threshold for repeated print elements.
+    "unlimited" causes all elements to be individually printed.
+
+  -static-members [on|off]
+    Set printing of C++ static members.
+
+  -symbol [on|off]
+    Set printing of symbol names when printing pointers.
+
+  -union [on|off]
+    Set printing of unions interior to structures.
+
+  -vtbl [on|off]
+    Set printing of C++ virtual function tables.
+
+Note: because this command accepts arbitrary expressions, if you
+specify any command option, you must use a double dash ("--")
+to mark the end of option processing.  E.g.: "print -o -- myobj".
+
+Variables accessible are those of the lexical environment of the selected
+stack frame, plus all those whose scope is global or an entire file.
+
+$NUM gets previous value number NUM.  $ and $$ are the last two values.
+$$NUM refers to NUM'th value back from the last one.
+Names starting with $ refer to registers (with the values they would have
+if the program were to return to the stack frame now selected, restoring
+all registers saved by frames farther in) or else to debugger
+"convenience" variables (any such name not a known register).
+Use assignment expressions to give values to convenience variables.
+
+{TYPE}ADREXP refers to a datum of data type TYPE, located at address ADREXP.
+@ is a binary operator for treating consecutive data objects
+anywhere in memory as an array.  FOO@NUM gives an array whose first
+element is FOO, whose second element is stored in the space following
+where FOO is stored, etc.  FOO must be an expression whose value
+resides in memory.
+
+EXP may be preceded with /FMT, where FMT is a format letter
+but no count or size letter (see "x" command).
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+[Inferior 1 (process 33386) exited with code 052]
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+Use the telescope command to dereference a given address/pointer multiple times (if the dereferenced value is a valid ptr; see config telescope to configure its behavior)
+Breakpoint 1 at 0x1eb9f: file /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp, line 292.
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, CATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/ScannerTests.cpp:292
+292	        const Token map_keyword{ scanner.NextToken() };
+[2S[2A$1 = "map myMap = {};"
+293	        CHECK( map_keyword == scanner.NewToken( TokenType::MAP ) );
+[2S[2A$2 = {
+  type = LuxLibrary::TokenType::MAP,
+  start = 0x6d,
+  length = 0x3,
+  line = 0x1
+}
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+Pwndbg sets the SIGLARM, SIGBUS, SIGPIPE and SIGSEGV signals so they are not passed to the app; see info signals for full GDB signals configuration
+Breakpoint 1 at 0x3c983: file /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp, line 449.
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, LuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:449
+449	        const std::uint8_t global{ ParseVariable( "Expected variable name." ) };
+[2S[2A451	        if ( !Match( TokenType::EQUAL ) ) {
+[2S[2A455	        Chunk* old_chunk{ current_chunk };
+[2S[2A457	        Chunk tmp_chunk{};
+[2S[2A459	        current_chunk = &tmp_chunk;
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A463	                Consume( TokenType::COMMA, "Array values should be a comma seperated list." );
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A463	                Consume( TokenType::COMMA, "Array values should be a comma seperated list." );
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A469	        current_chunk = old_chunk;
+[2S[2A❌️ No symbol "vector_chunk" in current context.
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, LuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:449
+449	        const std::uint8_t global{ ParseVariable( "Expected variable name." ) };
+[2S[2A451	        if ( !Match( TokenType::EQUAL ) ) {
+[2S[2A455	        Chunk* old_chunk{ current_chunk };
+[2S[2A457	        Chunk tmp_chunk{};
+[2S[2A459	        current_chunk = &tmp_chunk;
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2Apwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+Pwndbg sets the SIGLARM, SIGBUS, SIGPIPE and SIGSEGV signals so they are not passed to the app; see info signals for full GDB signals configuration
+Breakpoint 1 at 0x3c983: file /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp, line 449.
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, LuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:449
+449	        const std::uint8_t global{ ParseVariable( "Expected variable name." ) };
+[2S[2A451	        if ( !Match( TokenType::EQUAL ) ) {
+[2S[2A455	        Chunk* old_chunk{ current_chunk };
+[2S[2A457	        Chunk vector_chunk{};
+[2S[2A459	        current_chunk = &vector_chunk;
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A463	                Consume( TokenType::COMMA, "Array values should be a comma seperated list." );
+[2S[2A466	            Expression();
+[2S[2A$1 = {
+  code = std::vector of length 2, capacity 8 = {0x0, 0x0},
+  lines = std::vector of length 2, capacity 2 = {0x1, 0x1},
+  constants = {
+    values = std::vector of length 1, capacity 8 = {{
+        tag = std::variant [index 3] = {1}
+      }}
+  }
+}
+461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A463	                Consume( TokenType::COMMA, "Array values should be a comma seperated list." );
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A469	        current_chunk = old_chunk;
+[2S[2A$2 = {
+  code = std::vector of length 6, capacity 8 = {0x0, 0x0, 0x0, 0x1, 0x0, 0x2},
+  lines = std::vector of length 6, capacity 8 = {0x1, 0x1, 0x1, 0x1, 0x1, 0x1},
+  constants = {
+    values = std::vector of length 3, capacity 8 = {{
+        tag = std::variant [index 3] = {1}
+      }, {
+        tag = std::variant [index 2] = {0x61}
+      }, {
+        tag = std::variant [index 3] = {3.5}
+      }}
+  }
+}
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+If you have debugging symbols the info args command shows current frame's function arguments (use up and down to switch between frames)
+Breakpoint 1 at 0x3c983: file /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp, line 449.
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1, LuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:449
+449	        const std::uint8_t global{ ParseVariable( "Expected variable name." ) };
+[2S[2A451	        if ( !Match( TokenType::EQUAL ) ) {
+[2S[2A455	        Chunk* old_chunk{ current_chunk };
+[2S[2A457	        Chunk vector_chunk{};
+[2S[2A459	        current_chunk = &vector_chunk;
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A463	                Consume( TokenType::COMMA, "Array values should be a comma seperated list." );
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A463	                Consume( TokenType::COMMA, "Array values should be a comma seperated list." );
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A469	        current_chunk = old_chunk;
+[2S[2A471	        Consume( TokenType::SEMICOLON, "Expect ';' after variable declaration." );
+[2S[2A$1 = (LuxLibrary::Chunk *) 0x7fffffffc920
+$2 = {
+  code = std::vector of length 0, capacity 8,
+  lines = std::vector of length 0, capacity 0,
+  constants = {
+    values = std::vector of length 1, capacity 8 = {{
+        tag = std::variant [index 5] = {"myVec"}
+      }}
+  }
+}
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+Use plist command to dump elements of linked list
+Breakpoint 1 at 0x3c989: ArrayDeclaration. (10 locations)
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1.1, LuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:449
+449	        const std::uint8_t global{ ParseVariable( "Expected variable name." ) };
+[2S[2A451	        if ( !Match( TokenType::EQUAL ) ) {
+[2S[2A455	        Chunk* old_chunk{ current_chunk };
+[2S[2A457	        Chunk vector_chunk{};
+[2S[2A459	        current_chunk = &vector_chunk;
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2ALuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:462
+462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A463	                Consume( TokenType::COMMA, "Array values should be a comma seperated list." );
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A463	                Consume( TokenType::COMMA, "Array values should be a comma seperated list." );
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A469	        current_chunk = old_chunk;
+[2S[2A471	        detail::LuxArray new_array{};
+[2S[2A473	        const std::span vector_values{ vector_chunk.constants_begin(),
+[2S[2A474	                                       vector_chunk.constants_end() };
+[2S[2A476	        for ( const auto& val : vector_values ) {
+[2S[2A477	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2A
+Breakpoint 1.6, LuxLibrary::Compiler::ArrayDeclaration()::$_0::operator()<double const&>(double const&) const (arg=@0x55555561bb00: 1, this=<optimized out>) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:477
+477	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2ALuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:476
+476	        for ( const auto& val : vector_values ) {
+[2S[2A477	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2A
+Breakpoint 1.5, LuxLibrary::Compiler::ArrayDeclaration()::$_0::operator()<char const&>(char const&) const (arg=@0x55555561bb40: 0x61, this=<optimized out>) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:477
+477	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2ALuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:476
+476	        for ( const auto& val : vector_values ) {
+[2S[2A477	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2A
+Breakpoint 1.6, LuxLibrary::Compiler::ArrayDeclaration()::$_0::operator()<double const&>(double const&) const (arg=@0x55555561bb80: 3.5, this=<optimized out>) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:477
+477	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2ALuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:476
+476	        for ( const auto& val : vector_values ) {
+[2S[2A480	        EmitConstant( Value( new_array ) );
+[2S[2A482	        DefineVariable( global );
+[2S[2A$1 = <optimized out>
+$2 = {
+  code = std::vector of length 2, capacity 8 = {0x0, 0x1},
+  lines = std::vector of length 2, capacity 2 = {0x1, 0x1},
+  constants = {
+    values = std::vector of length 2, capacity 8 = {{
+        tag = std::variant [index 5] = {"myVec"}
+      }, {
+        tag = std::variant [index 8] containing std::vector of length 3, capacity 3 = {{
+            <std::variant<std::monostate, bool, char, double, long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, LuxLibrary::Object, std::unordered_map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, LuxLibrary::detail::Node, LuxLibrary::detail::string_hash, std::equal_to<void>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, LuxLibrary::detail::Node> > >, std::vector<LuxLibrary::detail::Node, std::allocator<LuxLibrary::detail::Node> > >> = std::variant [index 3] = {1}, <No data fields>}, {
+            <std::variant<std::monostate, bool, char, double, long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, LuxLibrary::Object, std::unordered_map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, LuxLibrary::detail::Node, LuxLibrary::detail::string_hash, std::equal_to<void>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, LuxLibrary::detail::Node> > >, std::vector<LuxLibrary::detail::Node, std::allocator<LuxLibrary::detail::Node> > >> = std::variant [index 2] = {0x61}, <No data fields>}, {
+            <std::variant<std::monostate, bool, char, double, long, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, LuxLibrary::Object, std::unordered_map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, LuxLibrary::detail::Node, LuxLibrary::detail::string_hash, std::equal_to<void>, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, LuxLibrary::detail::Node> > >, std::vector<LuxLibrary::detail::Node, std::allocator<LuxLibrary::detail::Node> > >> = std::variant [index 3] = {3.5}, <No data fields>}}
+      }}
+  }
+}
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+Reading symbols from ./build/Lux...
+------- tip of the day (disable with set show-tips off) -------
+Prefixing a command with ! in GDB will execute it as a shell command, e.g.: !ls or !cat flag.txt
+Breakpoint 1 at 0x1e8d9: ArrayDeclaration. (10 locations)
+Starting program: /home/david/Programming/cpp_dev/Lux/build/Lux test.lx
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1.1, LuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffd620) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:449
+449	        const std::uint8_t global{ ParseVariable( "Expected variable name." ) };
+[2S[2A451	        if ( !Match( TokenType::EQUAL ) ) {
+[2S[2A455	        Chunk* old_chunk{ current_chunk };
+[2S[2A457	        Chunk vector_chunk{};
+[2S[2A459	        current_chunk = &vector_chunk;
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2ALuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffd620) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:462
+462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A463	                Consume( TokenType::COMMA, "Array values should be a comma seperated list." );
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A462	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A463	                Consume( TokenType::COMMA, "Array values should be a comma seperated list." );
+[2S[2A466	            Expression();
+[2S[2A461	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A469	        current_chunk = old_chunk;
+[2S[2A471	        detail::LuxArray new_array{};
+[2S[2A473	        const std::span vector_values{ vector_chunk.constants_begin(),
+[2S[2A474	                                       vector_chunk.constants_end() };
+[2S[2A476	        for ( const auto& val : vector_values ) {
+[2S[2A477	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2A
+Breakpoint 1.6, LuxLibrary::Compiler::ArrayDeclaration()::$_0::operator()<double const&>(double const&) const (arg=@0x5555555cd740: 1, this=<optimized out>) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:477
+477	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2ALuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffd620) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:476
+476	        for ( const auto& val : vector_values ) {
+[2S[2A477	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2A
+Breakpoint 1.6, LuxLibrary::Compiler::ArrayDeclaration()::$_0::operator()<double const&>(double const&) const (arg=@0x5555555cd780: 2.3999999999999999, this=<optimized out>) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:477
+477	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2ALuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffd620) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:476
+476	        for ( const auto& val : vector_values ) {
+[2S[2A477	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2A
+Breakpoint 1.5, LuxLibrary::Compiler::ArrayDeclaration()::$_0::operator()<char const&>(char const&) const (arg=@0x5555555cd7c0: 0x63, this=<optimized out>) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:477
+477	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2ALuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffd620) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:476
+476	        for ( const auto& val : vector_values ) {
+[2S[2A480	        EmitConstant( Value( new_array ) );
+[2S[2A$1 = <optimized out>
+482	        DefineVariable( global );
+[2S[2A484	        Consume( TokenType::SEMICOLON, "Expect ';' after variable declaration." );
+[2S[2A$2 = {
+  current_chunk = 0x7fffffffd3b0,
+  parser = {
+    current = {
+      type = LuxLibrary::TokenType::VECTOR_END,
+      start = 0x5d,
+      length = 0x1,
+      line = 0x1
+    },
+    previous = {
+      type = LuxLibrary::TokenType::CHAR,
+      start = 0x27,
+      length = 0x3,
+      line = 0x1
+    },
+    had_error = 0x0,
+    panic_mode = 0x0
+  },
+  scanner = {
+    start = 0x5d,
+    current = 0x3b,
+    end = 0x0,
+    line = 0x1,
+    state = std::variant [index 3] = {{<No data fields>}}
+  },
+  error_message = ""
+}
+pwndbg: loaded 200 pwndbg commands. Type pwndbg [filter] for a list.
+pwndbg: created 12 GDB functions (can be used with print/break). Type help function to see them.
+Reading symbols from ./build/tests/UnitTests...
+------- tip of the day (disable with set show-tips off) -------
+GDB and Pwndbg parameters can be shown or set with show <param> and set <param> <value> GDB commands
+Breakpoint 1 at 0x3ca49: ArrayDeclaration. (10 locations)
+Starting program: /home/david/Programming/cpp_dev/Lux/build/tests/UnitTests 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/usr/lib64/libthread_db.so.1".
+
+Breakpoint 1.1, LuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:449
+449	        const std::uint8_t global{ ParseVariable( "Expected variable name." ) };
+[2S[2A451	        if ( !Match( TokenType::EQUAL ) ) {
+[2S[2A456	        Consume( TokenType::VECTOR_START, "Missing opening '['." );
+[2S[2A$1 = {
+  current_chunk = 0x7fffffffc920,
+  parser = {
+    current = {
+      type = LuxLibrary::TokenType::VECTOR_START,
+      start = 0x5b,
+      length = 0x1,
+      line = 0x1
+    },
+    previous = {
+      type = LuxLibrary::TokenType::EQUAL,
+      start = 0x3d,
+      length = 0x1,
+      line = 0x1
+    },
+    had_error = 0x0,
+    panic_mode = 0x0
+  },
+  scanner = {
+    start = 0x5b,
+    current = 0x31,
+    end = 0x0,
+    line = 0x1,
+    state = std::variant [index 1] = {{<No data fields>}}
+  },
+  error_message = ""
+}
+$2 = 0x5b
+$3 = 0x5b
+$4 = 0x5b
+458	        Chunk* old_chunk{ current_chunk };
+[2S[2A460	        Chunk vector_chunk{};
+[2S[2A462	        current_chunk = &vector_chunk;
+[2S[2A464	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A465	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A469	            Expression();
+[2S[2A464	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A465	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A466	                Consume( TokenType::COMMA, "Array values should be a comma seperated list." );
+[2S[2A469	            Expression();
+[2S[2A464	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A465	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A466	                Consume( TokenType::COMMA, "Array values should be a comma seperated list." );
+[2S[2A469	            Expression();
+[2S[2A464	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A465	            if ( parser.CurrentType( TokenType::COMMA ) ) {
+[2S[2A466	                Consume( TokenType::COMMA, "Array values should be a comma seperated list." );
+[2S[2A469	            Expression();
+[2S[2A464	        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+[2S[2A472	        Consume( TokenType::VECTOR_END, "Missing closing ']'." );
+[2S[2A474	        current_chunk = old_chunk;
+[2S[2A476	        detail::LuxArray new_array{};
+[2S[2A478	        const std::span vector_values{ vector_chunk.constants_begin(),
+[2S[2A479	                                       vector_chunk.constants_end() };
+[2S[2A481	        for ( const auto& val : vector_values ) {
+[2S[2A482	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2A
+Breakpoint 1.6, LuxLibrary::Compiler::ArrayDeclaration()::$_0::operator()<double const&>(double const&) const (arg=@0x55555561c520: 1, this=<optimized out>) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:482
+482	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2ALuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:481
+481	        for ( const auto& val : vector_values ) {
+[2S[2A482	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2A$5 = <optimized out>
+$6 = <optimized out>
+
+Breakpoint 1.5, LuxLibrary::Compiler::ArrayDeclaration()::$_0::operator()<char const&>(char const&) const (arg=@0x55555561c560: 0x41, this=<optimized out>) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:482
+482	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2A$7 = 0x55555561c2b0
+LuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:481
+481	        for ( const auto& val : vector_values ) {
+[2S[2A482	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2A
+Breakpoint 1.9, LuxLibrary::Compiler::ArrayDeclaration()::$_0::operator()<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&>(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&) const (arg="Apple", this=<optimized out>) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:482
+482	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2ALuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:481
+481	        for ( const auto& val : vector_values ) {
+[2S[2A482	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2A
+Breakpoint 1.6, LuxLibrary::Compiler::ArrayDeclaration()::$_0::operator()<double const&>(double const&) const (arg=@0x55555561c5e0: 1.5, this=<optimized out>) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:482
+482	            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
+[2S[2ALuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:481
+481	        for ( const auto& val : vector_values ) {
+[2S[2ALuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:485
+485	        EmitConstant( Value( new_array ) );
+[2S[2A$8 = <optimized out>
+❌️ Attempt to take address of value not located in memory.
+$9 = void
+$10 = void
+$11 = void
+❌️ No symbol "RSP" in current context.
+$12 = void
+$13 = void
+487	        DefineVariable( global );
+[2S[2A$14 = void
+489	        Consume( TokenType::SEMICOLON, "Expect ';' after array declaration." );
+[2S[2A490	    }
+[2S[2ALuxLibrary::Compiler::ArrayDeclaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:490
+490	    }
+[2S[2ALuxLibrary::Compiler::Declaration (this=0x7fffffffcd20) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:503
+503	        if ( parser.PanicMode() ) { Synchronize(); }
+[2S[2A504	    }
+[2S[2ALuxLibrary::Compiler::Compile (this=0x7fffffffcd20, source="vector myArray = [1, 'A', \"Apple\", 1.5];", chunk=...) at /home/david/Programming/cpp_dev/Lux/lib/Compiler.cpp:74
+74	        while ( !Match( TokenType::END_OF_FILE ) ) {
+[2S[2A78	        EndCompiler();
+[2S[2A80	        if ( parser.HadError() ) { return std::unexpected( error_message ); }
+[2S[2A82	        return {};
+[2S[2A83	    }
+[2S[2ACATCH2_INTERNAL_TEST_0 () at /home/david/Programming/cpp_dev/Lux/tests/CompilerTests.cpp:307
+307	        if ( !success ) { fmt::println( "\n{}", success.error() ); }
+[2S[2A$15 = {
+  {
+    _M_void = {<No data fields>},
+    _M_unex = <error reading variable: Cannot create a lazy string with address 0x0, and a non-zero length.>
+  },
+  _M_has_value = 0x1
+}
+325	    }
+[2S[2A

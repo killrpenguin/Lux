@@ -49,8 +49,8 @@ namespace LuxLibrary {
         constexpr std::string_view r_PRINT{ "rint" };
         constexpr std::string_view r_RETURN{ "eturn" };
         constexpr std::string_view r_SUPER{ "uper" };
-        constexpr std::string_view r_VAR{ "ar" };
         constexpr std::string_view r_WHILE{ "hile" };
+        constexpr std::string_view r_MAP{ "ap" };
 
         constexpr std::size_t Pos{ 1 };
 
@@ -91,6 +91,8 @@ namespace LuxLibrary {
             case 'i': return CheckKeyword( Pos, r_IF.size(), r_IF, TokenType::IF );
             case 'N':
             case 'n': return CheckKeyword( Pos, r_NIL.size(), r_NIL, TokenType::NIL );
+            case 'M':
+            case 'm': return CheckKeyword( Pos, r_MAP.size(), r_MAP, TokenType::MAP );
             case 'O':
             case 'o': return CheckKeyword( Pos, r_OR.size(), r_OR, TokenType::OR );
             case 'P':
@@ -119,8 +121,29 @@ namespace LuxLibrary {
                 }
                 break;
             }
+
             case 'V':
-            case 'v': return CheckKeyword( Pos, r_VAR.size(), r_VAR, TokenType::VAR );
+            case 'v': {
+                if ( current - start > 1 ) {
+                    constexpr std::string_view r_VECTOR{ "ector" };
+                    constexpr std::string_view r_VAR{ "ar" };
+
+                    const auto next_char{ ranges::next( start, 1, end ) };
+                    switch ( *next_char ) {
+                        case 'A':
+                        case 'a': return CheckKeyword( Pos, r_VAR.size(), r_VAR, TokenType::VAR );
+
+                        case 'E':
+                        case 'e': {
+                            return CheckKeyword(
+                                Pos, r_VECTOR.size(), r_VECTOR, TokenType::VECTOR );
+                        }
+                        default: return TokenType::IDENTIFIER;
+                    }
+                }
+                break;
+            }
+
             case 'W':
             case 'w': return CheckKeyword( Pos, r_WHILE.size(), r_WHILE, TokenType::WHILE );
             default : return TokenType::IDENTIFIER;
@@ -251,21 +274,20 @@ namespace LuxLibrary {
                 return NewToken( TokenType::GREATER );
             }
             case '"': return StringToken();
-            case '[': {
-                if ( InArray() ) { return ErrorToken( "Nested Arrays are unsupported." ); }
-                return LuxVectorStart();
-            }
+            case '[': return NewToken( TokenType::VECTOR_START ); // case '[': return VectorToken();
             case ']': {
-                if ( InArray() ) { return LuxVectorEnd(); }
+                if ( InArray() ) { return VectorEnd(); }
                 return NewToken( TokenType::RIGHT_BRACKET );
             };
             case '{': {
+                // if ( InMap() ) { return MapToken(); }
+                if ( InMap() ) { return NewToken( TokenType::MAP_START ); }
                 if ( InString() ) { return NewToken( TokenType::LEFT_BRACE ); }
-                return LuxMapStart();
+                return NewToken( TokenType::LEFT_BRACE );
             }
             case '}': {
                 if ( InString() ) { return ContinueString(); }
-                if ( InMap() ) { return LuxMapEnd(); }
+                if ( InMap() ) { return MapEnd(); }
                 return NewToken( TokenType::RIGHT_BRACE );
             };
             case '\'': return CharToken();
@@ -342,26 +364,37 @@ namespace LuxLibrary {
         return NewToken( TokenType::STRING );
     }
 
-    auto Scanner::LuxVectorStart() noexcept -> Token {
-        ScanningArray();
-        return NewToken( TokenType::LUX_VECTOR_START );
+    auto Scanner::MapToken() noexcept -> Token {
+        while ( Peek() != '}' and !IsAtEnd() ) {
+            if ( Peek() == '\n' ) { line++; }
+            Next();
+        }
+
+        if ( IsAtEnd() ) { return ErrorToken( "Unterminated Map." ); }
+
+        return NewToken( TokenType::MAP_START );
     }
 
-    auto Scanner::LuxVectorEnd() noexcept -> Token {
-        Next();
+    auto Scanner::VectorToken() noexcept -> Token {
+        while ( Peek() != ']' and !IsAtEnd() ) {
+            if ( Peek() == '\n' ) { line++; }
+
+            Next();
+        }
+
+        if ( IsAtEnd() ) { return ErrorToken( "Unterminated Vector." ); }
+
+        return NewToken( TokenType::VECTOR_START );
+    }
+
+    auto Scanner::VectorEnd() noexcept -> Token {
         DefaultScanning();
-        return NewToken( TokenType::LUX_VECTOR_END );
+        return NewToken( TokenType::VECTOR_END );
     }
 
-    auto Scanner::LuxMapStart() noexcept -> Token {
-        ScanningMap();
-        return NewToken( TokenType::LUX_MAP_START );
-    }
-
-    auto Scanner::LuxMapEnd() noexcept -> Token {
-        Next();
+    auto Scanner::MapEnd() noexcept -> Token {
         DefaultScanning();
-        return NewToken( TokenType::LUX_MAP_END );
+        return NewToken( TokenType::MAP_END );
     }
 
     auto Scanner::CharToken() noexcept -> Token {
@@ -384,19 +417,19 @@ namespace LuxLibrary {
     }
 
     auto Scanner::DefaultScanning() noexcept -> void {
-        state = detail::DefaultMode{};
+        state.emplace< detail::DefaultMode >();
     }
 
     auto Scanner::ScanningString() noexcept -> void {
-        state = detail::StringMode{};
+        state.emplace< detail::StringMode >();
     }
 
     auto Scanner::ScanningArray() noexcept -> void {
-        state = detail::ArrayMode{};
+        state.emplace< detail::ArrayMode >();
     }
 
     auto Scanner::ScanningMap() noexcept -> void {
-        state = detail::MapMode{};
+        state.emplace< detail::MapMode >();
     }
 
     auto Scanner::InString() const noexcept -> bool {

@@ -70,10 +70,10 @@ namespace LuxLibrary {
         CHAR,
 
         // Objects.
-        LUX_VECTOR_START,
-        LUX_VECTOR_END,
-        LUX_MAP_START,
-        LUX_MAP_END,
+        VECTOR_START,
+        VECTOR_END,
+        MAP_START,
+        MAP_END,
 
         // Keywords.
         AND,
@@ -92,6 +92,8 @@ namespace LuxLibrary {
         TRUE,
         VAR,
         WHILE,
+        VECTOR,
+        MAP,
 
         ERROR,
         END_OF_FILE,

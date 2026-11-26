@@ -42,6 +42,8 @@
 
 namespace LuxLibrary {
 
+    using namespace detail;
+
     Compiler::Compiler( Scanner scnr, Parser prsr ) noexcept
         : parser{ prsr }, scanner{ scnr } {
     }
@@ -238,79 +240,6 @@ namespace LuxLibrary {
         }
     }
 
-    auto Compiler::LuxVector( const bool /* can_assign */ ) noexcept -> void {
-        const auto start_idx{ current_chunk->CountIndex() };
-
-        while ( !parser.CurrentType( TokenType::LUX_VECTOR_END ) ) {
-            if ( parser.CurrentType( TokenType::COMMA ) ) {
-                Consume( TokenType::COMMA, "Array values should be a comma seperated list." );
-            }
-
-            Expression();
-        }
-
-        Consume( TokenType::LUX_VECTOR_END, "Missing closing ']'." );
-
-        const auto end_idx{ current_chunk->CountIndex() };
-
-        const auto start_offset =
-            std::ranges::next( current_chunk->constants_begin(), start_idx.constant );
-
-        const std::span array_values{ start_offset, current_chunk->constants_end() };
-
-        detail::LuxArray new_array{};
-
-        for ( const auto& val : array_values ) {
-            std::visit( [&new_array]( auto&& arg ) { new_array.emplace_back( arg ); }, val.tag );
-        }
-
-        current_chunk->Remove( start_idx );
-
-        EmitConstant( Value( new_array ) );
-    }
-
-    auto Compiler::LuxMap( const bool /* can_assign */ ) noexcept -> void {
-        const auto start_idx{ current_chunk->CountIndex() };
-
-        while ( !parser.CurrentType( TokenType::LUX_MAP_END ) ) {
-            if ( parser.CurrentType( TokenType::COMMA ) ) {
-                Consume( TokenType::COMMA, "Map pairs should be a comma seperated list." );
-            }
-
-            if ( parser.CurrentType( TokenType::COLON ) ) {
-                Consume( TokenType::COLON, "Map keys and values should be seperated by a colon." );
-            }
-
-            Expression();
-        }
-
-        Consume( TokenType::LUX_MAP_END, "Missing closing '}'." );
-
-        detail::LuxMap new_map{};
-
-        const auto start_offset =
-            std::ranges::next( current_chunk->constants_begin(), start_idx.constant );
-
-        const std::span parsed_constants{ start_offset, current_chunk->constants_end() };
-
-        for ( auto [key, val] :
-              parsed_constants | std::views::pairwise | std::views::stride( 2 ) ) {
-            if ( !key.IsString() ) { Error( "Maps require strings as keys." ); }
-
-            const std::string_view tmp_key{ key.AsStringView() };
-
-            if ( new_map.contains( tmp_key ) ) { Error( "Maps key exists." ); }
-
-            std::visit(
-                [&new_map, &tmp_key]( auto&& val ) { new_map[std::string( tmp_key )] = val; },
-                val.tag );
-        }
-
-        current_chunk->Remove( start_idx );
-
-        EmitConstant( Value( new_map ) );
-    }
-
     auto Compiler::Variable( const bool can_assign ) noexcept -> void {
         NamedVariable( parser.Previous(), can_assign );
     }
@@ -374,7 +303,6 @@ namespace LuxLibrary {
 
         parser.SetError();
     }
-
     auto Compiler::ExpressionStatement() noexcept -> void {
         Expression();
 
@@ -445,9 +373,115 @@ namespace LuxLibrary {
         DefineVariable( global );
     }
 
+    auto Compiler::ArrayDeclaration() noexcept -> void {
+        const std::uint8_t global{ ParseVariable( "Expected variable name." ) };
+
+        if ( !Match( TokenType::EQUAL ) ) {
+            Error( "Expected assignment operator in Array declaration." );
+            return;
+        }
+
+        Consume( TokenType::VECTOR_START, "Missing opening '[' in array declaration." );
+
+        Chunk* old_chunk{ current_chunk };
+
+        Chunk vector_chunk{};
+
+        current_chunk = &vector_chunk;
+
+        while ( !parser.CurrentType( TokenType::VECTOR_END ) ) {
+            if ( parser.CurrentType( TokenType::COMMA ) ) {
+                Consume( TokenType::COMMA, "Array values should be a comma seperated list." );
+            }
+
+            Expression();
+        }
+
+        Consume( TokenType::VECTOR_END, "Missing closing ']'." );
+
+        current_chunk = old_chunk;
+
+        LuxArray arr{};
+
+        const std::span vector_values{ vector_chunk.constants_begin(),
+                                       vector_chunk.constants_end() };
+
+        for ( const auto& val : vector_values ) {
+            std::visit( [&arr]( auto&& arg ) { arr.emplace_back( arg ); }, val.tag );
+        }
+
+        EmitConstant( Value( arr ) );
+
+        DefineVariable( global );
+
+        Consume( TokenType::SEMICOLON, "Expect ';' after array declaration." );
+    }
+
+    auto Compiler::MapDeclaration() noexcept -> void {
+        const std::uint8_t global{ ParseVariable( "Expected variable name." ) };
+
+        if ( !Match( TokenType::EQUAL ) ) {
+            Error( "Expected assignment operator in map declaration." );
+            return;
+        }
+
+        Consume( TokenType::MAP_START, "Missing opening '{' in map declaration." );
+
+        Chunk* old_chunk{ current_chunk };
+
+        Chunk map_chunk{};
+
+        current_chunk = &map_chunk;
+
+        while ( !parser.CurrentType( TokenType::MAP_END ) ) {
+            if ( parser.CurrentType( TokenType::COMMA ) ) {
+                Consume( TokenType::COMMA, "Map pairs should be a comma seperated list." );
+            }
+
+            if ( parser.CurrentType( TokenType::COLON ) ) {
+                Consume( TokenType::COLON, "Map keys and values should be seperated by a colon." );
+            }
+
+            Expression();
+        }
+
+        Consume( TokenType::MAP_END, "Missing closing ']'." );
+
+        current_chunk = old_chunk;
+
+        LuxMap map{};
+
+        const std::span parsed_constants{ map_chunk.constants_begin(), map_chunk.constants_end() };
+
+        for ( auto [key, val] :
+              parsed_constants | std::views::pairwise | std::views::stride( 2 ) ) {
+            if ( !key.IsString() ) { Error( "Maps require strings as keys." ); }
+
+            const std::string_view key_view{ key.AsStringView() };
+
+            if ( map.contains( key_view ) ) {
+                Error( "Map key already exists." );
+                return;
+            }
+
+            std::visit(
+                [&map, &key_view]( auto&& val ) { map[std::string( key_view )] = val; }, val.tag );
+        }
+
+        EmitConstant( Value( map ) );
+
+        DefineVariable( global );
+
+        Consume( TokenType::SEMICOLON, "Expect ';' after map declaration." );
+    }
+
     auto Compiler::Declaration() noexcept -> void {
         if ( Match( TokenType::VAR ) ) {
             VariableDeclaration();
+        } else if ( Match( TokenType::VECTOR ) ) {
+            ArrayDeclaration();
+        } else if ( Match( TokenType::MAP ) ) {
+            MapDeclaration();
         } else {
             Statement();
         }

@@ -77,10 +77,10 @@ namespace LuxLibrary {
                 Rule{ .prefix = &Compiler::Number, .infix = nullptr, .precedence = Precedence::NONE }, // INTEGER
                 Rule{ .prefix = &Compiler::Number, .infix = nullptr, .precedence = Precedence::NONE }, // DOUBLE
                 Rule{ .prefix = &Compiler::Char, .infix = nullptr, .precedence = Precedence::NONE }, // CHAR
-                                                                                                     // 
-                Rule{ .prefix = &Compiler::LuxVector, .infix = nullptr, .precedence = Precedence::ASSIGNMENT }, // LUX_VECTOR_START				
+
+                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::ASSIGNMENT }, // LUX_VECTOR_START				
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // LUX_VECTOR_END				
-                Rule{ .prefix = &Compiler::LuxMap, .infix = nullptr, .precedence = Precedence::NONE }, // LUX_MAP_START				
+                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // LUX_MAP_START				
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // LUX_MAP_END				
                                                                                              // 
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // AND
@@ -99,6 +99,9 @@ namespace LuxLibrary {
                 Rule{ .prefix = &Compiler::Literal, .infix = nullptr, .precedence = Precedence::NONE }, // TRUE
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // VAR
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // WHILE
+                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // VECTOR
+                Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // MAP
+                                                                                             // 
                 Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // ERROR
 				Rule{ .prefix = nullptr, .infix = nullptr, .precedence = Precedence::NONE }, // EOF
             // clang-format on

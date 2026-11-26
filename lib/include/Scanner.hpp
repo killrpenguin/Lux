@@ -58,7 +58,6 @@ namespace LuxLibrary {
         using line_type = std::uint32_t;
 
       private:
-
         std::string::const_iterator start{};
         std::string::const_iterator current{};
         std::string::const_iterator end{};
@@ -146,11 +145,17 @@ namespace LuxLibrary {
 
             std::string result( sub_view );
 
-            std::transform( result.begin(), result.end(), result.begin(), []( unsigned char c ) {
-                return static_cast< char >( std::tolower( c ) );
+            std::transform( result.begin(), result.end(), result.begin(), []( unsigned char val ) {
+                return static_cast< char >( std::tolower( val ) );
             } );
 
-            if ( current - start == pos + length and ( result == rest ) ) { return type; }
+            if ( current - start == pos + length and ( result == rest ) ) {
+                switch ( type ) {
+                    case LuxLibrary::TokenType::VECTOR: ScanningArray(); return type;
+                    case LuxLibrary::TokenType::MAP   : ScanningMap(); return type;
+                    default                           : return type;
+                }
+            }
 
             return TokenType::IDENTIFIER;
         }
@@ -224,28 +229,40 @@ namespace LuxLibrary {
         auto StringToken() noexcept -> Token;
 
         /*
+         * @brief Generate a string with the text between two double quotes.
+         * @return A string token.
+         */
+        auto MapToken() noexcept -> Token;
+
+        /*
+         * @brief Generate a string with the text between two double quotes.
+         * @return A string token.
+         */
+        auto VectorToken() noexcept -> Token;
+
+        /*
          * @brief Generate a Lux Vector with the values between two square brackets.
          * @return A LuxVector token.
          */
-        auto LuxVectorStart() noexcept -> Token;
+        [[deprecated]] auto LuxVectorStart() noexcept -> Token;
 
         /*
          * @brief Generate a Lux Vector closing brace token.
          * @return A LuxVector token.
          */
-        auto LuxVectorEnd() noexcept -> Token;
+        auto VectorEnd() noexcept -> Token;
 
         /*
          * @brief Generate a Lux Map with the key and value pairs between two curly brackets.
          * @return A LuxMap token.
          */
-        auto LuxMapStart() noexcept -> Token;
+        [[deprecated]] auto LuxMapStart() noexcept -> Token;
 
         /*
          * @brief Generate a Lux Map with the key and value pairs between two curly brackets.
          * @return A LuxMap token.
          */
-        auto LuxMapEnd() noexcept -> Token;
+        auto MapEnd() noexcept -> Token;
 
         /*
          * @brief Generate a char token with a value between two single quotes.

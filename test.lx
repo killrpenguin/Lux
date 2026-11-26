@@ -1,3 +1,6 @@
+vector myvec = ['a', 1, 2, 3];
+print myvec;
+
 var test = 5 + 5;
 
 print test;
